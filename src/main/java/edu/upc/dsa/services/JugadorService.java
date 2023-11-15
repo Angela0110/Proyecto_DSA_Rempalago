@@ -86,11 +86,29 @@ public class JugadorService {
     @ApiOperation(value = "register a new Jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Jugador.class),
-            @ApiResponse(code = 500, message = "Validation Error")
+            @ApiResponse(code = 500, message = "Validation Error"),
+            @ApiResponse(code=400,message="Bad request"),
+            @ApiResponse(code=404, message = "Not found"),
+            @ApiResponse(code=409,message="Conflict")
 
     })
+@Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response regJugador(Jugador jugador) {
+        try {
+            this.gm.addJugador(jugador);
+            return Response.status(201).entity(jugador).build();
+        } catch (FaltanDatosException e) {
+            return Response.status(500).entity(e.getMessage()).build();
+        } catch (NotAnEmailException e){
+            return Response.status(500).entity(e.getMessage()).build();
+        } catch (JugadorYaExisteException e){
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+    }
 
-    @Path("/register/{username}/{mail}/{password}")
+    ////////////////////////////////////////
+   /* @Path("/register/{username}/{mail}/{password}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response regJugador(@PathParam("username") String username, @PathParam("mail") String mail, @PathParam("password") String password) throws NotAnEmailException, FaltanDatosException {
         try {
@@ -104,7 +122,8 @@ public class JugadorService {
         } catch (JugadorYaExisteException e){
             return Response.status(500).entity(e.getMessage()).build();
         }
-    }
+    }*/
+/////////////////////////////////////////////////////////////
 
     @POST
     @ApiOperation(value = "login a jugador")
@@ -115,9 +134,9 @@ public class JugadorService {
 
     })
 
-    @Path("/login/{username}/{password}")
+    @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logJugador(@PathParam("username") String username, @PathParam("password") String pasword) throws FaltanDatosException {
+    public Response logJugador(@FormParam("username") String username, @FormParam("password") String pasword) throws FaltanDatosException {
         try {
             this.gm.logJugador(username, pasword);
             return Response.status(201).build();

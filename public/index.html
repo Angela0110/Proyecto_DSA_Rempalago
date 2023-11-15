@@ -5,125 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <style>
-        .jumbotron {
-        background-color: #f4511e;
-        color: #fff;
-        margin: 0px 0;
-        padding: 50px 25px;
-
-       }
-       .bg-1{
-        background-color: #f4511e;
-        color: #fff;
-        margin: 10px 0;
-        padding: 10px 25px;
-
-       }
-       .form-group {
-
-        color: #000000;
-
-       }
-        .container-fluid {
-        background-color: #f4511e;
-        color: #fff;
-        margin: 0px 0;
-        padding: 15px 25px;
-        }
-       .bt-1 {
-       padding: 10px 25px;
-       margin: 7px 0;
-       //width:100px;
-       }
-
-
-
-
-        .pull-right {
-        float: right !important;
-      }
-.navbar {
-  margin-bottom: 0;
-  background-color: #f4511e;
-  z-index: 9999;
-  border: 0;
-  font-size: 12px !important;
-  line-height: 1.42857143 !important;
-  letter-spacing: 4px;
-  border-radius: 0;
-}
-
-.navbar li a, .navbar .navbar-brand {
-  color: #fff !important;
-}
-
-.navbar-nav li a:hover, .navbar-nav li.active a {
-  color: #f4511e !important;
-  background-color: #fff !important;
-}
-
-.navbar-default .navbar-toggle {
-  border-color: transparent;
-  color: #fff !important;
-}
-    </style>
-    <script>
-        $(document).ready(function(){
-        $("#iniciar").hide();
-        $("#registro").hide();
-          $("#inicio_buton").click(function(){
-            $("#inicio").hide();
-            $("#test").hide();
-            $("#iniciar").show();
-            $("#registro").hide();
-          });
-          $("#regis_buton").click(function(){
-            $("#inicio").hide();
-            $("#test").hide();
-            $("#registro").show();
-            $("#iniciar").hide();
-          });
-          $("#menu").click(function(){
-            $("#iniciar").hide();
-            $("#registro").hide();
-            $("#inicio").show();
-            $("#test").show();
-          });
-          $("#tiendabtn").click(function(){
-            $("#test").hide();
-            //$.get("http://localhost:8080/dsaApp/juegos", function(data, status){
-            //alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-            fetch('http://localhost:8080/dsaApp/tracks')
-            .then(response => response.json())
-            .then(data => {
-
-             var tabla = document.createElement('table');
-
-             // por cada dato se crea una fila
-             for (const fila of data){
-             let tr = document.createElement('tr');
-
-             // otro bucle para recorrer los datos de cada objeto
-             for (const atributo of Object.values(fila)) {
-
-             var celda = document.createElement('td');
-             celda.textContent = atributo;
-             celda.style.border = '1px solid';
-             tr.appendChild(celda);
-             }
-
-             tr.appendChild(celda);
-
-             tabla.appendChild(tr);
-             }
-             document.body.appendChild(tabla);
-            })
-          });
-        });
-    </script>
+   
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -153,23 +39,22 @@
 <div id="iniciar" class="container-fluid text-center">
     <div class="container-border bg-1 text-center">
         <h3>Operación Rempálago</h3>
-        <img src="espinete.jpg" alt="espi" style="width:10%">
-        <div class="row" style="float: center">
-            <div style="float: center" class="col-sm-4">
-                <div style="float: center" class="panel panel-default text-center" >
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-default text-center" >
                     <div class="panel-heading">
                         <h4>Iniciar sesión</h4>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label style= "float: left " for="usr_ini">Usuario:</label>
+                            <label for="usr_ini">Usuario:</label>
                             <input type="text" class="form-control" id="usr_ini">
                         </div>
                         <div class="form-group">
-                            <label style= "float: left " for="pwd_ini">Contraseña:</label>
+                            <label for="pwd_ini">Contraseña:</label>
                             <input type="password" class="form-control" id="pwd_ini">
                         </div>
-                        <button class="btn btn-success w-100">Iniciar sesión</button>
+                        <button  class="btn btn-success w-100">Iniciar sesión</button>
 
                     </div>
 
@@ -178,30 +63,29 @@
         </div>
     </div>
 </div>
+
 <div id="registro" class="container-fluid bg-1 text-center">
-    <div class="container-border bg-1 text-center">
+    <div class="container bg-1 text-center">
         <h3>Operación Rempálago</h3>
-        <img src="espinete.jpg" alt="espi" style="width:10%">
         <div class="row justify-content-around align-items-center">
-            <div style="float: center" class="col-sm-4">
-                <div style="float: center" class="panel panel-default text-center" >
+            <div class="col-sm-4">
+                <div class="panel panel-default text-center ">
                     <div class="panel-heading">
                         <h4>Registrarse</h4>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label style= "float: left " for="usr_reg">Usuario:</label>
-                            <input type="text" class="form-control" id="usr_reg">
-                        </div>
-                        <div class="form-group">
-                            <label style= "float: left " for="email_reg">Email:</label>
+                            <label for="usr_reg">Usuario:</label>
+                            <input type="text" id="usr_reg "name="usr_reg" class="form-control">
+
+                            <label for="email_reg">Email:</label>
                             <input type="email" class="form-control" id="email_reg">
                         </div>
                         <div class="form-group">
-                            <label style= "float: left " for="pwd_reg">Contraseña:</label>
+                            <label for="pwd_reg">Contraseña:</label>
                             <input type="password" class="form-control" id="pwd_reg">
                         </div>
-                        <button class="btn btn-success w-100">Registrarse</button>
+                        <button id="btnRegister"class="btn btn-success w-100">Registrarse</button>
 
                     </div>
 
@@ -210,6 +94,7 @@
         </div>
     </div>
 </div>
+
 <div id="test" class="jumbotron text-center">
 
     <h1>Operación Rempálago</h1>

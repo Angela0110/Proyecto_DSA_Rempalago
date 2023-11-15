@@ -1,0 +1,64 @@
+   .jumbotron {
+    background-color: #f4511e;
+    color: #fff;
+    margin: 0px 0;
+    padding: 50px 25px;
+
+   }
+   .bg-1{
+    background-color: #f4511e;
+    color: #fff;
+    margin: 10px 0;
+    padding: 10px 25px;
+
+   }
+   .form-group {
+
+    color: #000000;
+
+   }
+    .container-fluid {
+    background-color: #f4511e;
+    color: #fff;
+    margin: 0px 0;
+    padding: 15px 25px;
+ }
+   .bt-1 {
+   padding: 10px 25px;
+   margin: 7px 0;
+   /*width:100px;*/
+   }
+    .pull-right {
+    float: right !important;
+  }
+.navbar {
+margin-bottom: 0;
+background-color: #f4511e;
+z-index: 9999;
+border: 0;
+font-size: 12px !important;
+line-height: 1.42857143 !important;
+letter-spacing: 4px;
+border-radius: 0;
+}
+
+.navbar li a, .navbar .navbar-brand {
+color: #fff !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+color: #f4511e !important;
+background-color: #fff !important;
+}
+
+.navbar-default .navbar-toggle {
+border-color: transparent;
+color: #fff !important;
+}
+
+#registro {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+  }
