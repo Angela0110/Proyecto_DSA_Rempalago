@@ -16,6 +16,7 @@ public class Avatar {
     public Avatar(){this.id = RandomUtils.getId();}
     public Avatar(int idArma, int life, int damg, int speed){
         this();
+        this.id = RandomUtils.getId();
         this.idArma = idArma;
         this.life = life;
         this.damg = damg;

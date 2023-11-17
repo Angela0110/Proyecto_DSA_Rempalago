@@ -91,7 +91,7 @@ public class TiendaService {
     @DELETE
     @ApiOperation(value = "delete producto")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Succesful", response = Teinda.class, responseContainer="List"),
+            @ApiResponse(code = 201, message = "Succesful", response = Tienda.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Validation Error")
 
@@ -104,7 +104,10 @@ public class TiendaService {
             return Response.status(201).entity(entity).build();
         }
         catch(ProductoNotFoundException e) {
-
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+        catch(FaltanDatosException e){
+            return Response.status(500).entity(e.getMessage()).build();
         }
     }
 

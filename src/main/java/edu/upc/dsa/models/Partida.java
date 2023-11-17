@@ -14,9 +14,10 @@ public class Partida {
     String idMapa;     // Identificador del mapa que se está jugando
 
     // Constructores
-    public Partida(){this.id = RandomUtils.getId();  this.idMapa = "";}
+    public Partida(){this.id = RandomUtils.getId(); this.idMapa = "";}
     public Partida(int dif, String idPlayer, String idMapa){
         this();
+        this.id = RandomUtils.getId();
         this.dif = dif;
         this.idPlayer = idPlayer;
         this.idMapa = idMapa;
@@ -25,13 +26,15 @@ public class Partida {
 
     // Setters y Getters
 
-    public String GetPartidaId(){return this.id;}
-    public String GetPlayerId(){return this.idPlayer;}
-    public void SetPlayerId(String idPlayer){this.idPlayer = idPlayer;}
-    public String GetMapId(){return this.idMapa;}
-    public void SetMapaId(String idMapa){this.idMapa = idMapa;}
-    public int GetNivel(){return this.nivl;}
-    public void SetNivel(int nivel){this.nivl = nivel;}
-    public int GetDificultad(){return this.dif;}
-    public void SetDificultad(int dif){this.dif = dif;}
+    public String getPartidaId(){return this.id;}
+    public String getPlayerId(){return this.idPlayer;}
+    public void setPlayerId(String idPlayer){this.idPlayer = idPlayer;}
+    public String getMapId(){return this.idMapa;}
+    public void setMapaId(String idMapa){this.idMapa = idMapa;}
+    public int getNivel(){return this.nivl;}
+    public void setNivel(int nivel){this.nivl = nivel;}
+    public int getDificultad(){return this.dif;}
+    public void setDificultad(int dif) {
+        this.dif = dif;
+    }
 }
