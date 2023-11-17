@@ -1,11 +1,9 @@
 package edu.upc.dsa;
 
 
-import edu.upc.dsa.exceptions.FaltanDatosException;
-import edu.upc.dsa.exceptions.JugadorYaExisteException;
-import edu.upc.dsa.exceptions.NotAnEmailException;
-import edu.upc.dsa.exceptions.UserNotFoundException;
+import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Jugador;
+import edu.upc.dsa.models.Tienda;
 
 import java.util.List;
 
@@ -32,4 +30,14 @@ public interface GameManager {
     public List<Partida> consultarPartidas(String id) throws UserNotFoundException;
     public Jugador addJugador(Jugador jugador);
     public Jugador addJugador();*/
-    }
+
+    // Tienda manager
+    public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
+    public Tienda addProducto(int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
+    public Tienda getProducto(String id) throws ProductoNotFoundException;
+    public int TiendasSize();
+    public List<Tienda> findAllProductos();
+}
+
+
+

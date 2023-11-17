@@ -92,7 +92,7 @@ public class JugadorService {
             @ApiResponse(code=409,message="Conflict")
 
     })
-@Path("/register")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response regJugador(Jugador jugador) {
         try {

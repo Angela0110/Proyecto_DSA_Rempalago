@@ -56,6 +56,7 @@ public class GameManagerImpl implements GameManager {
         return ret;
     }
 
+
     public Partida addPartida(Partida p) {
         logger.info("Nueva partida " + p);
 
@@ -63,7 +64,7 @@ public class GameManagerImpl implements GameManager {
         logger.info("Nueva partida añadida");
         return p;
     }
-    public Partida addPartida(int dif, int idPlayer, int idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
+    public Partida addPartida(int dif, String idPlayer, String idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
 
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
         logger.info("new Jugador " + jugador.getUserName());
@@ -100,8 +101,9 @@ public class GameManagerImpl implements GameManager {
 
     }
     public List<Jugador> findAllJugadores(){
-        return Jugadores;
+        return this.Jugadores;
     }
+    public List<Tienda> findAllProductos(){return this.Productos;}
     // Que pasa si yo ya tengo una partida guardada de antes??
     // Cómo se tendría que inciar?
 //    public void startPartida(Partida p, Jugador j, Mapa m, Avatar a) {        // El jugador inicicia una partida
@@ -139,6 +141,44 @@ public class GameManagerImpl implements GameManager {
         throw new UserNotFoundException();
     }
 
+
+    // Tienda
+
+    public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException{
+        logger.info("new product " + producto.getNombre());
+        for(Tienda p : this.findAllProductos()) {
+            if(p.getNombre().equals(producto.getNombre()))
+                throw new ProductoYaExisteException();
+        }
+        if(producto.getNombre() == null || producto.getDescription() == null || producto.getEfect() < 1 || producto.getEfectType() < 0  || producto.getEfectType() > 3 || producto.getPrecio() < 0)
+            throw new FaltanDatosException();
+        else{
+            this.Productos.add(producto);
+            logger.info("new producto added");
+            return producto;
+        }
+    }
+    public Tienda addProducto(int precio, String nombre, String descripcion, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException {return this.addProducto(new Tienda(precio, nombre, descripcion, efect_type,efect));}
+
+    public Tienda getProducto(String id) throws ProductoNotFoundException{
+        logger.info("getProducto("+id+")");
+
+        for (Tienda p: this.Productos) {
+            if (p.getId().equals(id)) {
+                logger.info("getUser("+id+"): "+p);
+
+                return p;
+            }
+        }
+
+        logger.error("not found " + id);
+        throw new ProductoNotFoundException();
+    }
+    public int TiendasSize(){
+        int ret = this.Productos.size();
+        logger.info("Productos size " + ret);
+        return ret;
+    }
 
   /*  private static GameManager instance;
     protected List<Partida> partidas;
