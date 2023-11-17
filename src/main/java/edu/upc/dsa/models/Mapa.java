@@ -1,11 +1,10 @@
 package edu.upc.dsa.models;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import edu.upc.dsa.util.RandomUtils;
 
 public class Mapa {
-    int id;
-    static AtomicInteger nextId = new AtomicInteger();
+    String id;
     // Constructor
-    public Mapa(){this.id = nextId.incrementAndGet();}
-    public int getId(){return this.id;}
+    public Mapa(){this.id = RandomUtils.getId();}
+    public String getId(){return this.id;}
 }

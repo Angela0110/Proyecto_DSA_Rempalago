@@ -34,5 +34,6 @@ public class Partida {
     public int getNivel(){return this.nivl;}
     public void setNivel(int nivel){this.nivl = nivel;}
     public int getDificultad(){return this.dif;}
-    public void setDificultad(int dif){this.dif = dif;}
+    public void setDificultad(int dif){this.dif = dif;
+
 }

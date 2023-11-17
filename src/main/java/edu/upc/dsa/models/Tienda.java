@@ -1,10 +1,11 @@
 package edu.upc.dsa.models;
 
+import edu.upc.dsa.util.RandomUtils;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Tienda {
-    int id;
-    static AtomicInteger nextId = new AtomicInteger();
+    String id;
     int precio;
     String nombre;
     int efect_type;         // Tipo de efecto que ejerce
@@ -16,17 +17,16 @@ public class Tienda {
     String description;     // Pequeña descripción del producto
 
     // Constructores
-    public Tienda(){this.id = nextId.incrementAndGet();}
+    public Tienda(){this.id = RandomUtils.getId();}
     public Tienda(int precio, String nombre, String description, int efect_type, int efect){
         this();
-        this.id = nextId.incrementAndGet();
         this.nombre = nombre;
         this.description = description;
         this.precio = precio;
         this.efect_type = efect_type;
         this.efect = efect;
     }
-    public int getId(){return this.id;}
+    public String getId(){return this.id;}
     public int getPrecio(){return this.precio;}
     public void setPrecio(int precio){this.precio = precio;}
     public int getEfectType(){return this.efect_type;}
