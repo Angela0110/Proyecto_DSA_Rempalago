@@ -64,7 +64,7 @@ $("#btnLogin").click(function(){
     username:username,
     password:password
   };
-  fetch('http://localhost:8080/jugadores/login',{
+  fetch('http://localhost:8080/swagger/juegos/login',{
     method:'POST',
     headers:{
       'Content-Type':'application/json'
@@ -89,12 +89,12 @@ $("#btnLogin").click(function(){
   });
 
 var datosProductos=[
-{nombre:"Producto 1", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
-{nombre:"Producto 2", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
-{nombre:"Producto 3", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
-{nombre:"Producto 4", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
-{nombre:"Producto 5", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
-{nombre:"Producto 6", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 1", descripcion:"+20 de daño", imagen:"espinete.jpg",precio:100},
+{nombre:"Producto 2", descripcion:"+20 de vida", imagen:"espinete.jpg",precio:100},
+{nombre:"Producto 3", descripcion:"+20 de velocidad", imagen:"espinete.jpg",precio:100},
+{nombre:"Producto 4", descripcion:"Invisibilidad durante 30s", imagen:"espinete.jpg",precio:210},
+{nombre:"Producto 5", descripcion:"Escopeta", imagen:"espinete.jpg",precio:200},
+{nombre:"Producto 6", descripcion:"Espada", imagen:"espinete.jpg",precio:150},
 ];
 function generarProductoWEB(producto){
   return `
