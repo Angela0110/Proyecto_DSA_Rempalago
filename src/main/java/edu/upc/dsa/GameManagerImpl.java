@@ -1,7 +1,6 @@
 package edu.upc.dsa;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Jugador;
@@ -17,7 +16,7 @@ public class GameManagerImpl implements GameManager {
 
     private static GameManager instance;
     protected List<Partida> Partidas;
-    protected List<Jugador> Jugadores;
+    protected Map<String, Jugador> Jugadores;
     protected List<Partida> Jugadas;
     protected List<Avatar> Avatares;
     protected List<Mapa> Mapas;
@@ -26,7 +25,7 @@ public class GameManagerImpl implements GameManager {
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
         this.Partidas = new LinkedList<>();
-        this.Jugadores = new LinkedList<>();
+        this.Jugadores = new HashMap<>();
         this.Avatares = new LinkedList<>();
         this.Mapas = new LinkedList<>();
         this.Productos = new LinkedList<>();
@@ -63,23 +62,26 @@ public class GameManagerImpl implements GameManager {
         logger.info("Nueva partida añadida");
         return p;
     }
-    public Partida addPartida(int dif, int idPlayer, int idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
+    public Partida addPartida(int dif, String idPlayer, int idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
 
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
         logger.info("new Jugador " + jugador.getUserName());
+        if (jugador.getMail() == null  || jugador.getUserName() == null || jugador.getPasword() == null){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
+        }
         for (Jugador j : this.findAllJugadores()){
             if (j.getMail().equals(jugador.getMail()) || j.getUserName().equals(jugador.getUserName())){
+                logger.info("Ese jugador ya existe (el email y el usuario tienen que ser únicos)");
                 throw new JugadorYaExisteException();
             }
         }
         if (Verificar.esDireccionCorreoValida(jugador.getMail()) == false){
+            logger.info("No es un email");
             throw new NotAnEmailException();
         }
-        if (jugador.getMail() == null  || jugador.getUserName() == null || jugador.getPasword() == null){
-            throw new FaltanDatosException();
-        }
         else{
-            this.Jugadores.add(jugador);
+            this.Jugadores.put(jugador.getUserId(), jugador);
             logger.info("new Jugador added");
             return jugador;
         }
@@ -87,21 +89,131 @@ public class GameManagerImpl implements GameManager {
 
     public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException { return this.addJugador(new Jugador(username, mail, pasword)); }
 
-    public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException {
+    public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException {
         if(username == null || password == null){
+            logger.info("Faltan datos");
             throw new FaltanDatosException();
         }
         for (Jugador j : this.findAllJugadores()){
-            if (j.getUserName().equals(username) && j.getPasword().equals(password)){
-                return;
+            if (j.getUserName().equals(username)){
+                if (j.getPasword().equals(password)) {
+                    logger.info("Login del jugador " + username);
+                    return;
+                }
+                else{
+                    throw new WrongPasswordException();
+                }
             }
         }
+        logger.info("Usuario o contraseña errónea");
         throw new UserNotFoundException();
+    }
 
-    }
     public List<Jugador> findAllJugadores(){
-        return Jugadores;
+
+        List<Jugador> lista = new ArrayList<Jugador>(Jugadores.values());
+        return lista;
     }
+
+    public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(id);
+        logger.info("El usuario " + j.getUserName() +" quiere cambiar su nombre");
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            if (j.getPasword().equals(password)){
+                j.setUserName(nuevoUser);
+                logger.info("El usuario cambió su username a  "+ nuevoUser);
+                return;
+            }
+            else{
+                throw new WrongPasswordException();
+            }
+        }
+    }
+
+    public void updatePassword(String id, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(id);
+        logger.info("El usuario " + j.getUserName() +" quiere cambiar su contraseña");
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            if (j.getPasword().equals(password)){
+                j.setPasword(nuevoPass);
+                logger.info("El usuario cambió su contraseña");
+                return;
+            }
+            else{
+                throw new WrongPasswordException();
+            }
+        }
+    }
+
+    public void deleteUser(String id, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(id);
+        logger.info("El usuario " + j.getUserName() +" borrar su perfil");
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            if (j.getPasword().equals(password)){
+                this.Jugadores.remove(id);
+                logger.info("El usuario cambió su contraseña");
+                return;
+            }
+            else{
+                throw new WrongPasswordException();
+            }
+        }
+    }
+
+    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException {
+        logger.info("El jugador con id " + identificadorUsuario + " quiere consultar su puntuación");
+        Jugador j = Jugadores.get(identificadorUsuario);
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            int puntos = j.getPoints();
+            logger.info("El usuario tiene "+ puntos + " puntos");
+            return puntos;
+        }
+    }
+
+
+
+    public List<Partida> consultarPartidas(String id) throws UserNotFoundException {
+        logger.info("El usuario " + id + " quiere consultar una lista con sus partidas");
+        List<Partida> par = new LinkedList<Partida>();
+        Jugador j = Jugadores.get(id);
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            for (Partida p:Partidas){
+                if (p.getPlayerId().equals(id)){
+                    par.add(p);
+                }
+            }
+            if (par.isEmpty()) {
+                logger.info("El usuario aun no jugó ninguna partida");
+                return Collections.emptyList();
+            }
+            else {
+                return par;
+            }
+        }
+    }
+
+
+
     // Que pasa si yo ya tengo una partida guardada de antes??
     // Cómo se tendría que inciar?
 //    public void startPartida(Partida p, Jugador j, Mapa m, Avatar a) {        // El jugador inicicia una partida
@@ -126,17 +238,15 @@ public class GameManagerImpl implements GameManager {
 
     public Jugador getJugador(String id) throws UserNotFoundException {
         logger.info("getUser("+id+")");
-
-        for (Jugador u: this.Jugadores) {
-            if (u.getUserId().equals(id)) {
-                logger.info("getUser("+id+"): "+u);
-
-                return u;
-            }
+        Jugador j = Jugadores.get(id);
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
         }
-
-        logger.error("not found " + id);
-        throw new UserNotFoundException();
+        else{
+            logger.info("getUser("+id+"): "+ j);
+            return j;
+        }
     }
 
 

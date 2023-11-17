@@ -57,14 +57,14 @@ $("#tienda_button").click(function(){
   });
 
 $("#btnLogin").click(function(){
-  var username=$("usr_ini").val();
+  var username=$("#usr_ini").val();
   var password=$("#pwd_ini").val();
 
   var userData={
     username:username,
     password:password
   };
-  fetch('http://localhost:8080/jugadores/login',{
+  fetch('http://localhost:8080/juegos/login',{
     method:'POST',
     headers:{
       'Content-Type':'application/json'
