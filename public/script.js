@@ -1,19 +1,31 @@
 $(document).ready(function(){
 $("#iniciar").hide();
 $("#registro").hide();
+$("#tienda").hide();
 
   $("#inicio_buton").click(function(){
     $("#inicio").hide();
     $("#test").hide();
     $("#iniciar").show();
     $("#registro").hide();
+    $("#tienda").hide();
+
   });
+$("#tienda_button").click(function(){
+    $("#inicio").hide();
+    $("#test").hide();
+    $("#registro").hide();
+    $("#iniciar").hide();
+    $("#tienda").show();
+
+});
 
   $("#regis_buton").click(function(){
     $("#inicio").hide();
     $("#test").hide();
     $("#registro").show();
     $("#iniciar").hide();
+    $("#tienda").hide();
   });
 
   $("#btnRegister").click(function(){
@@ -73,9 +85,56 @@ $("#btnLogin").click(function(){
     $("#registro").hide();
     $("#inicio").show();
     $("#test").show();
+    $("#tienda").hide();
   });
 
-  $("#tiendabtn").click(function(){
+var datosProductos=[
+{nombre:"Producto 1", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 2", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 3", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 4", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 5", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+{nombre:"Producto 6", descripcion:"Descripción del producto", imagen:"espinete.jpg",precio:10},
+];
+function generarProductoWEB(producto){
+  return `
+  <div class="col-md-4 custom-row-margin">
+    <div class="card">
+       <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+       <div class="card-body">
+         <h5 class="card-title">${producto.nombre} </h5>
+         <p class="card-text">${producto.descripcion}</p>
+         <a href="#" class="btn btn-primary">Comprar</a>
+     </div>
+    </div>
+  </div>
+  `;
+}
+$(document).ready(function(){
+  var productosContainer=$('#productos');
+  datosProductos.forEach(function(producto) {
+    var productoWeb=generarProductoWEB(producto);
+    productosContainer.append(productoWeb);
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*$("#tiendabtn").click(function(){
     $("#test").hide();
     //$.get("http://localhost:8080/dsaApp/juegos", function(data, status){
     //alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
@@ -104,7 +163,5 @@ $("#btnLogin").click(function(){
      }
      document.body.appendChild(tabla);
     })
-  });
-
-
+  });*/
 });

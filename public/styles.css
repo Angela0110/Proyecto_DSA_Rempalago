@@ -61,4 +61,8 @@ color: #fff !important;
    justify-content: center;
    align-items: center;
    height: 100vh;
-  }
+ }
+
+ .custom-row-margin{
+     margin-bottom: 20px;
+   }
