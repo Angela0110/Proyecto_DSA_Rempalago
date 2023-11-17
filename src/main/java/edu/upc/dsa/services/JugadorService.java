@@ -103,26 +103,26 @@ public class JugadorService {
          }
      }
 
-    @PUT
-    @ApiOperation(value = "update password de un Jugador")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "Not found"),
-            @ApiResponse(code = 400, message = "Error")
-    })
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateContraseña() {
-        try {
-            this.gm.updatePassword();
-            return Response.status(201).build();
-        } catch (UserNotFoundException e) {
-            return Response.status(404).entity(e.getMessage()).build();
-        } catch (WrongPasswordException e){
-            return Response.status(400).entity(e.getMessage()).build();
-        }
-
-    }
+//    @PUT
+//    @ApiOperation(value = "update password de un Jugador")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 201, message = "Successful"),
+//            @ApiResponse(code = 404, message = "Not found"),
+//            @ApiResponse(code = 400, message = "Error")
+//    })
+//    @Path("/{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response updateContraseña(Jugador jugador) {
+//        try {
+//            this.gm.updatePassword();
+//            return Response.status(201).build();
+//        } catch (UserNotFoundException e) {
+//            return Response.status(404).entity(e.getMessage()).build();
+//        } catch (WrongPasswordException e){
+//            return Response.status(400).entity(e.getMessage()).build();
+//        }
+//
+//    }
 
 
 

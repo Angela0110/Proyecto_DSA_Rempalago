@@ -3,11 +3,7 @@ package edu.upc.dsa;
 import java.util.*;
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.Jugador;
-import edu.upc.dsa.models.Partida;
-import edu.upc.dsa.models.Tienda;
-import edu.upc.dsa.models.Avatar;
-import edu.upc.dsa.models.Mapa;
+import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
 import edu.upc.dsa.util.Verificar;
 
@@ -21,6 +17,7 @@ public class GameManagerImpl implements GameManager {
     protected List<Avatar> Avatares;
     protected List<Mapa> Mapas;
     protected List<Tienda> Productos;
+    protected List<Credenciales> Credenciales;
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
@@ -29,6 +26,8 @@ public class GameManagerImpl implements GameManager {
         this.Avatares = new LinkedList<>();
         this.Mapas = new LinkedList<>();
         this.Productos = new LinkedList<>();
+        this.Credenciales = new LinkedList<>();
+
     }
 
     public static GameManager getInstance() {
@@ -82,6 +81,9 @@ public class GameManagerImpl implements GameManager {
         }
         else{
             this.Jugadores.put(jugador.getUserId(), jugador);
+            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getPasword());
+            this.Credenciales.add(c);
+            logger.info("credenciales: " + c.getUsername() + " " + c.getContraseña());
             logger.info("new Jugador added");
             return jugador;
         }
