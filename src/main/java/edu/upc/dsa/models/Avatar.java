@@ -1,10 +1,11 @@
 package edu.upc.dsa.models;
 
+import edu.upc.dsa.util.RandomUtils;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Avatar {
-    int id;
-    static AtomicInteger nextId = new AtomicInteger();
+    String id;
     int idArma;
     int life;
     int damg;
@@ -12,10 +13,9 @@ public class Avatar {
     int speed;
 
     // Constructores
-    public Avatar(){this.id = nextId.incrementAndGet();}
+    public Avatar(){this.id = RandomUtils.getId();}
     public Avatar(int idArma, int life, int damg, int speed){
         this();
-        this.id = nextId.incrementAndGet();
         this.idArma = idArma;
         this.life = life;
         this.damg = damg;
@@ -23,7 +23,7 @@ public class Avatar {
         this.visible = 0;
     }
     // Setters y Getters
-    public int getId(){return this.id;}
+    public String getId(){return this.id;}
     public int getIdArma(){return this.idArma;}
     public void setIdArma(int idArma){this.idArma = idArma;}
     public int getLife(){return this.life;}

@@ -19,7 +19,6 @@ public class Jugador {
         this.mail = mail;
         this.pasword = pasword;
         this.points = 100;
-        this.id = RandomUtils.getId();
     }
 
     public Jugador(){this.id = RandomUtils.getId();}
