@@ -7,6 +7,8 @@ import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Credenciales;
 import edu.upc.dsa.models.Jugador;
 import edu.upc.dsa.models.Partida;
+import edu.upc.dsa.models.Credenciales;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,10 +18,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URLDecoder;
 import java.util.List;
-
-@Api(value = "/juegos", description = "Endpoint to Juego Service")
-@Path("/juegos")
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+@Api(value = "/jugadores", description = "Endpoint to Juego Service")
+@Path("/jugadores")
 public class JugadorService {
 
     private GameManager gm;
@@ -94,7 +98,7 @@ public class JugadorService {
      @Produces(MediaType.APPLICATION_JSON)
      public Response updateUsername(@QueryParam("id") String id, Credenciales credenciales) {
          try {
-             this.gm.updateUsername(id, credenciales.getUsername(), credenciales.getContraseña());
+             this.gm.updateUsername(id, credenciales.getUsername(), credenciales.getPassword());
              return Response.status(201).build();
          } catch (UserNotFoundException e) {
              return Response.status(404).entity(e.getMessage()).build();
@@ -134,19 +138,23 @@ public class JugadorService {
             @ApiResponse(code=400,message="Bad request"),
             @ApiResponse(code=404, message = "Not found"),
             @ApiResponse(code=409,message="Conflict")
-
     })
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response regJugador(Jugador jugador) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
+    public Response regJugador(Credenciales credenciales) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
         try {
-            this.gm.addJugador(jugador);
+
+            System.out.println("Datos recibidos: " + credenciales);
+
+            Jugador jugador = new Jugador((credenciales.getUsername()), credenciales.getEmail(), credenciales.getPassword());
+            System.out.println("," + credenciales.getUsername() + "," + credenciales.getEmail() + "," + credenciales.getPassword());
+            this.gm.regJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
             return Response.status(201).entity(jugador).build();
         } catch (FaltanDatosException e) {
             return Response.status(400).entity(e.getMessage()).build();
-        } catch (NotAnEmailException e){
+        } catch (NotAnEmailException e) {
             return Response.status(400).entity(e.getMessage()).build();
-        } catch (JugadorYaExisteException e){
+        } catch (JugadorYaExisteException e) {
             return Response.status(500).entity(e.getMessage()).build();
         }
     }
@@ -159,12 +167,11 @@ public class JugadorService {
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
-
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response logJugador(Credenciales credenciales) throws FaltanDatosException {
         try {
-            this.gm.logJugador(credenciales.getUsername(), credenciales.getContraseña());
+            this.gm.logJugador(credenciales.getUsername(), credenciales.getPassword());
             return Response.status(201).build();
         } catch (FaltanDatosException e){
             return Response.status(500).entity(e.getMessage()).build();

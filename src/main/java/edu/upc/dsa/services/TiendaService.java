@@ -1,6 +1,6 @@
 package edu.upc.dsa.services;
 
-
+/*
 import edu.upc.dsa.GameManager;
 import edu.upc.dsa.GameManagerImpl;
 import edu.upc.dsa.exceptions.*;
@@ -34,17 +34,14 @@ public class TiendaService {
     }
 
     @GET
-    @ApiOperation(value = "get all productoss")
+    @ApiOperation(value = "get all productos")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Tienda.class, responseContainer="List"),
     })
-
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProductos() {
-
         List<Tienda> productos = this.gm.findAllProductos();
-
         GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
         return Response.status(201).entity(entity).build();
     }
@@ -61,7 +58,7 @@ public class TiendaService {
 
         try {
             Tienda p = this.gm.getProducto(id);
-            return Response.status(201).entity(p).build();
+            return Response.status(200).entity(p).build();
         } catch (ProductoNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
         }
@@ -72,8 +69,7 @@ public class TiendaService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
             @ApiResponse(code = 500, message = "Validation Error"),
-            @ApiResponse(code=409,message="Conflict")
-
+            @ApiResponse(code= 409,message="Conflict")
     })
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -94,10 +90,11 @@ public class TiendaService {
             @ApiResponse(code = 201, message = "Succesful", response = Tienda.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Validation Error")
-
     })
-    public Response deleteProducto(Tienda producto) {
+    @Path("/delete/{id}")
+    public Response deleteProducto(@PathParam("id")String id) {
         try {
+            Tienda producto=this.gm.getProducto(id);
             this.gm.deleteProducto(producto);
             List<Tienda> p = this.gm.findAllProductos();
             GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(p) {};
@@ -110,7 +107,5 @@ public class TiendaService {
             return Response.status(500).entity(e.getMessage()).build();
         }
     }
-
-
-
 }
+*/
