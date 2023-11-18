@@ -84,13 +84,41 @@ public class GameManagerImpl implements GameManager {
             this.Jugadores.put(jugador.getUserId(), jugador);
             Credenciales c = new Credenciales(jugador.getUserName(), jugador.getPasword());
             this.Credenciales.add(c);
-            logger.info("credenciales: " + c.getUsername() + " " + c.getContraseña());
+            logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
             return jugador;
         }
     }
 
     public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException { return this.addJugador(new Jugador(username, mail, pasword)); }
+
+    public void regJugador(String username,String email,String password)throws JugadorYaExisteException,FaltanDatosException, NotAnEmailException{
+        try{
+            if(username==null||email==null||password==null){
+                logger.info("Faltan datos");
+                throw new FaltanDatosException();
+            }
+
+            for(Jugador j:this.findAllJugadores()){
+                if(j.getUserName().equals(username)){
+                    logger.info("El jugador"+username+"ya exite");
+                    throw new JugadorYaExisteException();
+                }
+            }
+
+            Jugador nuevoJugador=new Jugador(username,email,password);
+            this.addJugador(nuevoJugador);
+            logger.info("Registro exitoso de "+username);
+        }catch (FaltanDatosException e){
+            logger.error("Error : faltan datos al registrar al jugador",e);
+        }catch (JugadorYaExisteException e){
+            logger.error("Error : jugador ya existe al registrar al jugador",e);
+        }catch (NotAnEmailException e) {
+            logger.error("Error : no es un email", e);
+        }catch (Exception e){
+            logger.error("Error inesperado al registrar",e);
+        }
+    }
 
     public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException {
         if(username == null || password == null){
@@ -112,12 +140,12 @@ public class GameManagerImpl implements GameManager {
         throw new UserNotFoundException();
     }
 
-    public List<Jugador> findAllJugadores(){return this.Jugadores;}
-    public List<Tienda> findAllProductos(){return this.Productos;}
-
-        List<Jugador> lista = new ArrayList<Jugador>(Jugadores.values());
+    public List<Jugador>  findAllJugadores(){ List<Jugador> lista = new ArrayList<Jugador>(Jugadores.values());
         return lista;
     }
+    public List<Tienda> findAllProductos(){return this.Productos;}
+
+
 
     public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException {
         Jugador j = Jugadores.get(id);

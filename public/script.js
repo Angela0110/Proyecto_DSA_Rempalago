@@ -30,7 +30,7 @@ $("#tienda_button").click(function(){
 
   $("#btnRegister").click(function(){
 
-    var username=$("#user_reg").val();
+    var username=$("#usr_reg").val();
     var email=$("#email_reg").val();
     var password=$("#pwd_reg").val();
 
@@ -40,7 +40,7 @@ $("#tienda_button").click(function(){
       password:password
     };
 
-    fetch('http://localhost:8080/jugadores/register',{
+    fetch('http://localhost:8080/dsaApp/jugadores/register',{
       method:'POST',
       headers: {
         'Content-Type':'application/json'
@@ -65,7 +65,7 @@ $("#btnLogin").click(function(){
     password:password
   };
 
-  fetch('http://localhost:8080/dsaApp/juegos/login',{
+  fetch('http://localhost:8080/dsaApp/jugadores/login',{
     method:'POST',
     headers:{
       'Content-Type':'application/json'
