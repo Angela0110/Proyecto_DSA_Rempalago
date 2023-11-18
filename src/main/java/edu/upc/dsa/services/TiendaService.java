@@ -18,8 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/juegos", description = "Endpoint to Juego Service")
-@Path("/juegos")
+@Api(value = "/tienda", description = "Endpoint to Tienda Service")
+@Path("/tienda")
 public class TiendaService {
 
     private GameManager gm;
@@ -75,7 +75,7 @@ public class TiendaService {
             @ApiResponse(code=409,message="Conflict")
 
     })
-    @Path("/register")
+    @Path("/addproducto")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addProducto(Tienda producto) {
         try {
@@ -96,6 +96,8 @@ public class TiendaService {
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
+    @Path("/deleteproducto")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteProducto(Tienda producto) {
         try {
             this.gm.deleteProducto(producto);
