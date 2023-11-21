@@ -21,7 +21,6 @@ public interface GameManager {
     public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException;
     public void updatePassword(String id, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException;
     public void deleteUser(String id, String password) throws UserNotFoundException, WrongPasswordException;
-    public void regJugador(String username,String email,String password)throws FaltanDatosException,JugadorYaExisteException,NotAnEmailException;
     public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
@@ -46,4 +45,5 @@ public interface GameManager {
     public int TiendasSize();
     public List<Tienda> findAllProductos();
     public void increaseDamage(String jugadorId);
+    public void increaseHealth(String jugadorId);
 }

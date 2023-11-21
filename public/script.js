@@ -29,6 +29,14 @@ $("#tienda_button").click(function(){
     $("#tienda").hide();
   });
 
+  $("#menu").click(function(){
+    $("#iniciar").hide();
+    $("#registro").hide();
+    $("#inicio").show();
+    $("#test").show();
+    $("#tienda").hide();
+  });
+
 $("#btnRegister").click(function(){
 
     var username=$("#usr_reg").val();
@@ -84,21 +92,21 @@ $("#btnLogin").click(function(){
     });
 });
 
-function aumentarDanio(index){
+function increaseDamage(index){
 
 var usernameJugadorRegistrado=sessionStorage.getItem('username');
 var data={
 username:usernameJugadorRegistrado
 };
 
-fetch('http://localhost:8080/dsaApp/tienda/aumentarDano',{
+fetch('http://localhost:8080/dsaApp/tienda/increaseDamage',{
 method:'POST',
 headers:{
 'Content-Type':'application/json'
 },
 body:JSON.stringify(data)
 })
-.thene(response=> response.json())
+.then(response=> response.json())
 .then(data=>{
 console.log(data);
 })
@@ -107,19 +115,55 @@ console.error('Error',error);
 });
 };
 
-  $("#menu").click(function(){
-    $("#iniciar").hide();
-    $("#registro").hide();
-    $("#inicio").show();
-    $("#test").show();
-    $("#tienda").hide();
-  });
+function increaseHealth(index){
+
+var usernameJugadorRegistrado=sessionStorage.getItem('username');
+var data={
+username:usernameJugadorRegistrado
+};
+
+fetch('http://localhost:8080/dsaApp/tienda/increaseHealth',{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify(data)
+})
+.then(response=> response.json())
+.then(data=>{
+console.log(data);
+})
+.catch(error=>{
+console.error('Error',error);
+});
+};
+
+function increaseSpeed(index){
+var usernameJugadorRegistrado=sessionStorage.getItem('username');
+var dat={
+username=usernameJugadorRegistrado
+};
+fetch('http://localhost:8080/dsaApp/tienda/increaseSpeed',{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify(data)
+})
+.then(response=> response.json())
+.then(data=>{
+console.log(data);
+})
+.catch(error=>{
+console.error('Error',error);
+});
+}
 
 var datosProductos=[
 {nombre:"Producto 1", descripcion:"+20 de daño", imagen:"espinete.jpg",precio:100},
 {nombre:"Producto 2", descripcion:"+20 de vida", imagen:"espinete.jpg",precio:100},
 {nombre:"Producto 3", descripcion:"+20 de velocidad", imagen:"espinete.jpg",precio:100},
-{nombre:"Producto 4", descripcion:"Invisibilidad durante 30s", imagen:"espinete.jpg",precio:210},
+{nombre:"Unobtanium", descripcion:"Invisibilidad durante 30s", imagen:"espinete.jpg",precio:210},
 {nombre:"Producto 5", descripcion:"Escopeta", imagen:"espinete.jpg",precio:200},
 {nombre:"Producto 6", descripcion:"Espada", imagen:"espinete.jpg",precio:150},
 ];
@@ -157,35 +201,5 @@ $(document).ready(function(){
 });
 });
 
-  /*$("#tienda_btn").click(function(){
-    $("#test").hide();
-    //$.get("http://localhost:8080/dsaApp/juegos", function(data, status){
-    //alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-    fetch('http://localhost:8080/dsaApp/tracks')
-    .then(response => response.json())
-    .then(data => {
 
-     var tabla = document.createElement('table');
-
-     // por cada dato se crea una fila
-     for (const fila of data){
-     let tr = document.createElement('tr');
-
-     // otro bucle para recorrer los datos de cada objeto
-     for (const atributo of Object.values(fila)) {
-
-     var celda = document.createElement('td');
-     celda.textContent = atributo;
-     celda.style.border = '1px solid';
-     tr.appendChild(celda);
-     }
-
-     tr.appendChild(celda);
-
-     tabla.appendChild(tr);
-     }
-     document.body.appendChild(tabla);
-    })
-  });
-});*/
 });

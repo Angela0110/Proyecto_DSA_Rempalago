@@ -94,17 +94,33 @@ public class TiendaService {
 //faltan los codigos
 
     })
-    @Path("/aumentarDano")
+    @Path("/increaseDamage")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response increaseDamage(String jugadorUsername){
         try{
             this.gm.increaseDamage(jugadorUsername);
-            return Response.status(201).entity(jugadorUsername).build();
+            return Response.status(201).build();
         }catch(Exception e){
             return Response.status(500).entity(e.getMessage()).build();
         }
 
     }
+
+    @POST
+    @ApiOperation(value="aumentar vida")
+    @ApiResponses(value={
+            //faltan los codigo
+    })@Path("/increaseHealth")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response increaseHealth(String jugadorUsername){
+        try{
+            this.gm.increaseHealth(jugadorUsername);
+            return Response.status(201).build();
+        }catch(Exception e){
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+    }
+
     @DELETE
     @ApiOperation(value = "delete producto")
     @ApiResponses(value = {
