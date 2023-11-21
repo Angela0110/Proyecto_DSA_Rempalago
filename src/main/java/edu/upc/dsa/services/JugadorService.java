@@ -6,8 +6,6 @@ import edu.upc.dsa.GameManagerImpl;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Credenciales;
 import edu.upc.dsa.models.Jugador;
-import edu.upc.dsa.models.Partida;
-import edu.upc.dsa.models.Credenciales;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,10 +16,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URLDecoder;
 import java.util.List;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+
+
+
 @Api(value = "/jugadores", description = "Endpoint to Juego Service")
 @Path("/jugadores")
 public class JugadorService {
@@ -43,7 +41,7 @@ public class JugadorService {
             @ApiResponse(code = 201, message = "Successful", response = Jugador.class, responseContainer="List"),
     })
 
-    @Path("/")
+    @Path("/allJugadores")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJugadores() {
 
@@ -72,62 +70,83 @@ public class JugadorService {
         }
 
     }
- /*   @PUT
-    @ApiOperation(value = "More points for jugador", notes = "asdasd")
+    /*   @PUT
+       @ApiOperation(value = "More points for jugador", notes = "asdasd")
+       @ApiResponses(value = {
+               @ApiResponse(code = 201, message = "Successful"),
+               @ApiResponse(code = 404, message = "User not found")
+       })
+       @Path("/")
+       public Response nextlevelUser(int id, int points, String date) {
+
+           Jugador j = this.gm.addPointsJugador(id, points, date);
+
+           if (j == null) return Response.status(404).build();
+           return Response.status(201).build();
+       }*/
+//
+    @PUT
+    @ApiOperation(value = "update nombre de un Jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Error")
     })
-    @Path("/")
-    public Response nextlevelUser(int id, int points, String date) {
+    @Path("/updateUsername")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUsername(Credenciales credenciales) {
+        try {
+            this.gm.updateUsername(credenciales.getId(), credenciales.getUsername(), credenciales.getPassword());
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (WrongPasswordException e){
+            return Response.status(400).entity(e.getMessage()).build();
+        }
+    }
 
-        Jugador j = this.gm.addPointsJugador(id, points, date);
-
-        if (j == null) return Response.status(404).build();
-        return Response.status(201).build();
-    }*/
-//
-     @PUT
-     @ApiOperation(value = "update nombre de un Jugador")
-     @ApiResponses(value = {
-             @ApiResponse(code = 201, message = "Successful"),
-             @ApiResponse(code = 404, message = "Not found"),
-             @ApiResponse(code = 400, message = "Error")
-     })
-     @Path("/{id}")
-     @Produces(MediaType.APPLICATION_JSON)
-     public Response updateUsername(@QueryParam("id") String id, Credenciales credenciales) {
-         try {
-             this.gm.updateUsername(id, credenciales.getUsername(), credenciales.getPassword());
-             return Response.status(201).build();
-         } catch (UserNotFoundException e) {
-             return Response.status(404).entity(e.getMessage()).build();
-         } catch (WrongPasswordException e){
-             return Response.status(400).entity(e.getMessage()).build();
-         }
-     }
-
-/*    @PUT
-      @ApiOperation(value = "update password de un Jugador")
-      @ApiResponses(value = {
-              @ApiResponse(code = 201, message = "Successful"),
-              @ApiResponse(code = 404, message = "Not found"),
-              @ApiResponse(code = 400, message = "Error")
-      })
-      @Path("/{id}")
-      @Produces(MediaType.APPLICATION_JSON)
-      public Response updateContraseña(Jugador jugador) {
-          try {
-              this.gm.updatePassword();
-              return Response.status(201).build();
-          } catch (UserNotFoundException e) {
-              return Response.status(404).entity(e.getMessage()).build();
-          } catch (WrongPasswordException e){
-              return Response.status(400).entity(e.getMessage()).build();
-          }
+    @PUT
+    @ApiOperation(value = "update password de un Jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Error")
+    })
+    @Path("/updatePassword")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePassword(Credenciales credenciales) {
+        try {
+            this.gm.updatePassword(credenciales.getId(), credenciales.getNewPassword(), credenciales.getPassword());
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (WrongPasswordException e){
+            return Response.status(400).entity(e.getMessage()).build();
+        }
 
     }
-*/
+
+    @DELETE
+    @ApiOperation(value = "Borrar perfil de un Jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Error")
+    })
+    @Path("/borrar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteJugador(Credenciales credenciales) {
+        try {
+            this.gm.deleteUser(credenciales.getId(), credenciales.getPassword());
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (WrongPasswordException e){
+            return Response.status(400).entity(e.getMessage()).build();
+        }
+
+    }
+
 
 
     @POST
@@ -143,12 +162,7 @@ public class JugadorService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response regJugador(Credenciales credenciales) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
         try {
-
-            System.out.println("Datos recibidos: " + credenciales);
-
-            Jugador jugador = new Jugador((credenciales.getUsername()), credenciales.getEmail(), credenciales.getPassword());
-            System.out.println("," + credenciales.getUsername() + "," + credenciales.getEmail() + "," + credenciales.getPassword());
-            this.gm.regJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
+            Jugador jugador = this.gm.addJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
             return Response.status(201).entity(jugador).build();
         } catch (FaltanDatosException e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -169,7 +183,8 @@ public class JugadorService {
     })
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logJugador(Credenciales credenciales) throws FaltanDatosException {
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response loginJugador(Credenciales credenciales) throws FaltanDatosException {
         try {
             this.gm.logJugador(credenciales.getUsername(), credenciales.getPassword());
             return Response.status(201).build();

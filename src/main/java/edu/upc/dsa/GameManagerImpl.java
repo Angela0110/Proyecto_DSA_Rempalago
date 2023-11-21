@@ -66,6 +66,7 @@ public class GameManagerImpl implements GameManager {
     public Partida addPartida(int dif, String idPlayer, String idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
         logger.info("new Jugador " + jugador.getUserName());
+        logger.info(jugador.getUserName() + jugador.getMail() + jugador.getPasword());
         if (jugador.getMail() == null  || jugador.getUserName() == null || jugador.getPasword() == null){
             logger.info("Faltan datos");
             throw new FaltanDatosException();
@@ -82,7 +83,7 @@ public class GameManagerImpl implements GameManager {
         }
         else{
             this.Jugadores.put(jugador.getUserId(), jugador);
-            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getPasword());
+            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getMail(), jugador.getPasword(), jugador.getUserId());
             this.Credenciales.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
@@ -91,34 +92,6 @@ public class GameManagerImpl implements GameManager {
     }
 
     public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException { return this.addJugador(new Jugador(username, mail, pasword)); }
-
-    public void regJugador(String username,String email,String password)throws JugadorYaExisteException,FaltanDatosException, NotAnEmailException{
-        try{
-            if(username==null||email==null||password==null){
-                logger.info("Faltan datos");
-                throw new FaltanDatosException();
-            }
-
-            for(Jugador j:this.findAllJugadores()){
-                if(j.getUserName().equals(username)){
-                    logger.info("El jugador"+username+"ya exite");
-                    throw new JugadorYaExisteException();
-                }
-            }
-
-            Jugador nuevoJugador=new Jugador(username,email,password);
-            this.addJugador(nuevoJugador);
-            logger.info("Registro exitoso de "+username);
-        }catch (FaltanDatosException e){
-            logger.error("Error : faltan datos al registrar al jugador",e);
-        }catch (JugadorYaExisteException e){
-            logger.error("Error : jugador ya existe al registrar al jugador",e);
-        }catch (NotAnEmailException e) {
-            logger.error("Error : no es un email", e);
-        }catch (Exception e){
-            logger.error("Error inesperado al registrar",e);
-        }
-    }
 
     public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException {
         if(username == null || password == null){
@@ -140,11 +113,13 @@ public class GameManagerImpl implements GameManager {
         throw new UserNotFoundException();
     }
 
-    public List<Jugador>  findAllJugadores(){ List<Jugador> lista = new ArrayList<Jugador>(Jugadores.values());
+
+    public List<Jugador>  findAllJugadores(){
+        List<Jugador> lista = new ArrayList<Jugador>(Jugadores.values());
         return lista;
     }
-    public List<Tienda> findAllProductos(){return this.Productos;}
 
+    public List<Tienda> findAllProductos(){return this.Productos;}
 
 
     public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException {
@@ -195,6 +170,7 @@ public class GameManagerImpl implements GameManager {
         else{
             if (j.getPasword().equals(password)){
                 this.Jugadores.remove(id);
+                this.Credenciales.remove(j);
                 logger.info("El usuario cambió su contraseña");
                 return;
             }
@@ -315,7 +291,7 @@ public class GameManagerImpl implements GameManager {
         throw new ProductoNotFoundException();
     }
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException {
-       if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
+        if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
             logger.info("delete Producto" + producto.getId() + ")");
             int i = 0;
             boolean encontrado = false;
@@ -327,14 +303,49 @@ public class GameManagerImpl implements GameManager {
                 i++;
             }
             throw new ProductoNotFoundException();
-       }
-       else {
-           throw new FaltanDatosException();
-       }
+        }
+        else {
+            throw new FaltanDatosException();
+        }
     }
     public int TiendasSize(){
         int ret = this.Productos.size();
         logger.info("Productos size " + ret);
         return ret;
+    }
+
+
+    // Tienda
+
+
+
+    public void increaseDamage(String jugadorUsername){
+        Jugador jugador=Jugadores.get(jugadorUsername);
+        if(jugador !=null){
+            Avatar avatar =jugador.getAvatarActual();
+            if(avatar!=null){
+                int damage=avatar.getDamg()+20;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador"+ jugadorUsername+"no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con ID"+jugadorUsername);
+        }
+    }
+
+    public void increaseHealth(String jugadorUsername){
+        Jugador jugador=Jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatarActual();
+            if(avatar!=null){
+                int health=avatar.getLife()+20;
+                avatar.setLife(health);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+"no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador "+ jugadorUsername);
+        }
     }
 }
