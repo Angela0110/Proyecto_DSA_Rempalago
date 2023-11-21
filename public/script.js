@@ -141,7 +141,7 @@ console.error('Error',error);
 function increaseSpeed(index){
 var usernameJugadorRegistrado=sessionStorage.getItem('username');
 var dat={
-username=usernameJugadorRegistrado
+username:usernameJugadorRegistrado
 };
 fetch('http://localhost:8080/dsaApp/tienda/increaseSpeed',{
 method:'POST',
@@ -157,7 +157,7 @@ console.log(data);
 .catch(error=>{
 console.error('Error',error);
 });
-}
+};
 
 var datosProductos=[
 {nombre:"Producto 1", descripcion:"+20 de daño", imagen:"espinete.jpg",precio:100},
