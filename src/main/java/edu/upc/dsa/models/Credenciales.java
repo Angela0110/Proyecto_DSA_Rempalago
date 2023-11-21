@@ -5,9 +5,7 @@ public class Credenciales {
     private String email;
     private String password;
 
-    public Credenciales(){
-
-    }
+    public Credenciales(){}
     public Credenciales(String username, String password) {
         this.username = username;
         this.password = password;
