@@ -1,50 +1,53 @@
 package edu.upc.dsa.services;
 
-/*
+
 import edu.upc.dsa.GameManager;
 import edu.upc.dsa.GameManagerImpl;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Jugador;
 import edu.upc.dsa.models.Partida;
 import edu.upc.dsa.models.Tienda;
+import edu.upc.dsa.models.Avatar;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/juegos", description = "Endpoint to Juego Service")
-@Path("/juegos")
+@Api(value = "/tienda", description = "Endpoint to Juego Service")
+@Path("/tienda")
 public class TiendaService {
 
     private GameManager gm;
 
-    public TiendaService()  throws ProductoYaExisteException, FaltanDatosException{
+    public TiendaService() throws ProductoYaExisteException, FaltanDatosException {
         this.gm = GameManagerImpl.getInstance();
         if (gm.TiendasSize() == 0) {
-            this.gm.addProducto(150,"Espada","Espada pesada de combate",1,100);
-            this.gm.addProducto(200,"Mejora de vida","Mejora en la salud del avatar",0,200);
-            this.gm.addProducto(250,"Unobtanium","Confiere invisivilidad a la persona que la use",3,1);
+            this.gm.addProducto(150, "Espada", "Espada pesada de combate", 1, 100);
+            this.gm.addProducto(200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
+            this.gm.addProducto(250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
         }
     }
 
-    @GET
-    @ApiOperation(value = "get all productos")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class, responseContainer="List"),
-    })
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductos() {
-        List<Tienda> productos = this.gm.findAllProductos();
-        GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
-        return Response.status(201).entity(entity).build();
-    }
+
+        @GET
+        @ApiOperation(value = "get all productos")
+        @ApiResponses(value = {
+                @ApiResponse(code = 201, message = "Successful", response = Tienda.class, responseContainer="List"),
+        })
+        @Path("/todos")
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response getProductos() {
+            List<Tienda> productos = this.gm.findAllProductos();
+            GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
+            return Response.status(200).entity(entity).build();
+        }
 
     @GET
     @ApiOperation(value = "get a Producto")
@@ -84,6 +87,24 @@ public class TiendaService {
         }
     }
 
+    @POST
+    @ApiOperation(value="aumentar daño")
+    @ApiResponses(value={
+
+//faltan los codigos
+
+    })
+    @Path("/aumentarDano")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response increaseDamage(String jugadorUsername){
+        try{
+            this.gm.increaseDamage(jugadorUsername);
+            return Response.status(201).entity(jugadorUsername).build();
+        }catch(Exception e){
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+
+    }
     @DELETE
     @ApiOperation(value = "delete producto")
     @ApiResponses(value = {
@@ -108,4 +129,3 @@ public class TiendaService {
         }
     }
 }
-*/

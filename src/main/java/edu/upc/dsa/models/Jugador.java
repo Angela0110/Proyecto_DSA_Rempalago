@@ -11,6 +11,7 @@ public class Jugador {
     String mail;
     int points;   // Puntos en partida
 
+    private Avatar avatarActual;
 
     // Constructores
     public Jugador(String username, String mail, String pasword){
@@ -33,5 +34,10 @@ public class Jugador {
     public void SetMail(String mail){this.mail = mail;}
     public int getPoints(){return this.points;}
     public void setPoints(int points){this.points = this.points + points;}
+    public Avatar getAvatarActual(){return avatarActual;}
 
+    //mirar si son necesarios cambios en otros sitios////
+    public void setAvatarActual(Avatar avatarActual) {
+        this.avatarActual = avatarActual;
+    }
 }

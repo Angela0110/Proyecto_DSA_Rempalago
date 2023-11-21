@@ -14,19 +14,19 @@ public class GameManagerImpl implements GameManager {
     protected List<Partida> Partidas;
     protected Map<String, Jugador> Jugadores;
     protected List<Partida> Jugadas;
-    protected List<Avatar> Avatares;
+    protected List<Avatar> avatares;
     protected List<Mapa> Mapas;
     protected List<Tienda> Productos;
-    protected List<Credenciales> Credenciales;
+    protected List<CredencialesLog> CredencialesLog;
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
         this.Partidas = new LinkedList<>();
         this.Jugadores = new HashMap<>();
-        this.Avatares = new LinkedList<>();
+        this.avatares = new LinkedList<>();
         this.Mapas = new LinkedList<>();
         this.Productos = new LinkedList<>();
-        this.Credenciales = new LinkedList<>();
+        this.CredencialesLog = new LinkedList<>();
 
     }
 
@@ -82,8 +82,8 @@ public class GameManagerImpl implements GameManager {
         }
         else{
             this.Jugadores.put(jugador.getUserId(), jugador);
-            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getPasword());
-            this.Credenciales.add(c);
+            CredencialesLog c = new CredencialesLog(jugador.getUserName(), jugador.getPasword());
+            this.CredencialesLog.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
             return jugador;
@@ -336,5 +336,19 @@ public class GameManagerImpl implements GameManager {
         int ret = this.Productos.size();
         logger.info("Productos size " + ret);
         return ret;
+    }
+    public void increaseDamage(String jugadorUsername){
+        Jugador jugador=Jugadores.get(jugadorUsername);
+        if(jugador !=null){
+            Avatar avatar =jugador.getAvatarActual();
+            if(avatar!=null){
+                int damage=avatar.getDamg()+20;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador"+ jugadorUsername+"no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontro al jugador con ID"+jugadorUsername);
+        }
     }
 }

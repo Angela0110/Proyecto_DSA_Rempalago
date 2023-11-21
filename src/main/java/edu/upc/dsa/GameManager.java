@@ -45,4 +45,5 @@ public interface GameManager {
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
+    public void increaseDamage(String jugadorId);
 }

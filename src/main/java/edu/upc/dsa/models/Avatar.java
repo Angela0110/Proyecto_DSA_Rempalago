@@ -30,7 +30,7 @@ public class Avatar {
     public int getLife(){return this.life;}
     public void setLife(int life){this.life = life;}
     public int getDamg(){return this.damg;}
-    public void SetDamg(int damg){this.damg = damg;}
+    public void setDamg(int damg){this.damg = damg;}
     public int getSpeed(){return this.speed;}
     public void setSpeed(int speed){this.speed = speed;}
     public int getVisible(){return this.visible;}

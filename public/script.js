@@ -3,7 +3,8 @@ $("#iniciar").hide();
 $("#registro").hide();
 $("#tienda").hide();
 
-  $("#inicio_buton").click(function(){
+
+$("#inicio_buton").click(function(){
     $("#inicio").hide();
     $("#test").hide();
     $("#iniciar").show();
@@ -28,7 +29,7 @@ $("#tienda_button").click(function(){
     $("#tienda").hide();
   });
 
-  $("#btnRegister").click(function(){
+$("#btnRegister").click(function(){
 
     var username=$("#usr_reg").val();
     var email=$("#email_reg").val();
@@ -49,6 +50,7 @@ $("#tienda_button").click(function(){
     })
     .then(response=> response.json())
     .then(data=> {
+      sessionStorage.setItem('username',username);
       console.log(data);
     })
      .catch(error=> {
@@ -74,12 +76,36 @@ $("#btnLogin").click(function(){
   })
   .then(response=> response.json())
   .then(data=>{
+  sessionStorage.setItem('username',username);
   console.log(data);
     })
     .catch(error=>{
       console.error('Error',error);
     });
 });
+
+function aumentarDanio(index){
+
+var usernameJugadorRegistrado=sessionStorage.getItem('username');
+var data={
+username:usernameJugadorRegistrado
+};
+
+fetch('http://localhost:8080/dsaApp/tienda/aumentarDano',{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify(data)
+})
+.thene(response=> response.json())
+.then(data=>{
+console.log(data);
+})
+.catch(error=>{
+console.error('Error',error);
+});
+};
 
   $("#menu").click(function(){
     $("#iniciar").hide();
@@ -97,7 +123,7 @@ var datosProductos=[
 {nombre:"Producto 5", descripcion:"Escopeta", imagen:"espinete.jpg",precio:200},
 {nombre:"Producto 6", descripcion:"Espada", imagen:"espinete.jpg",precio:150},
 ];
-function generarProductoWEB(producto){
+function generarProductoWEB(producto,index){
   return `
   <div class="col-md-4 custom-row-margin">
     <div class="card">
@@ -105,37 +131,33 @@ function generarProductoWEB(producto){
        <div class="card-body">
          <h5 class="card-title">${producto.nombre} </h5>
          <p class="card-text">${producto.descripcion}</p>
-         <a href="#" class="btn btn-primary">Comprar</a>
+         <a href="#" class="btn btn-primary btmComprar"data-index="${index}">Comprar</a>
      </div>
     </div>
   </div>
   `;
 }
+
 $(document).ready(function(){
   var productosContainer=$('#productos');
-  datosProductos.forEach(function(producto) {
-    var productoWeb=generarProductoWEB(producto);
+  datosProductos.forEach(function(producto,index) {
+    var productoWeb=generarProductoWEB(producto,index);
     productosContainer.append(productoWeb);
+
+    $(".btnComprar").click(function(){
+
+    var index = $(this).data("index");
+    switch(index){
+    case 0:
+      aumentarDanio(index);
+    break;
+
+    }
   });
 });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*$("#tiendabtn").click(function(){
+  /*$("#tienda_btn").click(function(){
     $("#test").hide();
     //$.get("http://localhost:8080/dsaApp/juegos", function(data, status){
     //alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
@@ -164,5 +186,6 @@ $(document).ready(function(){
      }
      document.body.appendChild(tabla);
     })
-  });*/
+  });
+});*/
 });

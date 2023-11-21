@@ -4,10 +4,9 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.GameManager;
 import edu.upc.dsa.GameManagerImpl;
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.Credenciales;
+import edu.upc.dsa.models.CredencialesLog;
 import edu.upc.dsa.models.Jugador;
-import edu.upc.dsa.models.Partida;
-import edu.upc.dsa.models.Credenciales;
+import edu.upc.dsa.models.CredencialesReg;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,10 +17,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.URLDecoder;
 import java.util.List;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+
 @Api(value = "/jugadores", description = "Endpoint to Juego Service")
 @Path("/jugadores")
 public class JugadorService {
@@ -40,10 +37,9 @@ public class JugadorService {
     @GET
     @ApiOperation(value = "get all Jugadores")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Jugador.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "Successful", response = Jugador.class, responseContainer="List"),
     })
-
-    @Path("/")
+    @Path("/todos")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getJugadores() {
 
@@ -96,9 +92,9 @@ public class JugadorService {
      })
      @Path("/{id}")
      @Produces(MediaType.APPLICATION_JSON)
-     public Response updateUsername(@QueryParam("id") String id, Credenciales credenciales) {
+     public Response updateUsername(@QueryParam("id") String id, CredencialesLog credencialesLog) {
          try {
-             this.gm.updateUsername(id, credenciales.getUsername(), credenciales.getPassword());
+             this.gm.updateUsername(id, credencialesLog.getUsername(), credencialesLog.getPassword());
              return Response.status(201).build();
          } catch (UserNotFoundException e) {
              return Response.status(404).entity(e.getMessage()).build();
@@ -141,14 +137,14 @@ public class JugadorService {
     })
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response regJugador(Credenciales credenciales) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
+    public Response regJugador(CredencialesReg credencialesReg) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
         try {
 
-            System.out.println("Datos recibidos: " + credenciales);
+            System.out.println("Datos recibidos: " + credencialesReg);
 
-            Jugador jugador = new Jugador((credenciales.getUsername()), credenciales.getEmail(), credenciales.getPassword());
-            System.out.println("," + credenciales.getUsername() + "," + credenciales.getEmail() + "," + credenciales.getPassword());
-            this.gm.regJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
+            Jugador jugador = new Jugador((credencialesReg.getUsername()), credencialesReg.getEmail(), credencialesReg.getPassword());
+            System.out.println("," + credencialesReg.getUsername() + "," + credencialesReg.getEmail() + "," + credencialesReg.getPassword());
+            this.gm.regJugador(credencialesReg.getUsername(), credencialesReg.getEmail(), credencialesReg.getPassword());
             return Response.status(201).entity(jugador).build();
         } catch (FaltanDatosException e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -169,9 +165,9 @@ public class JugadorService {
     })
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logJugador(Credenciales credenciales) throws FaltanDatosException {
+    public Response logJugador(CredencialesLog credencialesLog) throws FaltanDatosException {
         try {
-            this.gm.logJugador(credenciales.getUsername(), credenciales.getPassword());
+            this.gm.logJugador(credencialesLog.getUsername(), credencialesLog.getPassword());
             return Response.status(201).build();
         } catch (FaltanDatosException e){
             return Response.status(500).entity(e.getMessage()).build();
@@ -181,7 +177,6 @@ public class JugadorService {
             return Response.status(400).entity(e.getMessage()).build();
         }
     }
-
 
 
 
