@@ -82,8 +82,8 @@ public class GameManagerImpl implements GameManager {
             throw new NotAnEmailException();
         }
         else{
-            this.Jugadores.put(jugador.getUserId(), jugador);
-            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getMail(), jugador.getPasword(), jugador.getUserId());
+            this.Jugadores.put(jugador.getUserName(), jugador);
+            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getMail(), jugador.getPasword());
             this.Credenciales.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
@@ -122,17 +122,20 @@ public class GameManagerImpl implements GameManager {
     public List<Tienda> findAllProductos(){return this.Productos;}
 
 
-    public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException {
-        Jugador j = Jugadores.get(id);
-        logger.info("El usuario " + j.getUserName() +" quiere cambiar su nombre");
-        if (j == null){
-            logger.info("El usuario no existe");
-            throw new UserNotFoundException();
+    public void updateUsername(String username,String email, String newUsername, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador jugador = Jugadores.get(username);
+
+        if (jugador == null){
+           logger.info("El usuario no existe");
+           throw new UserNotFoundException();
         }
         else{
-            if (j.getPasword().equals(password)){
-                j.setUserName(nuevoUser);
-                logger.info("El usuario cambió su username a  "+ nuevoUser);
+            logger.info("El usuario " + jugador.getUserName() +" quiere cambiar su nombre");
+            if (jugador.getPasword().equals(password)){
+                Jugadores.remove(jugador.getUserName());
+                jugador.setUserName(newUsername);
+                Jugadores.put(newUsername,jugador);
+                logger.info("El usuario cambió su username a  "+ newUsername);
                 return;
             }
             else{
@@ -141,16 +144,16 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public void updatePassword(String id, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException {
-        Jugador j = Jugadores.get(id);
-        logger.info("El usuario " + j.getUserName() +" quiere cambiar su contraseña");
+    public void updatePassword(String username,String email, String newPassword, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
         }
         else{
+            logger.info("El usuario " + j.getUserName() +" quiere cambiar su contraseña");
             if (j.getPasword().equals(password)){
-                j.setPasword(nuevoPass);
+                j.setPasword(newPassword);
                 logger.info("El usuario cambió su contraseña");
                 return;
             }
@@ -160,16 +163,16 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public void deleteUser(String id, String password) throws UserNotFoundException, WrongPasswordException {
-        Jugador j = Jugadores.get(id);
-        logger.info("El usuario " + j.getUserName() +" borrar su perfil");
+    public void deleteUser(String username,String email, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
         }
         else{
+            logger.info("El usuario " + j.getUserName() +" borrar su perfil");
             if (j.getPasword().equals(password)){
-                this.Jugadores.remove(id);
+                this.Jugadores.remove(email);
                 this.Credenciales.remove(j);
                 logger.info("El usuario cambió su contraseña");
                 return;
@@ -180,9 +183,9 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException {
-        logger.info("El jugador con id " + identificadorUsuario + " quiere consultar su puntuación");
-        Jugador j = Jugadores.get(identificadorUsuario);
+    public int consultarPuntuacion(String username) throws UserNotFoundException {
+        logger.info("El jugador con nombre " + username + " quiere consultar su puntuación");
+        Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
@@ -194,8 +197,7 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-
-
+    ///////////////////////////////usamos idplayer de partida,¿ modificamos a username también?
     public List<Partida> consultarPartidas(String id) throws UserNotFoundException {
         logger.info("El usuario " + id + " quiere consultar una lista con sus partidas");
         List<Partida> par = new LinkedList<Partida>();
@@ -219,8 +221,7 @@ public class GameManagerImpl implements GameManager {
             }
         }
     }
-
-
+////////////////////////////////////
 
     // Que pasa si yo ya tengo una partida guardada de antes??
     // Cómo se tendría que inciar?
@@ -244,15 +245,15 @@ public class GameManagerImpl implements GameManager {
 //
 //    }
 
-    public Jugador getJugador(String id) throws UserNotFoundException {
-        logger.info("getUser("+id+")");
-        Jugador j = Jugadores.get(id);
+    public Jugador getJugador(String username) throws UserNotFoundException {
+        logger.info("getUser("+username+")");
+        Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
         }
         else{
-            logger.info("getUser("+id+"): "+ j);
+            logger.info("getUser("+username+"): "+ j);
             return j;
         }
     }
@@ -314,38 +315,52 @@ public class GameManagerImpl implements GameManager {
         return ret;
     }
 
-
-    // Tienda
-
-
-
     public void increaseDamage(String jugadorUsername){
         Jugador jugador=Jugadores.get(jugadorUsername);
+
         if(jugador !=null){
             Avatar avatar =jugador.getAvatarActual();
             if(avatar!=null){
                 int damage=avatar.getDamg()+20;
                 avatar.setDamg(damage);
             }else{
-                logger.warn("El jugador"+ jugadorUsername+"no tiene un avatar actual");
+                logger.warn("El jugador"+ jugadorUsername+" no tiene un avatar actual");
             }
         }else{
-            logger.warn("No se encontró al jugador con ID"+jugadorUsername);
+            logger.warn("No se encontró al jugador con username "+jugadorUsername);
         }
     }
 
     public void increaseHealth(String jugadorUsername){
         Jugador jugador=Jugadores.get(jugadorUsername);
+
+        if(jugador!=null) {
+            Avatar avatar = jugador.getAvatarActual();
+            if (avatar != null) {
+                int health = avatar.getHealth() + 20;
+                avatar.setHealth(health);
+            } else {
+                logger.warn("El jugador " + jugadorUsername + " no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
+    }
+    public void increaseSpeed(String jugadorUsername){
+        Jugador jugador=Jugadores.get(jugadorUsername);
         if(jugador!=null){
             Avatar avatar=jugador.getAvatarActual();
             if(avatar!=null){
-                int health=avatar.getLife()+20;
-                avatar.setLife(health);
+                int speed=avatar.getSpeed()+20;
+                avatar.setSpeed(speed);
             }else{
-                logger.warn("El jugador "+jugadorUsername+"no tiene un avatar actual");
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
             }
         }else{
-            logger.warn("No se encontró al jugador "+ jugadorUsername);
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
         }
+    }
+    public void invisibility(String jugadorUsername){
+
     }
 }

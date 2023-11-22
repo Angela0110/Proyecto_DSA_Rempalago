@@ -96,7 +96,7 @@ public class JugadorService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUsername(Credenciales credenciales) {
         try {
-            this.gm.updateUsername(credenciales.getId(), credenciales.getUsername(), credenciales.getPassword());
+            this.gm.updateUsername(credenciales.getUsername(),credenciales.getEmail(), credenciales.getNewUsername(), credenciales.getPassword());
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
@@ -116,7 +116,7 @@ public class JugadorService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updatePassword(Credenciales credenciales) {
         try {
-            this.gm.updatePassword(credenciales.getId(), credenciales.getNewPassword(), credenciales.getPassword());
+            this.gm.updatePassword(credenciales.getUsername(),credenciales.getEmail(), credenciales.getNewPassword(), credenciales.getPassword());
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
@@ -137,7 +137,7 @@ public class JugadorService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteJugador(Credenciales credenciales) {
         try {
-            this.gm.deleteUser(credenciales.getId(), credenciales.getPassword());
+            this.gm.deleteUser(credenciales.getUsername(),credenciales.getEmail(), credenciales.getPassword());
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();

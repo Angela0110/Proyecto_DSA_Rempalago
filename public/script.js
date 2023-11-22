@@ -89,7 +89,7 @@ $(document).ready(function(){
         console.error('Error',error);
       });
   });
-  
+
   var datosProductos=[
     {nombre:"Producto 1", descripcion:"+20 de daño", imagen:"espinete.jpg",precio:100},
     {nombre:"Producto 2", descripcion:"+20 de vida", imagen:"espinete.jpg",precio:100},
@@ -121,7 +121,6 @@ $(document).ready(function(){
       console.error('Error',error);
       });
    };
-      
     
    function increaseHealth(index){
   
@@ -166,7 +165,27 @@ $(document).ready(function(){
       console.error('Error',error);
       });
       };
-  
+
+     function invisibility(index){
+      var usernameJugadorRegistrado=sessionStorage.getItem('username');
+      var data={
+      username:usernameJugadorRegistrado
+      };
+      fetch('http://localhost:8080/dsaApp/tienda/invisibility',{
+      method:'POST',
+      headers:{
+      "Content-Type":'application/json'
+      },
+      body:JSON.stringify(data)
+      })
+      .then(response=>response.json())
+      .then(data=>{
+      console.log(data);
+      })
+      .catch(error=>{
+      console.error('Error',error);
+      });
+      };
 
         function generarProductoWEB(producto,index){
           return `
@@ -182,22 +201,29 @@ $(document).ready(function(){
           </div>
           `;
         }
-  
         $(document).ready(function(){
           var productosContainer=$('#productos');
           datosProductos.forEach(function(producto,index) {
             var productoWeb=generarProductoWEB(producto,index);
             productosContainer.append(productoWeb);
-        
-            $(".btnComprar").click(function(){
-        
-            var index = $(this).data("index");
+
+            $(".btnComprar[data-index='"+index+"']").click(function(){
+
             switch(index){
             case 0:
-              aumentarDanio(index);
-            break;
+             increaseDamage(currentIndex);
+             break;
+            case 1:
+             increaseHealth(currentIndex);
+             break;
+            case 2:
+             increaseSpeed(currentIndex);
+             break;
+             case 3:
+             invisibility(currentIndex);
+             break;
             }
           });
           });
-        });   
+        });
 });

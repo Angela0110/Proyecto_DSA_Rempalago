@@ -18,15 +18,15 @@ public interface GameManager {
     // public int getPoints(int id);
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
-    public void updateUsername(String id, String nuevoUser, String password) throws UserNotFoundException, WrongPasswordException;
-    public void updatePassword(String id, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException;
-    public void deleteUser(String id, String password) throws UserNotFoundException, WrongPasswordException;
+    public void updateUsername(String username, String email, String newUsername, String password) throws UserNotFoundException, WrongPasswordException;
+    public void updatePassword(String username,String email, String newPassword, String password) throws UserNotFoundException, WrongPasswordException;
+    public void deleteUser(String username,String email, String password) throws UserNotFoundException, WrongPasswordException;
     public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
 //    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
 //    public List<Partida> consultarUsuariosPorPuntuacion(String idJuego) throws JuegoNotFoundException;
-    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
+    public int consultarPuntuacion(String username) throws UserNotFoundException;
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
 //    public String stringToJSON(String args);
 //    public Juego addJuego(Juego j);
@@ -44,6 +44,8 @@ public interface GameManager {
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
-    public void increaseDamage(String jugadorId);
-    public void increaseHealth(String jugadorId);
+    public void increaseDamage(String jugadorUsername);
+    public void increaseHealth(String jugadorUsername);
+    public void increaseSpeed(String jugadorUsername);
+    public void invisibility(String jugadorUsername);
 }

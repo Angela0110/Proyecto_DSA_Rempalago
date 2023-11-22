@@ -5,7 +5,6 @@ import edu.upc.dsa.util.RandomUtils;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Jugador {
-    String id;
     String username;
     String pasword;
     String mail;
@@ -15,17 +14,14 @@ public class Jugador {
 
     // Constructores
     public Jugador(String username, String mail, String pasword){
-        this();
         this.username = username;
         this.mail = mail;
         this.pasword = pasword;
         this.points = 100;
     }
 
-    public Jugador(){this.id = RandomUtils.getId();}
 
     // Setters y Getters
-    public String getUserId(){return this.id;}
     public String getUserName(){return this.username;}
     public void setUserName(String username){this.username = username;}
     public String getPasword(){return this.pasword;}

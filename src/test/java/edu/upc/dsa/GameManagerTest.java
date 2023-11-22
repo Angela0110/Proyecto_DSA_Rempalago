@@ -82,7 +82,7 @@ public class GameManagerTest {
     public void TestConsultarPuntuaciones() throws UserNotFoundException, JugadorYaExisteException, NotAnEmailException, FaltanDatosException {
         Jugador j = new Jugador("Pablo", "pablo@yahoo.com", "nada");
         this.gm.addJugador(j);
-        int msg1 = gm.consultarPuntuacion(j.getUserId());
+        int msg1 = gm.consultarPuntuacion(j.getUserName());
         Assert.assertEquals(100, msg1);
 
         try {

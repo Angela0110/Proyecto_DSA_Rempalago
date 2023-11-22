@@ -110,8 +110,9 @@ public class TiendaService {
     @ApiOperation(value="aumentar vida")
     @ApiResponses(value={
             //faltan los codigo
-    })@Path("/increaseHealth")
-    @Consumes(MediaType.APPLICATION_JSON)
+    })
+    @Path("/increaseHealth")
+    @Consumes(MediaType.APPLICATION_JSON)//path param mejor
     public Response increaseHealth(String jugadorUsername){
         try{
             this.gm.increaseHealth(jugadorUsername);
@@ -120,6 +121,22 @@ public class TiendaService {
             return Response.status(500).entity(e.getMessage()).build();
         }
     }
+
+    @POST
+    @ApiOperation(value="incremetar velocidad")
+    @ApiResponses(value={
+            //faltan los codigos
+    })
+    @Path("/increaseSpeed")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response increaseSpeed(String jugadorUsername){
+        try{
+            this.gm.increaseSpeed(jugadorUsername);
+            return Response.status(201).build();
+        }catch(Exception e) {
+            return Response.status(500).entity(e.getMessage()).build();
+    }
+}
 
     @DELETE
     @ApiOperation(value = "delete producto")
