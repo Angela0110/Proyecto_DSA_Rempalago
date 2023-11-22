@@ -8,9 +8,8 @@ public class Credenciales {
     private String newPassword;
     private String newUser;
 
-    public Credenciales(){
 
-    }
+
     public Credenciales(String username, String email, String password) {
         this.username = username;
         this.password = password;

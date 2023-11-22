@@ -20,7 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/tienda", description = "Endpoint to Juego Service")
+
+@Api(value = "/tienda", description = "Endpoint to Tienda Service")
+
 @Path("/tienda")
 public class TiendaService {
 
@@ -74,7 +76,7 @@ public class TiendaService {
             @ApiResponse(code = 500, message = "Validation Error"),
             @ApiResponse(code= 409,message="Conflict")
     })
-    @Path("/register")
+    @Path("/addproducto")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addProducto(Tienda producto) {
         try {
@@ -145,6 +147,7 @@ public class TiendaService {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Validation Error")
     })
+
     @Path("/delete/{id}")
     public Response deleteProducto(@PathParam("id")String id) {
         try {

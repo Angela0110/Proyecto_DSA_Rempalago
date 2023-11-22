@@ -149,7 +149,6 @@ public class JugadorService {
 
 
 
-
     @POST
     @ApiOperation(value = "register a new Jugador")
     @ApiResponses(value = {
@@ -201,7 +200,7 @@ public class JugadorService {
 
 
 
-    //public GameService() throws UserNotFoundException, UserEnPartidaException, JuegoNotFoundException, NoNivelException {
+    /*public GameService() throws UserNotFoundException, UserEnPartidaException, JuegoNotFoundException, NoNivelException {
 //        this.jm = GameManagerImpl.getInstance();
 //        if (jm.size()==0) {
 //            this.jm.addJugador();
@@ -323,49 +322,49 @@ public class JugadorService {
 //        try {
 //            Partida partida = this.jm.pasarDeNivel(puntos,idUsuario);
 //            return Response.status(201).entity(partida.toString()).build();
-//        } catch (UserNotFoundException e) {
-//            return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
-//        } catch (UserNoEnPartidaException e) {
-//            return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
-//        }
-//    }
-//
-//
-//    @GET
-//    @ApiOperation(value = "Finalizar partida de un jugador")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 201, message = "Successful"),
-//            @ApiResponse(code = 404, message = "Error")
-//    })
-//    @Path("/finalizar/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response finalizarPartida(@PathParam("id") String id){
-//        try {
-//            String resultado = this.jm.FinalizarPartida(id);
-//            return Response.status(201).entity(this.jm.stringToJSON(resultado)).build();
-//        } catch (UserNotFoundException e) {
-//            return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
-//        } catch (UserNoEnPartidaException e){
-//            return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
-//        }
-//    }
-//
-//
-//    @GET
-//    @ApiOperation(value = "Lista de jugadores de un juego")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 201, message = "Successful", response = Jugador.class, responseContainer="List"),
-//            @ApiResponse(code = 404, message = "Error")
-//    })
-//    @Path("/jugadores/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getUsuariosPorPuntos(@PathParam("id") String id){
-//        try {
-//            List<Partida> j = this.jm.consultarUsuariosPorPuntuacion(id);
-//            GenericEntity<List<Partida>> entity = new GenericEntity<List<Partida>>(j) {};
-//            return Response.status(201).entity(entity.toString()).build()  ;
-//        } catch (JuegoNotFoundException e) {
-//            return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
-//        }
-//    }
+          } catch (UserNotFoundException e) {
+              return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
+          } catch (UserNoEnPartidaException e) {
+              return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
+          }
+      }
+
+
+      @GET
+      @ApiOperation(value = "Finalizar partida de un jugador")
+      @ApiResponses(value = {
+              @ApiResponse(code = 201, message = "Successful"),
+              @ApiResponse(code = 404, message = "Error")
+      })
+      @Path("/finalizar/{id}")
+      @Produces(MediaType.APPLICATION_JSON)
+      public Response finalizarPartida(@PathParam("id") String id){
+          try {
+              String resultado = this.jm.FinalizarPartida(id);
+              return Response.status(201).entity(this.jm.stringToJSON(resultado)).build();
+          } catch (UserNotFoundException e) {
+              return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
+          } catch (UserNoEnPartidaException e){
+              return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
+          }
+      }
+
+
+      @GET
+      @ApiOperation(value = "Lista de jugadores de un juego")
+      @ApiResponses(value = {
+              @ApiResponse(code = 201, message = "Successful", response = Jugador.class, responseContainer="List"),
+              @ApiResponse(code = 404, message = "Error")
+      })
+      @Path("/jugadores/{id}")
+      @Produces(MediaType.APPLICATION_JSON)
+      public Response getUsuariosPorPuntos(@PathParam("id") String id){
+          try {
+              List<Partida> j = this.jm.consultarUsuariosPorPuntuacion(id);
+              GenericEntity<List<Partida>> entity = new GenericEntity<List<Partida>>(j) {};
+              return Response.status(201).entity(entity.toString()).build()  ;
+          } catch (JuegoNotFoundException e) {
+              return Response.status(404).entity(this.jm.stringToJSON(e.getMessage())).build();
+          }
+   } */
 }
