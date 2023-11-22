@@ -184,7 +184,7 @@ public class JugadorService {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response loginJugador(Credenciales credenciales) throws FaltanDatosException {
+    public Response logJugador(Credenciales credenciales) throws FaltanDatosException {
         try {
             this.gm.logJugador(credenciales.getUsername(), credenciales.getPassword());
             return Response.status(201).build();

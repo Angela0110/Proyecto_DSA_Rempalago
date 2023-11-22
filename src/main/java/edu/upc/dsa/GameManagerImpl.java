@@ -295,7 +295,6 @@ public class GameManagerImpl implements GameManager {
         if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
             logger.info("delete Producto" + producto.getId() + ")");
             int i = 0;
-            boolean encontrado = false;
             for (Tienda p : this.Productos) {
                 if (p.getId().equals(producto.getId())) {
                     this.Productos.remove(i);
