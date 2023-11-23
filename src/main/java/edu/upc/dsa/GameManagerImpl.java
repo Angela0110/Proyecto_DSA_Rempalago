@@ -192,7 +192,6 @@ public class GameManagerImpl implements GameManager {
                 logger.info("El usuario " + j.getUsername() +" quiere borrar su perfil");
                 logger.info("El usuario borró la cuenta");
                 respuesta.setSuccess(true);
-
             }
             else{
                 throw new WrongPasswordException();

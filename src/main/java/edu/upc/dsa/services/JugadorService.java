@@ -38,7 +38,7 @@ public class JugadorService {
             this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
         }
     }
-    /*
+
         @GET
         @ApiOperation(value = "get all Jugadores")
         @ApiResponses(value = {
@@ -73,7 +73,7 @@ public class JugadorService {
                 return Response.status(404).entity(e.getMessage()).build();
             }
 
-        }*/
+        }
  /*   @PUT
     @ApiOperation(value = "More points for jugador", notes = "asdasd")
     @ApiResponses(value = {
