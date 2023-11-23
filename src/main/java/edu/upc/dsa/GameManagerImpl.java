@@ -1,7 +1,6 @@
 package edu.upc.dsa;
 
 import java.util.*;
-
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
@@ -10,7 +9,7 @@ import edu.upc.dsa.util.Verificar;
 
 public class GameManagerImpl implements GameManager {
 
-    private static GameManager instance;
+    private static edu.upc.dsa.GameManager instance;
     protected List<Partida> Partidas;
     protected Map<String, Jugador> Jugadores;
     protected List<Partida> Jugadas;
@@ -30,7 +29,7 @@ public class GameManagerImpl implements GameManager {
 
     }
 
-    public static GameManager getInstance() {
+    public static edu.upc.dsa.GameManager getInstance() {
         if (instance==null)
             instance = new GameManagerImpl();
         return instance;
@@ -65,14 +64,14 @@ public class GameManagerImpl implements GameManager {
 
     public Partida addPartida(int dif, String idPlayer, String idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
-        logger.info("new Jugador " + jugador.getUserName());
-        logger.info(jugador.getUserName() + jugador.getMail() + jugador.getPasword());
-        if (jugador.getMail() == null  || jugador.getUserName() == null || jugador.getPasword() == null){
+        logger.info("new Jugador " + jugador.getUsername());
+        logger.info(jugador.getUsername() + jugador.getMail() + jugador.getPassword());
+        if (jugador.getMail() == null  || jugador.getUsername() == null || jugador.getPassword() == null){
             logger.info("Faltan datos");
             throw new FaltanDatosException();
         }
         for (Jugador j : this.findAllJugadores()){
-            if (j.getMail().equals(jugador.getMail()) || j.getUserName().equals(jugador.getUserName())){
+            if (j.getMail().equals(jugador.getMail()) || j.getUsername().equals(jugador.getUsername())){
                 logger.info("Ese jugador ya existe (el email y el usuario tienen que ser únicos)");
                 throw new JugadorYaExisteException();
             }
@@ -82,8 +81,8 @@ public class GameManagerImpl implements GameManager {
             throw new NotAnEmailException();
         }
         else{
-            this.Jugadores.put(jugador.getUserName(), jugador);
-            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getMail(), jugador.getPasword());
+            this.Jugadores.put(jugador.getUsername(), jugador);
+            Credenciales c = new Credenciales(jugador.getUsername(), jugador.getMail(), jugador.getPassword());
             this.Credenciales.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
@@ -93,16 +92,18 @@ public class GameManagerImpl implements GameManager {
 
     public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException { return this.addJugador(new Jugador(username, mail, pasword)); }
 
-    public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException {
+    public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException {
+        CredencialesRespuesta respuesta = new CredencialesRespuesta();
         if(username == null || password == null){
             logger.info("Faltan datos");
             throw new FaltanDatosException();
         }
         for (Jugador j : this.findAllJugadores()){
-            if (j.getUserName().equals(username)){
-                if (j.getPasword().equals(password)) {
+            if (j.getUsername().equals(username)){
+                if (j.getPassword().equals(password)) {
                     logger.info("Login del jugador " + username);
-                    return;
+                    respuesta.setSuccess(true);
+                    return respuesta;
                 }
                 else{
                     throw new WrongPasswordException();
@@ -122,21 +123,27 @@ public class GameManagerImpl implements GameManager {
     public List<Tienda> findAllProductos(){return this.Productos;}
 
 
-    public void updateUsername(String username,String email, String newUsername, String password) throws UserNotFoundException, WrongPasswordException {
-        Jugador jugador = Jugadores.get(username);
-
-        if (jugador == null){
-           logger.info("El usuario no existe");
-           throw new UserNotFoundException();
+    public CredencialesRespuesta updateUsername(String username, String newUser, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(username);
+        CredencialesRespuesta respuesta = new CredencialesRespuesta();
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
         }
         else{
-            logger.info("El usuario " + jugador.getUserName() +" quiere cambiar su nombre");
-            if (jugador.getPasword().equals(password)){
-                Jugadores.remove(jugador.getUserName());
-                jugador.setUserName(newUsername);
-                Jugadores.put(newUsername,jugador);
-                logger.info("El usuario cambió su username a  "+ newUsername);
-                return;
+            if (j.getPassword().equals(password)){
+                for (Credenciales c : Credenciales){
+                    if (username.equals(c.getUsername())){
+                        c.setUsername(newUser);
+                    }
+                }
+                j.setUsername(newUser);
+                Jugadores.remove(username);
+                Jugadores.put(newUser, j);
+                logger.info("El usuario " + username +" quiere cambiar su nombre a " + newUser);
+                logger.info("El usuario cambió su username a "+ newUser);
+                respuesta.setSuccess(true);
+                return respuesta;
             }
             else{
                 throw new WrongPasswordException();
@@ -144,18 +151,48 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public void updatePassword(String username,String email, String newPassword, String password) throws UserNotFoundException, WrongPasswordException {
+    public CredencialesRespuesta updatePassword(String user, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException {
+        Jugador j = Jugadores.get(user);
+        CredencialesRespuesta respuesta = new CredencialesRespuesta();
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            if (j.getPassword().equals(password)){
+                for (Credenciales c : Credenciales){
+                    if (user.equals(c.getUsername())){
+                        c.setPassword(nuevoPass);
+                    }
+                }
+                j.setPassword(nuevoPass);
+                respuesta.setSuccess(true);
+                logger.info("El usuario " + j.getUsername() +" quiere cambiar su contraseña");
+                logger.info("El usuario cambió su contraseña");
+                return respuesta;
+            }
+            else{
+                throw new WrongPasswordException();
+            }
+        }
+    }
+
+    public CredencialesRespuesta deleteUser(String username, String password) throws UserNotFoundException, WrongPasswordException {
+        CredencialesRespuesta respuesta = new CredencialesRespuesta();
         Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
         }
         else{
-            logger.info("El usuario " + j.getUserName() +" quiere cambiar su contraseña");
-            if (j.getPasword().equals(password)){
-                j.setPasword(newPassword);
-                logger.info("El usuario cambió su contraseña");
-                return;
+            if (j.getPassword().equals(password)){
+                this.Jugadores.remove(username);
+                this.Credenciales.remove(username);
+                logger.info("El usuario " + j.getUsername() +" quiere borrar su perfil");
+                logger.info("El usuario borró la cuenta");
+                respuesta.setSuccess(true);
+                return respuesta;
+
             }
             else{
                 throw new WrongPasswordException();
@@ -163,29 +200,9 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public void deleteUser(String username,String email, String password) throws UserNotFoundException, WrongPasswordException {
-        Jugador j = Jugadores.get(username);
-        if (j == null){
-            logger.info("El usuario no existe");
-            throw new UserNotFoundException();
-        }
-        else{
-            logger.info("El usuario " + j.getUserName() +" borrar su perfil");
-            if (j.getPasword().equals(password)){
-                this.Jugadores.remove(email);
-                this.Credenciales.remove(j);
-                logger.info("El usuario cambió su contraseña");
-                return;
-            }
-            else{
-                throw new WrongPasswordException();
-            }
-        }
-    }
-
-    public int consultarPuntuacion(String username) throws UserNotFoundException {
-        logger.info("El jugador con nombre " + username + " quiere consultar su puntuación");
-        Jugador j = Jugadores.get(username);
+    public int consultarPuntuacion(String usuario) throws UserNotFoundException {
+        logger.info("El jugador con id " + usuario + " quiere consultar su puntuación");
+        Jugador j = Jugadores.get(usuario);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
@@ -197,18 +214,19 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    ///////////////////////////////usamos idplayer de partida,¿ modificamos a username también?
-    public List<Partida> consultarPartidas(String id) throws UserNotFoundException {
-        logger.info("El usuario " + id + " quiere consultar una lista con sus partidas");
+
+
+    public List<Partida> consultarPartidas(String username) throws UserNotFoundException {
+        logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
         List<Partida> par = new LinkedList<Partida>();
-        Jugador j = Jugadores.get(id);
+        Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");
             throw new UserNotFoundException();
         }
         else{
             for (Partida p:Partidas){
-                if (p.getPlayerId().equals(id)){
+                if (p.getPlayerId().equals(username)){
                     par.add(p);
                 }
             }
@@ -221,7 +239,8 @@ public class GameManagerImpl implements GameManager {
             }
         }
     }
-////////////////////////////////////
+
+
 
     // Que pasa si yo ya tengo una partida guardada de antes??
     // Cómo se tendría que inciar?
@@ -260,7 +279,6 @@ public class GameManagerImpl implements GameManager {
 
 
     // Tienda
-
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException{
         logger.info("new product " + producto.getNombre());
         for(Tienda p : this.findAllProductos()) {
@@ -319,7 +337,7 @@ public class GameManagerImpl implements GameManager {
         Jugador jugador=Jugadores.get(jugadorUsername);
 
         if(jugador !=null){
-            Avatar avatar =jugador.getAvatarActual();
+            Avatar avatar =jugador.getAvatar();
             if(avatar!=null){
                 int damage=avatar.getDamg()+20;
                 avatar.setDamg(damage);
@@ -335,7 +353,7 @@ public class GameManagerImpl implements GameManager {
         Jugador jugador=Jugadores.get(jugadorUsername);
 
         if(jugador!=null) {
-            Avatar avatar = jugador.getAvatarActual();
+            Avatar avatar = jugador.getAvatar();
             if (avatar != null) {
                 int health = avatar.getHealth() + 20;
                 avatar.setHealth(health);
@@ -349,7 +367,7 @@ public class GameManagerImpl implements GameManager {
     public void increaseSpeed(String jugadorUsername){
         Jugador jugador=Jugadores.get(jugadorUsername);
         if(jugador!=null){
-            Avatar avatar=jugador.getAvatarActual();
+            Avatar avatar=jugador.getAvatar();
             if(avatar!=null){
                 int speed=avatar.getSpeed()+20;
                 avatar.setSpeed(speed);
