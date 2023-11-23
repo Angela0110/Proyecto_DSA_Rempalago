@@ -12,6 +12,7 @@ public class Credenciales {
 
     }
     public Credenciales(String username, String email, String password) {
+        this();
         this.username = username;
         this.password = password;
         this.email = email;
@@ -29,7 +30,7 @@ public class Credenciales {
         return newPassword;
     }
 
-    public String getNewUsername() {
+    public String getNewUser() {
         return newUser;
     }
 
@@ -43,7 +44,6 @@ public class Credenciales {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
