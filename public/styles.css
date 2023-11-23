@@ -1,4 +1,4 @@
-   .jumbotron {
+.jumbotron {
     background-color: #f4511e;
     color: #fff;
     margin: 0px 0;
@@ -13,16 +13,28 @@
 
    }
    .form-group {
-
-    color: #000000;
-
+    margin-bottom:15px;
    }
-    .container-fluid {
-    background-color: #f4511e;
-    color: #fff;
-    margin: 0px 0;
-    padding: 15px 25px;
- }
+   .form-group label{
+    display:block;
+    margin-bottom: 5px;
+   }
+   .form-group input{
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+   }
+   .form-group .error-message{
+    color:red;
+   }
+   .form-container{
+    max-width:400px;
+    margin: 125px auto 20px;
+    padding:20px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+   }
+
    .bt-1 {
    padding: 10px 25px;
    margin: 7px 0;
@@ -66,3 +78,11 @@ color: #fff !important;
  .custom-row-margin{
      margin-bottom: 20px;
    }
+
+#miAlerta {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}

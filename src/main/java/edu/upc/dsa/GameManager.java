@@ -2,6 +2,7 @@ package edu.upc.dsa;
 
 
 import edu.upc.dsa.exceptions.*;
+import edu.upc.dsa.models.CredencialesRespuesta;
 import edu.upc.dsa.models.Jugador;
 import edu.upc.dsa.models.Tienda;
 import edu.upc.dsa.models.Partida;
@@ -18,15 +19,19 @@ public interface GameManager {
     // public int getPoints(int id);
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
+
     public void updateUsername(String username, String newUsername, String password) throws UserNotFoundException, WrongPasswordException;
-    public void updatePassword(String username, String newPassword, String password) throws UserNotFoundException, WrongPasswordException;
-    public void deleteUser(String username,String email, String password) throws UserNotFoundException, WrongPasswordException;
-    public void logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
+    public CredencialesRespuesta updatePassword(String username, String newPassword, String password) throws UserNotFoundException, WrongPasswordException;
+    public void deleteUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
+
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
+    public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
+    //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
+
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
 //    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
 //    public List<Partida> consultarUsuariosPorPuntuacion(String idJuego) throws JuegoNotFoundException;
-    public int consultarPuntuacion(String username) throws UserNotFoundException;
+    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
 //    public String stringToJSON(String args);
 //    public Juego addJuego(Juego j);
