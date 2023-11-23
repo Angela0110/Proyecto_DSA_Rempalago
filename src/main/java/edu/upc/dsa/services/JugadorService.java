@@ -98,7 +98,7 @@ public class JugadorService {
     })
     @Path("/updateUsername")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUsername(String username, String password, String newUsername) {
+    public Response updateUsername(CredencialesUc username, String password, String newUsername) {
         try {
             this.gm.updateUsername(username, newUsername, password);
             return Response.status(201).build();
