@@ -144,9 +144,7 @@ public class JugadorService {
         } catch (WrongPasswordException e){
             return Response.status(400).entity(e.getMessage()).build();
         }
-
     }
-
 
 
     @POST
@@ -196,8 +194,6 @@ public class JugadorService {
             return Response.status(400).entity(e.getMessage()).build();
         }
     }
-
-
 
 
     /*public GameService() throws UserNotFoundException, UserEnPartidaException, JuegoNotFoundException, NoNivelException {

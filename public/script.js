@@ -34,7 +34,33 @@ $(document).ready(function(){
       $("#test").show();
       $("#tienda").hide();
     });
-  
+
+      document.getElementById('btnRegister').addEventListener('click',function (){
+      var username=document.getElementById('usr_reg').value;
+      var email=document.getElementById('email_reg').value;
+      var password=document.getElementById('pwd_reg').value;
+
+      if(username==''){
+        document.getElementBy('username-error').innerText='Please enter a username';
+        return;
+       }else{
+        document.getElementById('username-error').innerText='';
+       }
+       if(email==''){
+        document.getElementBy('username-error').innerText='Please enter a email';
+        return;
+       }else{
+        document.getElementById('username-error').innerText='';
+       }
+       if(password==''){
+        document.getElementBy('username-error').innerText='Please enter a password';
+        return;
+       }else{
+        document.getElementById('username-error').innerText='';
+       }
+       alert ('Todo correcto, se puede enviar.')
+    });
+    
     $("#btnRegister").click(function(){
 
       var username=$("#usr_reg").val();
