@@ -18,6 +18,7 @@ public class GameManagerImpl implements GameManager {
     protected List<Mapa> Mapas;
     protected List<Tienda> Productos;
     protected List<Credenciales> Credenciales;
+    protected List<CredencialesRegistro> CredencialesRegistro;
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
@@ -27,6 +28,7 @@ public class GameManagerImpl implements GameManager {
         this.Mapas = new LinkedList<>();
         this.Productos = new LinkedList<>();
         this.Credenciales = new LinkedList<>();
+        this.CredencialesRegistro = new LinkedList<>();
 
     }
 
@@ -83,8 +85,8 @@ public class GameManagerImpl implements GameManager {
         }
         else{
             this.Jugadores.put(jugador.getUserName(), jugador);
-            Credenciales c = new Credenciales(jugador.getUserName(), jugador.getMail(), jugador.getPasword());
-            this.Credenciales.add(c);
+            CredencialesRegistro c = new CredencialesRegistro(jugador.getUserName(), jugador.getMail(), jugador.getPasword());
+            this.CredencialesRegistro.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
             return jugador;
@@ -122,7 +124,7 @@ public class GameManagerImpl implements GameManager {
     public List<Tienda> findAllProductos(){return this.Productos;}
 
 
-    public void updateUsername(String username,String email, String newUsername, String password) throws UserNotFoundException, WrongPasswordException {
+    public void updateUsername(String username, String newUsername, String password) throws UserNotFoundException, WrongPasswordException {
         Jugador jugador = Jugadores.get(username);
 
         if (jugador == null){
@@ -144,7 +146,7 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public void updatePassword(String username,String email, String newPassword, String password) throws UserNotFoundException, WrongPasswordException {
+    public void updatePassword(String username, String newPassword, String password) throws UserNotFoundException, WrongPasswordException {
         Jugador j = Jugadores.get(username);
         if (j == null){
             logger.info("El usuario no existe");

@@ -5,6 +5,7 @@ import edu.upc.dsa.GameManager;
 import edu.upc.dsa.GameManagerImpl;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Credenciales;
+import edu.upc.dsa.models.CredencialesRegistro;
 import edu.upc.dsa.models.Jugador;
 
 import io.swagger.annotations.Api;
@@ -94,9 +95,9 @@ public class JugadorService {
     })
     @Path("/updateUsername")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUsername(Credenciales credenciales) {
+    public Response updateUsername(String username, String password, String newUsername) {
         try {
-            this.gm.updateUsername(credenciales.getUsername(),credenciales.getEmail(), credenciales.getNewUsername(), credenciales.getPassword());
+            this.gm.updateUsername(username, newUsername, password);
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
@@ -114,9 +115,9 @@ public class JugadorService {
     })
     @Path("/updatePassword")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updatePassword(Credenciales credenciales) {
+    public Response updatePassword(String username, String password, String newPassword) {
         try {
-            this.gm.updatePassword(credenciales.getUsername(),credenciales.getEmail(), credenciales.getNewPassword(), credenciales.getPassword());
+            this.gm.updatePassword(username, newPassword, password);
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
@@ -135,9 +136,9 @@ public class JugadorService {
     })
     @Path("/borrar")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteJugador(Credenciales credenciales) {
+    public Response deleteJugador(String username, String mail, String password) {
         try {
-            this.gm.deleteUser(credenciales.getUsername(),credenciales.getEmail(), credenciales.getPassword());
+            this.gm.deleteUser(username, mail, password);
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
@@ -160,9 +161,9 @@ public class JugadorService {
     })
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response regJugador(Credenciales credenciales) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
+    public Response regJugador(CredencialesRegistro credenciales) throws FaltanDatosException, NotAnEmailException, JugadorYaExisteException {
         try {
-            Jugador jugador = this.gm.addJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
+            Jugador jugador = this.gm.addJugador(credenciales.getUsername(), credenciales.getMail(), credenciales.getPassword());
             return Response.status(201).entity(jugador).build();
         } catch (FaltanDatosException e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -183,7 +184,7 @@ public class JugadorService {
     })
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response loginJugador(Credenciales credenciales) throws FaltanDatosException {
         try {
             this.gm.logJugador(credenciales.getUsername(), credenciales.getPassword());
