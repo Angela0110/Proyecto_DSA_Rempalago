@@ -6,6 +6,9 @@ public class Credenciales {
     private String password;
 
 
+    public Credenciales(){
+    }
+
     public Credenciales(String username,  String password) {
         this.username = username;
         this.password = password;
