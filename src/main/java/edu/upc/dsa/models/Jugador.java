@@ -20,6 +20,9 @@ public class Jugador {
         this.setPoints(100);
     }
 
+    public Jugador(){
+
+    }
 
     // Setters y Getters
     public String getUsername(){return this.username;}

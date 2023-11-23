@@ -198,12 +198,12 @@ $(document).ready(function(){
   $("#btnEditUser").click(function(){
 
     var usernameJugadorRegistrado=sessionStorage.getItem('username');
-    var newUser = $("#new_usr").val();
+    var newUsername = $("#new_usr").val();
     var password = $("#pwd_edit").val();
 
     var userData = {
        username:usernameJugadorRegistrado,
-       newUser: newUser,
+       newUsername: newUsername,
        password: password
     };
     console.log(userData);
@@ -218,7 +218,7 @@ $(document).ready(function(){
         .then(data => {
             console.log(data);
             if (data.success) {
-              sessionStorage.setItem('username', newUser);
+              sessionStorage.setItem('username', newUsername);
               mostrarAlerta('success', 'Update successful!');
               var username = sessionStorage.getItem('username');
               $("#myNavbar .dropdown-toggle").html('MI PERFIL <br>' + username +' <span class="caret"></span>');
@@ -268,14 +268,12 @@ $(document).ready(function(){
 
   $("#btnDeleteUser").click(function(){
       var usernameJugadorRegistrado = sessionStorage.getItem('username');
-      var password = $("#pwd_delete").val();
 
       var userData = {
          username: usernameJugadorRegistrado,
-         password: password
       };
 
-      fetch('http://localhost:8080/dsaApp/jugadores/deleteUser', {
+      fetch('http://localhost:8080/dsaApp/jugadores/deleteUser/' + usernameJugadorRegistrado, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json'

@@ -2,7 +2,6 @@ package edu.upc.dsa;
 
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.Jugador;
-import edu.upc.dsa.models.Partida;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +48,7 @@ public class GameManagerTest {
     }
 
     @Test
-    public void logJugadorTest() throws UserNotFoundException, FaltanDatosException, WrongPasswordException {
+    public void logJugadorTest() throws UserNotFoundException, FaltanDatosException, ErrorCredencialesException {
 
         this.gm.logJugador("Antonio", "SweetP2");
         Assert.assertEquals(null, null);
@@ -71,7 +70,7 @@ public class GameManagerTest {
         try {
             this.gm.logJugador("Antonio","SwetP2");
             Assert.fail("Se esperaba que lanzara WrongPasswordException");
-        } catch (WrongPasswordException e) {
+        } catch (ErrorCredencialesException e) {
             Assert.assertEquals("La contraseña no es correcta", e.getMessage());
         }
 
