@@ -198,12 +198,12 @@ $(document).ready(function(){
   $("#btnEditUser").click(function(){
 
     var usernameJugadorRegistrado=sessionStorage.getItem('username');
-    var newUser = $("#new_usr").val();
+    var newUsername = $("#new_usr").val();
     var password = $("#pwd_edit").val();
 
     var userData = {
        username:usernameJugadorRegistrado,
-       newUser: newUser,
+       newUsername: newUsername,
        password: password
     };
     console.log(userData);
@@ -218,7 +218,7 @@ $(document).ready(function(){
         .then(data => {
             console.log(data);
             if (data.success) {
-              sessionStorage.setItem('username', newUser);
+              sessionStorage.setItem('username', newUsername);
               mostrarAlerta('success', 'Update successful!');
               var username = sessionStorage.getItem('username');
               $("#myNavbar .dropdown-toggle").html('MI PERFIL <br>' + username +' <span class="caret"></span>');
@@ -268,14 +268,12 @@ $(document).ready(function(){
 
   $("#btnDeleteUser").click(function(){
       var usernameJugadorRegistrado = sessionStorage.getItem('username');
-      var password = $("#pwd_delete").val();
 
       var userData = {
          username: usernameJugadorRegistrado,
-         password: password
       };
 
-      fetch('http://localhost:8080/dsaApp/jugadores/deleteUser', {
+      fetch('http://localhost:8080/dsaApp/jugadores/deleteUser/' + usernameJugadorRegistrado, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json'
@@ -306,12 +304,12 @@ $(document).ready(function(){
       $('#miAlerta').fadeIn().delay(2000).fadeOut();
    }
   var datosProductos=[
-    {nombre:"Producto 1", descripcion:"+20 de daño", imagen:"espinete.jpg",precio:100},
-    {nombre:"Producto 2", descripcion:"+20 de vida", imagen:"espinete.jpg",precio:100},
-    {nombre:"Producto 3", descripcion:"+20 de velocidad", imagen:"espinete.jpg",precio:100},
+    {nombre:"Mejora de daño", descripcion:"+20 de daño", imagen:"provisonalDano.jpg",precio:100},
+    {nombre:"Mejora de vida", descripcion:"+20 de vida", imagen:"provisionalVida.jpg",precio:100},
+    {nombre:"Mejora de velocidad", descripcion:"+20 de velocidad", imagen:"provisionalVelocidad.jpg",precio:100},
     {nombre:"Unobtanium", descripcion:"Invisibilidad durante 30s", imagen:"espinete.jpg",precio:210},
-    {nombre:"Producto 5", descripcion:"Escopeta", imagen:"espinete.jpg",precio:200},
-    {nombre:"Producto 6", descripcion:"Espada", imagen:"espinete.jpg",precio:150},
+    {nombre:"Escopeta", descripcion:"+100 de daño,-20 de velocidad", imagen:"provisionalescopeta.jpg",precio:200},
+    {nombre:"Espada", descripcion:"+50 de daño,-10 de velocidad", imagen:"provisionalespada.jpg",precio:150},
     ];
 
     function increaseDamage(index){
@@ -401,6 +399,46 @@ $(document).ready(function(){
       console.error('Error',error);
       });
       };
+      function armaEscopeta(index){
+        var usernameJugadorRegistrado=sessionStorage.getItem('username');
+        var data={
+        username:usernameJugadorRegistrado
+        };
+        fetch('http://localhost:8080/dsaApp/tienda/armaEscopeta',{
+        method:'POST',
+        headers:{
+        "Content-Type":'application/json'
+        },
+        body:JSON.stringify(data)
+        })
+        .then(response=>response.json())
+        .then(data=>{
+        console.log(data);
+        })
+        .catch(error=>{
+        console.error('Error',error);
+        });
+      };
+      function armaEspada(index){
+        var usernameJugadorRegistrado=sessionStorage.getItem('username');
+        var data={
+        username:usernameJugadorRegistrado
+        };
+        fetch('http://localhost:8080/dsaApp/tienda/armaEspada',{
+        method:'POST',
+        headers:{
+        "Content-Type":'application/json'
+        },
+        body:JSON.stringify(data)
+        })
+        .then(response=>response.json())
+        .then(data=>{
+        console.log(data);
+        })
+        .catch(error=>{
+        console.error('Error',error);
+        });
+      }
 
         function generarProductoWEB(producto,index){
           return `
@@ -436,6 +474,12 @@ $(document).ready(function(){
              break;
              case 3:
              invisibility(currentIndex);
+             break;
+             case 4:
+              armaEscopeta(currentIndex)
+             break;
+             case 5:
+              armaEspada(currentIndex)
              break;
             }
           });
