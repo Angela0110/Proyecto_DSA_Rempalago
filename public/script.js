@@ -97,6 +97,31 @@ $(document).ready(function(){
       $("#tienda").hide();
     });
 
+      document.getElementById('btnRegister').addEventListener('click',function (){
+      var username=document.getElementById('usr_reg').value;
+      var email=document.getElementById('email_reg').value;
+      var password=document.getElementById('pwd_reg').value;
+
+      if(username==''){
+        document.getElementBy('usernameReg-error').innerText='Please enter a username';
+        return;
+       }else{
+        document.getElementById('usernameReg-error').innerText='';
+       }
+       if(email==''){
+        document.getElementBy('emailReg-error').innerText='Please enter a email';
+        return;
+       }else{
+        document.getElementById('emailReg-error').innerText='';
+       }
+       if(password==''){
+        document.getElementBy('passwordReg-error').innerText='Please enter a password';
+        return;
+       }else{
+        document.getElementById('passwordReg-error').innerText='';
+       }
+       alert ('Todo correcto, se puede enviar.')
+    });
 
     $("#btnRegister").click(function(){
 

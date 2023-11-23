@@ -17,6 +17,7 @@ public class GameManagerImpl implements GameManager {
     protected List<Mapa> Mapas;
     protected List<Tienda> Productos;
     protected List<Credenciales> Credenciales;
+    protected List<CredencialesRegistro> CredencialesRegistro;
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
@@ -26,6 +27,7 @@ public class GameManagerImpl implements GameManager {
         this.Mapas = new LinkedList<>();
         this.Productos = new LinkedList<>();
         this.Credenciales = new LinkedList<>();
+        this.CredencialesRegistro = new LinkedList<>();
 
     }
 
@@ -90,8 +92,8 @@ public class GameManagerImpl implements GameManager {
         }
         else{
             this.Jugadores.put(jugador.getUsername(), jugador);
-            Credenciales c = new Credenciales(jugador.getUsername(), jugador.getMail(), jugador.getPassword());
-            this.Credenciales.add(c);
+            CredencialesRegistro c = new CredencialesRegistro(jugador.getUsername(), jugador.getMail(), jugador.getPassword());
+            this.CredencialesRegistro.add(c);
             logger.info("credenciales: " + c.getUsername() + " " + c.getPassword());
             logger.info("new Jugador added");
             return jugador;
@@ -131,33 +133,34 @@ public class GameManagerImpl implements GameManager {
     public List<Tienda> findAllProductos(){return this.Productos;}
 
 
-    public CredencialesRespuesta updateUsername(String username, String newUser, String password) throws UserNotFoundException, WrongPasswordException {
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws UserNotFoundException, WrongPasswordException {
         Jugador j = Jugadores.get(username);
-        CredencialesRespuesta respuesta = new CredencialesRespuesta();
+
         if (j == null){
-            logger.info("El usuario no existe");
-            throw new UserNotFoundException();
+           logger.info("El usuario no existe");
+           throw new UserNotFoundException();
         }
         else{
             if (j.getPassword().equals(password)){
                 for (Credenciales c : Credenciales){
                     if (username.equals(c.getUsername())){
-                        c.setUsername(newUser);
+                        c.setUsername(newUsername);
                     }
                 }
-                j.setUsername(newUser);
+                j.setUsername(newUsername);
                 Jugadores.remove(username);
-                Jugadores.put(newUser, j);
-                logger.info("El usuario " + username +" quiere cambiar su nombre a " + newUser);
-                logger.info("El usuario cambió su username a "+ newUser);
-                respuesta.setSuccess(true);
-                return respuesta;
+                Jugadores.put(newUsername, j);
+                logger.info("El usuario " + username +" quiere cambiar su nombre a " + newUsername);
+                logger.info("El usuario cambió su username a "+ newUsername);
+                return null;
+
             }
             else{
                 throw new WrongPasswordException();
             }
         }
     }
+
 
     public CredencialesRespuesta updatePassword(String user, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException {
         Jugador j = Jugadores.get(user);
@@ -185,7 +188,9 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
+
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException {
+
         CredencialesRespuesta respuesta = new CredencialesRespuesta();
         Jugador j = Jugadores.get(username);
         if (j == null){
@@ -199,6 +204,7 @@ public class GameManagerImpl implements GameManager {
                 logger.info("El usuario borró la cuenta");
                 respuesta.setSuccess(true);
                 return respuesta;
+
         }
     }
 
@@ -315,7 +321,6 @@ public class GameManagerImpl implements GameManager {
         if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
             logger.info("delete Producto" + producto.getId() + ")");
             int i = 0;
-            boolean encontrado = false;
             for (Tienda p : this.Productos) {
                 if (p.getId().equals(producto.getId())) {
                     this.Productos.remove(i);

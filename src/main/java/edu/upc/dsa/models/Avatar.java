@@ -36,4 +36,3 @@ public class Avatar {
     public int getVisible(){return this.visible;}
     public void setVisible(int visible){this.visible = visible;}
 }
-
