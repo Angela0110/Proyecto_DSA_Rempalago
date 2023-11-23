@@ -19,9 +19,11 @@ public interface GameManager {
     // public int getPoints(int id);
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
+    public Partida addPartida(Partida p) throws FaltanDatosException, UserNotFoundException;
+    public Partida addPartida(int dif, String idPlayer, String idMapa) throws UserNotFoundException, FaltanDatosException;
     public CredencialesRespuesta updateUsername(String username, String newUser, String password) throws UserNotFoundException, WrongPasswordException;
     public CredencialesRespuesta updatePassword(String user, String nuevoPass, String password) throws UserNotFoundException, WrongPasswordException;
-    public CredencialesRespuesta deleteUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
+    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
     //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;

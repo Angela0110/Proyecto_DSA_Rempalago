@@ -25,12 +25,17 @@ public class JugadorService {
 
     private GameManager gm;
 
-    public JugadorService() throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
+    public JugadorService() { //throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException {
         this.gm = GameManagerImpl.getInstance();
         if (gm.JugadoresSize()==0) {
-            this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
-            this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
-            this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
+            try {
+                this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
+                this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
+                this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
+                this.gm.addPartida(1,"Antonio", "knj");
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     /*
@@ -84,6 +89,7 @@ public class JugadorService {
         return Response.status(201).build();
     }*/
 //
+    /*
     @PUT
     @ApiOperation(value = "update nombre de un Jugador")
     @ApiResponses(value = {
@@ -129,30 +135,37 @@ public class JugadorService {
             return Response.status(401).entity(r).build();
         }
     }
-
+*/
     @DELETE
     @ApiOperation(value = "delete perfil de un jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = CredencialesRespuesta.class),
             @ApiResponse(code = 404, message = "Not found")
     })
-    @Path("/deleteUser")
+    @Path("/deleteUser/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteTrack(Credenciales credenciales) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@PathParam("username") String username) {
+        System.out.println("111111111111111111111111111111111"+username);
         CredencialesRespuesta r = new CredencialesRespuesta();
         try{
-            r = this.gm.deleteUser(credenciales.getUsername(), credenciales.getPassword());
+            r = this.gm.deleteUser(username);
             return Response.status(401).entity(r).build();
-        } catch (UserNotFoundException e) {
+        }catch (Throwable t ) {
+            t.printStackTrace();
+            return Response.status(401).entity(r).build();
+        }/*
+        catch (UserNotFoundException e) {
             r.setMessage(e.getMessage());
             return Response.status(404).entity(r).build();
         } catch (WrongPasswordException e){
             r.setMessage(e.getMessage());
             return Response.status(401).entity(r).build();
-        }
+        }*/
+
     }
 
-
+/*
 
     @POST
     @ApiOperation(value = "register a new Jugador")
@@ -209,7 +222,24 @@ public class JugadorService {
         }
     }
 
-
+    @GET
+    @ApiOperation(value = "Consultar partidas de un jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Partida.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "Error")
+    })
+    @Path("/partidas/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPartidas(@PathParam("username") String username){
+        try {
+            List<Partida> p = this.gm.consultarPartidas(username);
+            GenericEntity<List<Partida>> entity = new GenericEntity<List<Partida>>(p) {};
+            return Response.status(201).entity(entity).build()  ;
+        } catch (UserNotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+    }
+*/
 
     /*public GameService() throws UserNotFoundException, UserEnPartidaException, JuegoNotFoundException, NoNivelException {
 //        this.jm = GameManagerImpl.getInstance();

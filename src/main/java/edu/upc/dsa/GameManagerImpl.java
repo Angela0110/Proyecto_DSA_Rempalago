@@ -54,15 +54,23 @@ public class GameManagerImpl implements GameManager {
     }
 
 
-    public Partida addPartida(Partida p) {
+    public Partida addPartida(Partida p) throws FaltanDatosException, UserNotFoundException {
         logger.info("Nueva partida " + p);
-
-        this.Partidas.add (p);
-        logger.info("Nueva partida añadida");
-        return p;
+        if (p.getPlayerId() == null || p.getMapId() == null){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
+        }
+        for (Jugador j : this.findAllJugadores()){
+            if (j.getUsername().equals(p.getPlayerId())) {
+                this.Partidas.add (p);
+                logger.info("Nueva partida añadida");
+                return p;
+            }
+        }
+        throw new UserNotFoundException();
     }
 
-    public Partida addPartida(int dif, String idPlayer, String idMapa) { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
+    public Partida addPartida(int dif, String idPlayer, String idMapa) throws UserNotFoundException, FaltanDatosException { return this.addPartida(new Partida(dif, idPlayer, idMapa)); }
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
         logger.info("new Jugador " + jugador.getUsername());
         logger.info(jugador.getUsername() + jugador.getMail() + jugador.getPassword());
@@ -177,7 +185,7 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    public CredencialesRespuesta deleteUser(String username, String password) throws UserNotFoundException, WrongPasswordException {
+    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException {
         CredencialesRespuesta respuesta = new CredencialesRespuesta();
         Jugador j = Jugadores.get(username);
         if (j == null){
@@ -185,18 +193,12 @@ public class GameManagerImpl implements GameManager {
             throw new UserNotFoundException();
         }
         else{
-            if (j.getPassword().equals(password)){
                 this.Jugadores.remove(username);
                 this.Credenciales.remove(username);
                 logger.info("El usuario " + j.getUsername() +" quiere borrar su perfil");
                 logger.info("El usuario borró la cuenta");
                 respuesta.setSuccess(true);
                 return respuesta;
-
-            }
-            else{
-                throw new WrongPasswordException();
-            }
         }
     }
 

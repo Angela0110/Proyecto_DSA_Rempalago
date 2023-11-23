@@ -1,8 +1,7 @@
 package edu.upc.dsa.models;
 
 import edu.upc.dsa.util.RandomUtils;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Date;
 
 public class Partida {
     String id;
@@ -12,6 +11,8 @@ public class Partida {
     int nivl;   // Nivel de la partida en el que se encuentra el jugador
     String idPlayer;   // Identificador del jugador que está jugando la partida
     String idMapa;     // Identificador del mapa que se está jugando
+    int puntos;
+    Date fecha;
 
     // Constructores
     public Partida(){this.id = RandomUtils.getId(); this.idMapa = "";}
@@ -21,7 +22,9 @@ public class Partida {
         this.dif = dif;
         this.idPlayer = idPlayer;
         this.idMapa = idMapa;
-        this.nivl = 1;                  // Siempre se empieza por el nivel 1
+        this.nivl = 1;   // Siempre se empieza por el nivel 1
+        this.puntos = 0;
+        this.fecha = new Date();
     }
 
     // Setters y Getters
@@ -36,5 +39,21 @@ public class Partida {
     public int getDificultad(){return this.dif;}
     public void setDificultad(int dif) {
         this.dif = dif;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    public int getPuntos() {
+        return puntos;
     }
 }
