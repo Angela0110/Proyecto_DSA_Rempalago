@@ -49,4 +49,6 @@ public interface GameManager {
     public void increaseHealth(String jugadorUsername);
     public void increaseSpeed(String jugadorUsername);
     public void invisibility(String jugadorUsername);
+    public void armaEscopeta(String jugadorUsername);
+    public void armaEspada(String jugadorUsername);
 }

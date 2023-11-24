@@ -339,6 +339,50 @@ public class GameManagerImpl implements GameManager {
         }
     }
     public void invisibility(String jugadorUsername){
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int invisibility=1;
+                avatar.setVisible(invisibility);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
+    }
+    public void armaEscopeta(String jugadorUsername){
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int speed=avatar.getSpeed()-20;
+                avatar.setSpeed(speed);
+                int damage=100;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
+    }
+    public void armaEspada(String jugadorUsername){
 
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int speed=avatar.getSpeed()-10;
+                avatar.setSpeed(speed);
+                int damage=50;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
     }
 }
