@@ -16,22 +16,18 @@ public interface GameManager {
     public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException;
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException;
     public Jugador getJugador(String id) throws UserNotFoundException;
-    // public int getPoints(int id);
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
-
-    public void updateUsername(String username, String newUsername, String password) throws UserNotFoundException, WrongPasswordException;
-    public CredencialesRespuesta updatePassword(String username, String newPassword, String password) throws UserNotFoundException, WrongPasswordException;
-    public void deleteUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
-
-//    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
-    public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, UserNotFoundException, WrongPasswordException;
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException;
+    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException;
+    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
+    public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
     //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
 //    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
 //    public List<Partida> consultarUsuariosPorPuntuacion(String idJuego) throws JuegoNotFoundException;
-    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
+//    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
 //    public String stringToJSON(String args);
 //    public Juego addJuego(Juego j);
