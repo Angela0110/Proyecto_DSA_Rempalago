@@ -303,14 +303,7 @@ $(document).ready(function(){
       $('#miAlerta').removeClass().addClass('alert ' + 'alert-' + tipo);
       $('#miAlerta').fadeIn().delay(2000).fadeOut();
    }
-  var datosProductos=[
-    {nombre:"Mejora de daño", descripcion:"+20 de daño", imagen:"provisonalDano.jpg",precio:100},
-    {nombre:"Mejora de vida", descripcion:"+20 de vida", imagen:"provisionalVida.jpg",precio:100},
-    {nombre:"Mejora de velocidad", descripcion:"+20 de velocidad", imagen:"provisionalVelocidad.jpg",precio:100},
-    {nombre:"Unobtanium", descripcion:"Invisibilidad durante 30s", imagen:"espinete.jpg",precio:210},
-    {nombre:"Escopeta", descripcion:"+100 de daño,-20 de velocidad", imagen:"provisionalescopeta.jpg",precio:200},
-    {nombre:"Espada", descripcion:"+50 de daño,-10 de velocidad", imagen:"provisionalespada.jpg",precio:150},
-    ];
+
 
     function increaseDamage(index){
 
@@ -440,49 +433,57 @@ $(document).ready(function(){
         });
       }
 
-        function generarProductoWEB(producto,index){
-          return `
-          <div class="col-md-4 custom-row-margin">
-            <div class="card">
-               <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
-               <div class="card-body">
-                 <h5 class="card-title">${producto.nombre} </h5>
-                 <p class="card-text">${producto.descripcion}</p>
-                 <a href="#" class="btn btn-primary btmComprar"data-index="${index}">Comprar</a>
-             </div>
-            </div>
-          </div>
-          `;
+      $('#tienda_button').click(function(){
+        const listaProductosElement = document.getElementsByClassName('tienda_productos')[0];
+
+        fetch('http://localhost:8080/dsaApp/tienda/todos')
+            .then(response => response.json())
+            .then(productos => {
+                productos.forEach((producto, index) => {
+                const productoWeb = generarProductoWEB(producto, index);
+
+                    listaProductosElement.innerHTML += productoWeb;
+                });
+
+                $('.btnComprar').click(function(){
+                    var index = $(this).data('index');
+                    switch(index){
+                        case 0:
+                            increaseDamage(index);
+                            break;
+                        case 1:
+                            increaseHealth(index);
+                            break;
+                        case 2:
+                            increaseSpeed(index);
+                            break;
+                        case 3:
+                            invisibility(index);
+                            break;
+                        case 4:
+                            armaEscopeta(index)
+                            break;
+                        case 5:
+                            armaEspada(index)
+                            break;
+                    }
+                });
+            })
+            .catch(error => console.error('Error al obtener la lista', error));
+
+        function generarProductoWEB(producto, index){
+            return `
+                <div class="col-md-4 custom-row-margin">
+                    <div class="card">
+                     //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+                        <div class="card-body">
+                            <h5 class="card-title">${producto.nombre}</h5>
+                            <p class="card-text">${producto.description}</p>
+                            <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
-        $(document).ready(function(){
-          var productosContainer=$('#productos');
-          datosProductos.forEach(function(producto,index) {
-            var productoWeb=generarProductoWEB(producto,index);
-            productosContainer.append(productoWeb);
-
-            $(".btnComprar[data-index='"+index+"']").click(function(){
-
-            switch(index){
-            case 0:
-             increaseDamage(currentIndex);
-             break;
-            case 1:
-             increaseHealth(currentIndex);
-             break;
-            case 2:
-             increaseSpeed(currentIndex);
-             break;
-             case 3:
-             invisibility(currentIndex);
-             break;
-             case 4:
-              armaEscopeta(currentIndex)
-             break;
-             case 5:
-              armaEspada(currentIndex)
-             break;
-            }
-          });
-          });
-        });
+    });
 });
