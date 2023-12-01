@@ -31,9 +31,12 @@ public class TiendaService {
     public TiendaService() throws ProductoYaExisteException, FaltanDatosException {
         this.gm = GameManagerImpl.getInstance();
         if (gm.TiendasSize() == 0) {
-            this.gm.addProducto(150, "Espada", "Espada pesada de combate", 1, 100);
+            this.gm.addProducto(150, "Espada", "Espada pesada de combate,+50 de daño,-10 de velocidad", 1, 50);
             this.gm.addProducto(200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
             this.gm.addProducto(250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
+            this.gm.addProducto(100,"Mejora de daño", "+20 de daño", 1,20);
+            this.gm.addProducto(100,"Mejora de vida","+20 de vida",2,20);
+            this.gm.addProducto(200,"Escopeta","+100 de daño,-20 de velocidad",1,100);
         }
     }
 
