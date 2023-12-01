@@ -69,6 +69,30 @@ public class TiendaService {
         }
     }
 
+    @GET
+    @ApiOperation(value = "buy a Producto")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Jugador.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 400, message = "Capital insufieciente")
+    })
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response comprarProducto(String pnombre, String usrnm) {
+        try {
+            this.gm.comprarProducto(pnombre, usrnm);
+            Jugador j = this.gm.getJugador(usrnm);
+            return Response.status(200).entity(j).build();
+        }
+        catch (ProductoNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (CapitalInsuficienteException e) {
+            throw new RuntimeException(e);
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @POST
     @ApiOperation(value = "new producto")
     @ApiResponses(value = {
@@ -90,11 +114,10 @@ public class TiendaService {
     }
 
     @POST
-    @ApiOperation(value="aumentar daño")
-    @ApiResponses(value={
-
-//faltan los codigos
-
+    @ApiOperation(value = "aumentar daño")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
+            @ApiResponse(code = 500, message = "Validation Error")
     })
     @Path("/increaseDamage")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -109,9 +132,10 @@ public class TiendaService {
     }
 
     @POST
-    @ApiOperation(value="aumentar vida")
-    @ApiResponses(value={
-            //faltan los codigo
+    @ApiOperation(value = "aumentar vida")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
+            @ApiResponse(code = 500, message = "Validation Error")
     })
     @Path("/increaseHealth")
     @Consumes(MediaType.APPLICATION_JSON)//path param mejor
@@ -125,10 +149,12 @@ public class TiendaService {
     }
 
     @POST
-    @ApiOperation(value="incremetar velocidad")
-    @ApiResponses(value={
-            //faltan los codigos
+    @ApiOperation(value = "aumentar velocidad")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
+            @ApiResponse(code = 500, message = "Validation Error")
     })
+
     @Path("/increaseSpeed")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response increaseSpeed(String jugadorUsername){
@@ -140,6 +166,38 @@ public class TiendaService {
     }
 }
 
+  @POST
+    @ApiOperation(value = "cambiar a escopeta")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
+            @ApiResponse(code = 500, message = "Validation Error")
+    })
+    @Path("/armaEscopeta")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response armaEscopeta(String jugadorUsername){
+        try{
+            this.gm.armaEscopeta(jugadorUsername);
+            return Response.status(201).build();
+        }catch(Exception e){
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+    }
+    @POST
+    @ApiOperation(value = "cambiar a espada")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
+            @ApiResponse(code = 500, message = "Validation Error")
+    })
+    @Path("/armaEspada")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response armaEspada(String jugadorUsername) {
+        try {
+            this.gm.armaEspada(jugadorUsername);
+            return Response.status(201).build();
+        } catch (Exception e) {
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+    }
     @DELETE
     @ApiOperation(value = "delete producto")
     @ApiResponses(value = {
@@ -147,7 +205,6 @@ public class TiendaService {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Validation Error")
     })
-
     @Path("/delete/{id}")
     public Response deleteProducto(@PathParam("id")String id) {
         try {

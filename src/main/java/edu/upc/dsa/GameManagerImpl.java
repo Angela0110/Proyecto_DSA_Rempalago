@@ -277,19 +277,55 @@ public class GameManagerImpl implements GameManager {
     }
     public Tienda addProducto(int precio, String nombre, String descripcion, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException {return this.addProducto(new Tienda(precio, nombre, descripcion, efect_type,efect));}
 
-    public Tienda getProducto(String id) throws ProductoNotFoundException{
-        logger.info("getProducto("+id+")");
+    public Tienda getProducto(String nombre) throws ProductoNotFoundException{
+        logger.info("getProducto("+nombre+")");
 
         for (Tienda p: this.productos) {
-            if (p.getId().equals(id)) {
-                logger.info("getProducto("+id+"): "+p);
+            if (p.getNombre().equals(nombre)) {
+                logger.info("getProducto("+nombre+"): "+p);
 
                 return p;
             }
         }
 
-        logger.error("not found " + id);
+        logger.error("not found " + nombre);
         throw new ProductoNotFoundException();
+    }
+
+    public void comprarProducto(String Pnombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException{
+        try {
+            Tienda p = this.getProducto(Pnombre);
+            Jugador j = this.getJugador(usrnm);
+            int precio = p.getPrecio();
+            if(j.getEurillos() < precio) {
+                logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
+                throw new CapitalInsuficienteException();
+            }
+            else{
+                logger.info(usrnm + " se ha comprado " + Pnombre);
+                j.setEurillos((j.getEurillos() - precio));
+                if(p.getEfectType() == 0)
+                    logger.info("Se ha incrementado la salud");
+                this.increaseHealth(usrnm);
+                if(p.getEfectType() == 1)
+                    logger.info("Se ha incrementado el daño");
+                this.increaseDamage(usrnm);
+                if(p.getEfectType() == 2)
+                    logger.info("Se ha incrementado la velocidad");
+                this.increaseSpeed(usrnm);
+                if(p.getEfectType() == 3)
+                    logger.info("El jugador se ha hecho invisible...");
+                this.invisibility(usrnm);
+            }
+        }
+        catch (UserNotFoundException e) {
+            logger.error("User not found");
+            throw new RuntimeException(e);
+        }
+        catch (ProductoNotFoundException e){
+            logger.error("Producto no encontrado");
+            throw new RuntimeException(e);
+        }
     }
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException {
         if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
@@ -360,6 +396,50 @@ public class GameManagerImpl implements GameManager {
         }
     }
     public void invisibility(String jugadorUsername){
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int invisibility=1;
+                avatar.setVisible(invisibility);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
+    }
+    public void armaEscopeta(String jugadorUsername){
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int speed=avatar.getSpeed()-20;
+                avatar.setSpeed(speed);
+                int damage=100;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
+    }
+    public void armaEspada(String jugadorUsername){
 
+        Jugador jugador=jugadores.get(jugadorUsername);
+        if(jugador!=null){
+            Avatar avatar=jugador.getAvatar();
+            if(avatar!=null){
+                int speed=avatar.getSpeed()-10;
+                avatar.setSpeed(speed);
+                int damage=50;
+                avatar.setDamg(damage);
+            }else{
+                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            }
+        }else{
+            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        }
     }
 }

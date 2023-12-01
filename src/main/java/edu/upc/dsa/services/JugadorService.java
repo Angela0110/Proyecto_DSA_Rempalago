@@ -204,10 +204,7 @@ public class JugadorService {
         if (j == null) return Response.status(404).build();
         return Response.status(201).build();
     }*/
-//
 
-
-/*
 
 /*
     @GET

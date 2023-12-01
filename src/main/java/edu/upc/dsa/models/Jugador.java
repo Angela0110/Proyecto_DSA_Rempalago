@@ -8,7 +8,8 @@ public class Jugador {
     String username;
     String password;
     String mail;
-    int points;   // Puntos en partida
+    int points;   // Puntos en partida, sirven para subir el nivel de los avatares
+    int eurillos;   // Divisa del juego
 
     private Avatar avatar;
 
@@ -18,11 +19,10 @@ public class Jugador {
         this.setMail(mail);
         this.setPassword(password);
         this.setPoints(100);
+        this.eurillos = 50;
     }
 
-    public Jugador(){
-
-    }
+    public Jugador(){}
 
     // Setters y Getters
     public String getUsername(){return this.username;}
@@ -33,6 +33,8 @@ public class Jugador {
     public void setMail(String mail){this.mail = mail;}
     public int getPoints(){return this.points;}
     public void setPoints(int points){this.points = this.points + points;}
+    public int getEurillos(){return this.eurillos;}
+    public void setEurillos(int e){this.eurillos = e;}
 
     public Avatar getAvatar() {
         return avatar;
