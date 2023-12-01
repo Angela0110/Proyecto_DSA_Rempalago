@@ -79,7 +79,7 @@ public class TiendaService {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 400, message = "Capital insufieciente")
     })
-    @Path("/{id}")
+    @Path("/comprar/{pnombre}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response comprarProducto(String pnombre, String usrnm) {
         try {
