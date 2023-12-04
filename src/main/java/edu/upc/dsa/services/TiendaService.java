@@ -79,9 +79,9 @@ public class TiendaService {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 400, message = "Capital insufieciente")
     })
-    @Path("/comprar/{pnombre}")
+    @Path("/comprar/{pnombre}/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response comprarProducto(String pnombre, String usrnm) {
+    public Response comprarProducto(@PathParam("pnombre")  String pnombre, @PathParam("username")  String usrnm) {
         try {
             this.gm.comprarProducto(pnombre, usrnm);
             Jugador j = this.gm.getJugador(usrnm);
