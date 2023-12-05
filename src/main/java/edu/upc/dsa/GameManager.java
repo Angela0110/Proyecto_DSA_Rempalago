@@ -42,7 +42,7 @@ public interface GameManager {
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda addProducto(int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda getProducto(String id) throws ProductoNotFoundException;
-    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException;
+    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException;
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();

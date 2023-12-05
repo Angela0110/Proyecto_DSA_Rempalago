@@ -19,7 +19,7 @@ public class Jugador {
         this.setMail(mail);
         this.setPassword(password);
         this.setPoints(100);
-        this.eurillos = 50;
+        this.eurillos = 500;
     }
 
     public Jugador(){}

@@ -35,7 +35,7 @@ public class TiendaService {
             this.gm.addProducto(200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
             this.gm.addProducto(250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
             this.gm.addProducto(100,"Mejora de daño", "+20 de daño", 1,20);
-            this.gm.addProducto(100,"Mejora de vida","+20 de vida",2,20);
+            this.gm.addProducto(100,"Mejora de velocidad","+20 de vida",2,20);
             this.gm.addProducto(200,"Escopeta","+100 de daño,-20 de velocidad",1,100);
         }
     }
@@ -85,14 +85,14 @@ public class TiendaService {
         try {
             this.gm.comprarProducto(pnombre, usrnm);
             Jugador j = this.gm.getJugador(usrnm);
-            return Response.status(200).entity(j).build();
+            return Response.status(201).entity(j).build();
         }
         catch (ProductoNotFoundException e) {
-            throw new RuntimeException(e);
+            return Response.status(404).build();
         } catch (CapitalInsuficienteException e) {
-            throw new RuntimeException(e);
+            return Response.status(400).build();
         } catch (UserNotFoundException e) {
-            throw new RuntimeException(e);
+            return Response.status(404).build();
         }
     }
 

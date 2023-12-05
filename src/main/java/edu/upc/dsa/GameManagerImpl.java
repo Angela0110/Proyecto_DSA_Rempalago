@@ -292,7 +292,8 @@ public class GameManagerImpl implements GameManager {
         throw new ProductoNotFoundException();
     }
 
-    public void comprarProducto(String Pnombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException{
+    public void comprarProducto(String Pnombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException{
+        logger.info("Entramos en la función de comprar");
         try {
             Tienda p = this.getProducto(Pnombre);
             Jugador j = this.getJugador(usrnm);
