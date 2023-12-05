@@ -10,6 +10,8 @@ public class Jugador {
     String mail;
     int points;   // Puntos en partida
 
+    int eurillos;
+
     private Avatar avatar;
 
     // Constructores
