@@ -46,10 +46,8 @@ public interface GameManager {
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
-    public void increaseDamage(String jugadorUsername);
-    public void increaseHealth(String jugadorUsername);
-    public void increaseSpeed(String jugadorUsername);
+    public void increaseDamage(String jugadorUsername, int damage);
+    public void increaseHealth(String jugadorUsername, int health);
+    public void increaseSpeed(String jugadorUsername, int speed);
     public void invisibility(String jugadorUsername);
-    public void armaEscopeta(String jugadorUsername);
-    public void armaEspada(String jugadorUsername);
 }
