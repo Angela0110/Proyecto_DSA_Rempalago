@@ -449,6 +449,7 @@ $(document).ready(function(){
                     var index = $(this).data('index');
                     switch(index){
                         case 0:
+                            
                             increaseDamage(index);
                             break;
                         case 1:
