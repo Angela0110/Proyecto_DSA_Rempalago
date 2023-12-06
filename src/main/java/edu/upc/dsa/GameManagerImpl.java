@@ -161,7 +161,28 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
+
+    public void deleteUser(String username, String password) throws UserNotFoundException{
+        CredencialesRespuesta respuesta = new CredencialesRespuesta();
+        Jugador j = jugadores.get(username);
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            if (j.getPassword().equals(password)){
+                this.jugadores.remove(username);
+                logger.info("El usuario " + j.getUsername() +" quiere borrar su perfil");
+                logger.info("El usuario borró la cuenta");
+                respuesta.setSuccess(true);
+            }
+        }
+    }
+
+
+
    /* public int consultarPuntuacion(String usuario) throws UserNotFoundException {
+>>>>>>> ac24456938c0ebffb28a8f6e00ea413ec9dcd401
         logger.info("El jugador con id " + usuario + " quiere consultar su puntuación");
         Jugador j = jugadores.get(usuario);
         if (j == null){
@@ -256,19 +277,60 @@ public class GameManagerImpl implements GameManager {
     }
     public Tienda addProducto(int precio, String nombre, String descripcion, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException {return this.addProducto(new Tienda(precio, nombre, descripcion, efect_type,efect));}
 
-    public Tienda getProducto(String id) throws ProductoNotFoundException{
-        logger.info("getProducto("+id+")");
+    public Tienda getProducto(String nombre) throws ProductoNotFoundException{
+        logger.info("getProducto("+nombre+")");
 
         for (Tienda p: this.productos) {
-            if (p.getId().equals(id)) {
-                logger.info("getProducto("+id+"): "+p);
+            if (p.getNombre().equals(nombre)) {
+                logger.info("getProducto("+nombre+"): "+p);
 
                 return p;
             }
         }
 
-        logger.error("not found " + id);
+        logger.error("not found " + nombre);
         throw new ProductoNotFoundException();
+    }
+
+    public void comprarProducto(String Pnombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException{
+        logger.info("Entramos en la función de comprar");
+        try {
+            Tienda p = this.getProducto(Pnombre);
+            Jugador j = this.getJugador(usrnm);
+            int precio = p.getPrecio();
+            if(j.getEurillos() < precio) {
+                logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
+                throw new CapitalInsuficienteException();
+            }
+            else{
+                logger.info(usrnm + " se ha comprado " + Pnombre);
+                j.setEurillos((j.getEurillos() - precio));
+                if(p.getEfectType() == 0) {
+                    logger.info("Se ha incrementado la salud");
+                    this.increaseHealth(usrnm, p.getEfect());
+                }
+                if(p.getEfectType() == 1) {
+                    logger.info("Se ha incrementado el daño");
+                    this.increaseDamage(usrnm, p.getEfect());
+                }
+                if(p.getEfectType() == 2) {
+                    logger.info("Se ha incrementado la velocidad");
+                    this.increaseSpeed(usrnm, p.getEfect());
+                }
+                if(p.getEfectType() == 3) {
+                    logger.info("El jugador se ha hecho invisible...");
+                    this.invisibility(usrnm);
+                }
+            }
+        }
+        catch (UserNotFoundException e) {
+            logger.error("User not found");
+            throw new RuntimeException(e);
+        }
+        catch (ProductoNotFoundException e){
+            logger.error("Producto no encontrado");
+            throw new RuntimeException(e);
+        }
     }
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException {
         if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
@@ -293,96 +355,81 @@ public class GameManagerImpl implements GameManager {
         return ret;
     }
 
-    public void increaseDamage(String jugadorUsername){
+    public void increaseDamage(String jugadorUsername, int damage){
         Jugador jugador=jugadores.get(jugadorUsername);
-
+        boolean encontrado = false;
         if(jugador !=null){
-            Avatar avatar =jugador.getAvatar();
-            if(avatar!=null){
-                int damage=avatar.getDamg()+20;
-                avatar.setDamg(damage);
-            }else{
-                logger.warn("El jugador"+ jugadorUsername+" no tiene un avatar actual");
+            String av =jugador.getAvatar();
+            for(Avatar avatar : this.avatares){
+                if(avatar.getNombre().equals(av)){
+                    int damg=avatar.getDamg()+ damage;
+                    avatar.setDamg(damg);
+                    encontrado = true;
+                    logger.info("El jugador " + jugadorUsername + " ha incrementado su daño");
+                }
             }
         }else{
             logger.warn("No se encontró al jugador con username "+jugadorUsername);
         }
+        if(!encontrado)
+            logger.warn("El jugador"+ jugadorUsername+" no tiene un avatar actual");
     }
 
-    public void increaseHealth(String jugadorUsername){
+    public void increaseHealth(String jugadorUsername, int health){
         Jugador jugador=jugadores.get(jugadorUsername);
-
+        boolean encontrado = false;
         if(jugador!=null) {
-            Avatar avatar = jugador.getAvatar();
-            if (avatar != null) {
-                int health = avatar.getHealth() + 20;
-                avatar.setHealth(health);
-            } else {
-                logger.warn("El jugador " + jugadorUsername + " no tiene un avatar actual");
+            String av = jugador.getAvatar();
+            for(Avatar avatar : this.avatares){
+                if (avatar.getNombre().equals(av)) {
+                    int hlth = avatar.getHealth() + health;
+                    avatar.setHealth(hlth);
+                    logger.info("El jugador " + jugadorUsername + " ha incrementado su vida");
+                    encontrado = true;
+                }
             }
-        }else{
+        }
+        else{
             logger.warn("No se encontró al jugador con username " + jugadorUsername);
         }
+        if(!encontrado)
+            logger.warn("El jugador " + jugadorUsername + " no tiene un avatar actual");
     }
-    public void increaseSpeed(String jugadorUsername){
+    public void increaseSpeed(String jugadorUsername, int speed){
         Jugador jugador=jugadores.get(jugadorUsername);
+        boolean encontrado = false;
         if(jugador!=null){
-            Avatar avatar=jugador.getAvatar();
-            if(avatar!=null){
-                int speed=avatar.getSpeed()+20;
-                avatar.setSpeed(speed);
-            }else{
-                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            String av=jugador.getAvatar();
+            for(Avatar avatar : this.avatares){
+                if(avatar.getNombre().equals(av)){
+                    int spd=avatar.getSpeed() + speed;
+                    avatar.setSpeed(spd);
+                    encontrado = true;
+                    logger.info("El jugador " + jugadorUsername + " ha incrementado su velocidad");
+                }
             }
         }else{
             logger.warn("No se encontró al jugador con username " + jugadorUsername);
         }
+        if(!encontrado)
+            logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
     }
     public void invisibility(String jugadorUsername){
         Jugador jugador=jugadores.get(jugadorUsername);
+        boolean encontrado = false;
         if(jugador!=null){
-            Avatar avatar=jugador.getAvatar();
-            if(avatar!=null){
-                int invisibility=1;
-                avatar.setVisible(invisibility);
-            }else{
-                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+            String av = jugador.getAvatar();
+            for(Avatar avatar : this.avatares){
+                if(avatar.getNombre().equals(av)){
+                    avatar.setVisible(1);
+                    encontrado = true;
+                    logger.info("El jugador " + jugadorUsername + " se ha hecho invisible");
+                }
             }
         }else{
             logger.warn("No se encontró al jugador con username " + jugadorUsername);
         }
-    }
-    public void armaEscopeta(String jugadorUsername){
-        Jugador jugador=jugadores.get(jugadorUsername);
-        if(jugador!=null){
-            Avatar avatar=jugador.getAvatar();
-            if(avatar!=null){
-                int speed=avatar.getSpeed()-20;
-                avatar.setSpeed(speed);
-                int damage=100;
-                avatar.setDamg(damage);
-            }else{
-                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
-            }
-        }else{
-            logger.warn("No se encontró al jugador con username " + jugadorUsername);
-        }
-    }
-    public void armaEspada(String jugadorUsername){
-
-        Jugador jugador=jugadores.get(jugadorUsername);
-        if(jugador!=null){
-            Avatar avatar=jugador.getAvatar();
-            if(avatar!=null){
-                int speed=avatar.getSpeed()-10;
-                avatar.setSpeed(speed);
-                int damage=50;
-                avatar.setDamg(damage);
-            }else{
-                logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
-            }
-        }else{
-            logger.warn("No se encontró al jugador con username " + jugadorUsername);
-        }
+        if(!encontrado)
+            logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
     }
 }

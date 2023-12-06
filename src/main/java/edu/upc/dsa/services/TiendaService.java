@@ -35,7 +35,7 @@ public class TiendaService {
             this.gm.addProducto(200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
             this.gm.addProducto(250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
             this.gm.addProducto(100,"Mejora de daño", "+20 de daño", 1,20);
-            this.gm.addProducto(100,"Mejora de vida","+20 de vida",2,20);
+            this.gm.addProducto(100,"Mejora de velocidad","+20 de vida",2,20);
             this.gm.addProducto(200,"Escopeta","+100 de daño,-20 de velocidad",1,100);
         }
     }
@@ -72,6 +72,30 @@ public class TiendaService {
         }
     }
 
+    @GET
+    @ApiOperation(value = "buy a Producto")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Jugador.class),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 400, message = "Capital insufieciente")
+    })
+    @Path("/comprar/{pnombre}/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response comprarProducto(@PathParam("pnombre")  String pnombre, @PathParam("username")  String usrnm) {
+        try {
+            this.gm.comprarProducto(pnombre, usrnm);
+            Jugador j = this.gm.getJugador(usrnm);
+            return Response.status(201).entity(j).build();
+        }
+        catch (ProductoNotFoundException e) {
+            return Response.status(404).build();
+        } catch (CapitalInsuficienteException e) {
+            return Response.status(400).build();
+        } catch (UserNotFoundException e) {
+            return Response.status(404).build();
+        }
+    }
+
     @POST
     @ApiOperation(value = "new producto")
     @ApiResponses(value = {
@@ -92,91 +116,6 @@ public class TiendaService {
         }
     }
 
-    @POST
-    @ApiOperation(value = "aumentar daño")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
-            @ApiResponse(code = 500, message = "Validation Error")
-    })
-    @Path("/increaseDamage")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response increaseDamage(String jugadorUsername){
-        try{
-            this.gm.increaseDamage(jugadorUsername);
-            return Response.status(201).build();
-        }catch(Exception e){
-            return Response.status(500).entity(e.getMessage()).build();
-        }
-
-    }
-
-    @POST
-    @ApiOperation(value = "aumentar vida")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
-            @ApiResponse(code = 500, message = "Validation Error")
-    })
-    @Path("/increaseHealth")
-    @Consumes(MediaType.APPLICATION_JSON)//path param mejor
-    public Response increaseHealth(String jugadorUsername){
-        try{
-            this.gm.increaseHealth(jugadorUsername);
-            return Response.status(201).build();
-        }catch(Exception e){
-            return Response.status(500).entity(e.getMessage()).build();
-        }
-    }
-
-    @POST
-    @ApiOperation(value = "aumentar velocidad")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
-            @ApiResponse(code = 500, message = "Validation Error")
-    })
-
-    @Path("/increaseSpeed")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response increaseSpeed(String jugadorUsername){
-        try{
-            this.gm.increaseSpeed(jugadorUsername);
-            return Response.status(201).build();
-        }catch(Exception e) {
-            return Response.status(500).entity(e.getMessage()).build();
-    }
-}
-
-  @POST
-    @ApiOperation(value = "cambiar a escopeta")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
-            @ApiResponse(code = 500, message = "Validation Error")
-    })
-    @Path("/armaEscopeta")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response armaEscopeta(String jugadorUsername){
-        try{
-            this.gm.armaEscopeta(jugadorUsername);
-            return Response.status(201).build();
-        }catch(Exception e){
-            return Response.status(500).entity(e.getMessage()).build();
-        }
-    }
-    @POST
-    @ApiOperation(value = "cambiar a espada")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tienda.class),
-            @ApiResponse(code = 500, message = "Validation Error")
-    })
-    @Path("/armaEspada")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response armaEspada(String jugadorUsername) {
-        try {
-            this.gm.armaEspada(jugadorUsername);
-            return Response.status(201).build();
-        } catch (Exception e) {
-            return Response.status(500).entity(e.getMessage()).build();
-        }
-    }
     @DELETE
     @ApiOperation(value = "delete producto")
     @ApiResponses(value = {

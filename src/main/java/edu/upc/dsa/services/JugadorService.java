@@ -40,6 +40,7 @@ public class JugadorService {
     }
 
 
+
     @POST
     @ApiOperation(value = "register a new Jugador")
     @ApiResponses(value = {
@@ -186,7 +187,9 @@ public class JugadorService {
             return Response.status(404).entity(e.getMessage()).build();
         }
 
+
     }
+
  /*   @PUT
     @ApiOperation(value = "More points for jugador", notes = "asdasd")
     @ApiResponses(value = {

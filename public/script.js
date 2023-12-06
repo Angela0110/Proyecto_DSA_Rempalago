@@ -304,186 +304,57 @@ $(document).ready(function(){
       $('#miAlerta').fadeIn().delay(2000).fadeOut();
    }
 
+   $('#tienda_button').click(function(){
+           const listaProductosElement = document.getElementsByClassName('tienda_productos')[0];
 
-    function increaseDamage(index){
+           fetch('http://localhost:8080/dsaApp/tienda/todos')
+               .then(response => response.json())
+               .then(productos => {
+                   productos.forEach((producto, index) => {
+                   const productoWeb = generarProductoWEB(producto, index);
 
-      var usernameJugadorRegistrado=sessionStorage.getItem('username');
-      var data={
-      username:usernameJugadorRegistrado
-      };
+                       listaProductosElement.innerHTML += productoWeb;
+                   });
 
-      fetch('http://localhost:8080/dsaApp/tienda/increaseDamage',{
-      method:'POST',
-      headers:{
-      'Content-Type':'application/json'
-      },
-      body:JSON.stringify(data)
-      })
-      .then(response=> response.json())
-      .then(data=>{
-      console.log(data);
-      })
-      .catch(error=>{
-      console.error('Error',error);
-      });
-   };
+                   $('.btnComprar').click(function(){
+                       var index = $(this).data('index');
+                       switch(index){
+                           case 0:
+                               increaseDamage(index);
+                               break;
+                           case 1:
+                               increaseHealth(index);
+                               break;
+                           case 2:
+                               increaseSpeed(index);
+                               break;
+                           case 3:
+                               invisibility(index);
+                               break;
+                           case 4:
+                               armaEscopeta(index)
+                               break;
+                           case 5:
+                               armaEspada(index)
+                               break;
+                       }
+                   });
+               })
+               .catch(error => console.error('Error al obtener la lista', error));
 
-   function increaseHealth(index){
-
-    var usernameJugadorRegistrado=sessionStorage.getItem('username');
-    var data={
-    username:usernameJugadorRegistrado
-    };
-
-    fetch('http://localhost:8080/dsaApp/tienda/increaseHealth',{
-    method:'POST',
-    headers:{
-    'Content-Type':'application/json'
-    },
-    body:JSON.stringify(data)
-    })
-    .then(response=> response.json())
-    .then(data=>{
-    console.log(data);
-    })
-    .catch(error=>{
-    console.error('Error',error);
-    });
-    };
-
-    function increaseSpeed(index){
-      var usernameJugadorRegistrado=sessionStorage.getItem('username');
-      var dat={
-      username:usernameJugadorRegistrado
-      };
-      fetch('http://localhost:8080/dsaApp/tienda/increaseSpeed',{
-      method:'POST',
-      headers:{
-      'Content-Type':'application/json'
-      },
-      body:JSON.stringify(data)
-      })
-      .then(response=> response.json())
-      .then(data=>{
-      console.log(data);
-      })
-      .catch(error=>{
-      console.error('Error',error);
-      });
-      };
-
-     function invisibility(index){
-      var usernameJugadorRegistrado=sessionStorage.getItem('username');
-      var data={
-      username:usernameJugadorRegistrado
-      };
-      fetch('http://localhost:8080/dsaApp/tienda/invisibility',{
-      method:'POST',
-      headers:{
-      "Content-Type":'application/json'
-      },
-      body:JSON.stringify(data)
-      })
-      .then(response=>response.json())
-      .then(data=>{
-      console.log(data);
-      })
-      .catch(error=>{
-      console.error('Error',error);
-      });
-      };
-      function armaEscopeta(index){
-        var usernameJugadorRegistrado=sessionStorage.getItem('username');
-        var data={
-        username:usernameJugadorRegistrado
-        };
-        fetch('http://localhost:8080/dsaApp/tienda/armaEscopeta',{
-        method:'POST',
-        headers:{
-        "Content-Type":'application/json'
-        },
-        body:JSON.stringify(data)
-        })
-        .then(response=>response.json())
-        .then(data=>{
-        console.log(data);
-        })
-        .catch(error=>{
-        console.error('Error',error);
-        });
-      };
-      function armaEspada(index){
-        var usernameJugadorRegistrado=sessionStorage.getItem('username');
-        var data={
-        username:usernameJugadorRegistrado
-        };
-        fetch('http://localhost:8080/dsaApp/tienda/armaEspada',{
-        method:'POST',
-        headers:{
-        "Content-Type":'application/json'
-        },
-        body:JSON.stringify(data)
-        })
-        .then(response=>response.json())
-        .then(data=>{
-        console.log(data);
-        })
-        .catch(error=>{
-        console.error('Error',error);
-        });
-      }
-
-      $('#tienda_button').click(function(){
-        const listaProductosElement = document.getElementsByClassName('tienda_productos')[0];
-
-        fetch('http://localhost:8080/dsaApp/tienda/todos')
-            .then(response => response.json())
-            .then(productos => {
-                productos.forEach((producto, index) => {
-                const productoWeb = generarProductoWEB(producto, index);
-
-                    listaProductosElement.innerHTML += productoWeb;
-                });
-
-                $('.btnComprar').click(function(){
-                    var index = $(this).data('index');
-                    switch(index){
-                        case 0:
-                            increaseDamage(index);
-                            break;
-                        case 1:
-                            increaseHealth(index);
-                            break;
-                        case 2:
-                            increaseSpeed(index);
-                            break;
-                        case 3:
-                            invisibility(index);
-                            break;
-                        case 4:
-                            armaEscopeta(index)
-                            break;
-                        case 5:
-                            armaEspada(index)
-                            break;
-                    }
-                });
-            })
-            .catch(error => console.error('Error al obtener la lista', error));
-
-        function generarProductoWEB(producto, index){
-            return `
-                <div class="col-md-4 custom-row-margin">
-                    <div class="card">
-                     //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
-                        <div class="card-body">
-                            <h5 class="card-title">${producto.nombre}</h5>
-                            <p class="card-text">${producto.description}</p>
-                            <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-    });
+           function generarProductoWEB(producto, index){
+               return `
+                   <div class="col-md-4 custom-row-margin">
+                       <div class="card">
+                        //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+                           <div class="card-body">
+                               <h5 class="card-title">${producto.nombre}</h5>
+                               <p class="card-text">${producto.description}</p>
+                               <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
+                           </div>
+                       </div>
+                   </div>
+               `;
+           }
+       });
 });
