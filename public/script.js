@@ -27,7 +27,13 @@ $(document).ready(function(){
       $("#iniciar").show();
       $("#registro").hide();
       $("#tienda").hide();
-    }
+   }
+
+   function mostrarAlerta(tipo, contenido) {
+        $('#miAlerta').html(contenido);
+        $('#miAlerta').removeClass().addClass('alert ' + 'alert-' + tipo);
+        $('#miAlerta').fadeIn().delay(2000).fadeOut();
+   }
 
    $("#inicio_buton").click(function(){
       showIniciarSection();
@@ -298,63 +304,58 @@ $(document).ready(function(){
       });
   });
 
-   function mostrarAlerta(tipo, contenido) {
-      $('#miAlerta').html(contenido);
-      $('#miAlerta').removeClass().addClass('alert ' + 'alert-' + tipo);
-      $('#miAlerta').fadeIn().delay(2000).fadeOut();
-   }
 
-   $('#tienda_button').click(function(){
-           const listaProductosElement = document.getElementsByClassName('tienda_productos')[0];
 
-           fetch('http://localhost:8080/dsaApp/tienda/todos')
-               .then(response => response.json())
-               .then(productos => {
-                   productos.forEach((producto, index) => {
-                   const productoWeb = generarProductoWEB(producto, index);
+  $('#tienda_button').click(function(){
+          const listaProductosElement = document.getElementsByClassName('tienda_productos')[0];
 
-                       listaProductosElement.innerHTML += productoWeb;
-                   });
+          fetch('http://localhost:8080/dsaApp/tienda/todos')
+              .then(response => response.json())
+              .then(productos => {
+                  productos.forEach((producto, index) => {
+                  const productoWeb = generarProductoWEB(producto, index);
 
-                   $('.btnComprar').click(function(){
-                       var index = $(this).data('index');
-                       switch(index){
-                           case 0:
-                               increaseDamage(index);
-                               break;
-                           case 1:
-                               increaseHealth(index);
-                               break;
-                           case 2:
-                               increaseSpeed(index);
-                               break;
-                           case 3:
-                               invisibility(index);
-                               break;
-                           case 4:
-                               armaEscopeta(index)
-                               break;
-                           case 5:
-                               armaEspada(index)
-                               break;
-                       }
-                   });
-               })
-               .catch(error => console.error('Error al obtener la lista', error));
+                      listaProductosElement.innerHTML += productoWeb;
+                  });
 
-           function generarProductoWEB(producto, index){
-               return `
-                   <div class="col-md-4 custom-row-margin">
-                       <div class="card">
-                        //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
-                           <div class="card-body">
-                               <h5 class="card-title">${producto.nombre}</h5>
-                               <p class="card-text">${producto.description}</p>
-                               <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
-                           </div>
-                       </div>
-                   </div>
-               `;
-           }
-       });
+                  $('.btnComprar').click(function(){
+                      var index = $(this).data('index');
+                      var username = $('usr_ini').val();
+                      fetch('http://localhost:8080/dsaApp/tienda/comprar/' + producto.nombre + '/' + username, {
+                            method: 'GET'
+                            headers:{
+                                'Content-Type':'application/json'
+                            },
+                            body:JSON.stringify(userData)
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                            console.log(data);
+                            if(data.success){
+                                mostrarAlerta('Success','Objeto comprado');
+                            }
+                            else{
+                                console.error('Error', error);
+                                mostrarAlerta('Danger','No se ha podido comprar el objeto, no tienes eurillos suficientes');
+                            }
+                      })
+                  });
+              })
+              .catch(error => console.error('Error al obtener la lista', error));
+
+          function generarProductoWEB(producto, index){
+              return `
+                  <div class="col-md-4 custom-row-margin">
+                      <div class="card">
+                       //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+                          <div class="card-body">
+                              <h5 class="card-title">${producto.nombre}</h5>
+                              <p class="card-text">${producto.description}</p>
+                              <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
+                          </div>
+                      </div>
+                  </div>
+              `;
+          }
+  });
 });
