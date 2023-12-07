@@ -51,7 +51,7 @@ public class TiendaService {
         public Response getProductos() {
             List<Tienda> productos = this.gm.findAllProductos();
             GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
-            return Response.status(200).entity(entity).build();
+            return Response.status(201).entity(entity).build();
         }
 
     @GET
@@ -66,7 +66,7 @@ public class TiendaService {
 
         try {
             Tienda p = this.gm.getProducto(id);
-            return Response.status(200).entity(p).build();
+            return Response.status(201).entity(p).build();
         } catch (ProductoNotFoundException e) {
             return Response.status(404).entity(e.getMessage()).build();
         }

@@ -322,7 +322,7 @@ $(document).ready(function(){
                       var index = $(this).data('index');
                       var username = $('usr_ini').val();
                       fetch('http://localhost:8080/dsaApp/tienda/comprar/' + producto.nombre + '/' + username, {
-                            method: 'GET'
+                            method: 'GET',
                             headers:{
                                 'Content-Type':'application/json'
                             },
@@ -347,7 +347,7 @@ $(document).ready(function(){
               return `
                   <div class="col-md-4 custom-row-margin">
                       <div class="card">
-                       //   <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+                       // <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
                           <div class="card-body">
                               <h5 class="card-title">${producto.nombre}</h5>
                               <p class="card-text">${producto.description}</p>

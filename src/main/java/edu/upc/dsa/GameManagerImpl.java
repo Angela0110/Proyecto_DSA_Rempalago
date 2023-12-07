@@ -111,6 +111,7 @@ public class GameManagerImpl implements GameManager {
 
             j.setUsername(newUsername);
             jugadores.remove(j);
+            jugadores.remove(j);
             jugadores.put(newUsername, j);
             logger.info("El usuario " + username + " quiere cambiar su nombre a " + newUsername);
             logger.info("El usuario cambió su username a " + newUsername);
@@ -333,11 +334,11 @@ public class GameManagerImpl implements GameManager {
         }
     }
     public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException {
-        if(producto.getId() != null || producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
-            logger.info("delete Producto" + producto.getId() + ")");
+        if(producto.getNombre() != null || producto.getDescription() != null || producto.getEfect() >= 1 || producto.getEfectType() >= 0 || producto.getEfectType() <= 3){
+            logger.info("delete Producto" + producto.getNombre() + ")");
             int i = 0;
             for (Tienda p : this.productos) {
-                if (p.getId().equals(producto.getId())) {
+                if (p.getNombre().equals(producto.getNombre())) {
                     this.productos.remove(i);
                     return this.productos;
                 }

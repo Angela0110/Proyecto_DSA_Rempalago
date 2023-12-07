@@ -1,5 +1,6 @@
 package edu.upc.dsa.models;
 
+import edu.upc.dsa.util.Fecha;
 import edu.upc.dsa.util.RandomUtils;
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class Partida {
     String idPlayer;   // Identificador del jugador que está jugando la partida
     String idMapa;     // Identificador del mapa que se está jugando
     int puntos;
-    Date fecha;
+    String fecha;
 
     // Constructores
     public Partida(){this.id = RandomUtils.getId(); this.idMapa = "";}
@@ -24,7 +25,7 @@ public class Partida {
         this.idMapa = idMapa;
         this.nivl = 1;   // Siempre se empieza por el nivel 1
         this.puntos = 0;
-        this.fecha = new Date();
+        this.fecha = Fecha.getFecha();
     }
 
     // Setters y Getters
@@ -41,11 +42,11 @@ public class Partida {
         this.dif = dif;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
