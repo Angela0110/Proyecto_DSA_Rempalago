@@ -35,6 +35,21 @@ $(document).ready(function(){
         $('#miAlerta').fadeIn().delay(2000).fadeOut();
    }
 
+   function generarProductoWEB(producto, index){
+        return `
+        <div class="col-md-4 custom-row-margin">
+            <div class="card">
+                // <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
+                <div class="card-body">
+                    <h5 class="card-title">${producto.nombre}</h5>
+                    <p class="card-text">${producto.description}</p>
+                    <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
+                </div>
+            </div>
+        </div>
+    `;
+   }
+
    $("#inicio_buton").click(function(){
       showIniciarSection();
    });
@@ -320,13 +335,12 @@ $(document).ready(function(){
 
                   $('.btnComprar').click(function(){
                       var index = $(this).data('index');
-                      var username = $('usr_ini').val();
-                      fetch('http://localhost:8080/dsaApp/tienda/comprar/' + producto.nombre + '/' + username, {
+                      var username = $('#usr_ini').val();
+                      fetch('http://localhost:8080/dsaApp/tienda/comprar/' + productos[index].nombre + '/' + username, {
                             method: 'GET',
                             headers:{
                                 'Content-Type':'application/json'
                             },
-                            body:JSON.stringify(userData)
                       })
                       .then(response => response.json())
                       .then(data => {
@@ -342,20 +356,5 @@ $(document).ready(function(){
                   });
               })
               .catch(error => console.error('Error al obtener la lista', error));
-
-          function generarProductoWEB(producto, index){
-              return `
-                  <div class="col-md-4 custom-row-margin">
-                      <div class="card">
-                       // <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}" width="40" height="40">
-                          <div class="card-body">
-                              <h5 class="card-title">${producto.nombre}</h5>
-                              <p class="card-text">${producto.description}</p>
-                              <a href="#" class="btn btn-primary btnComprar" data-index="${index}">Comprar</a>
-                          </div>
-                      </div>
-                  </div>
-              `;
-          }
   });
 });

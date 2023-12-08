@@ -22,11 +22,7 @@ public interface GameManager {
     public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException;
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
-    //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 
-//    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
-//    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
-//    public List<Partida> consultarUsuariosPorPuntuacion(String idJuego) throws JuegoNotFoundException;
 //    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
 //    public String stringToJSON(String args);
@@ -36,7 +32,10 @@ public interface GameManager {
 
     // Partida Manager
     public List<Partida> consultarPartidas(String id) throws UserNotFoundException;
-
+//    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
+//    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
+//    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
+//    public List<Partida> consultarUsuariosPorPuntuacion(String idJuego) throws JuegoNotFoundException;
 
     // Tienda Manager
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
