@@ -26,7 +26,7 @@ public class JugadorService {
 
     private GameManager gm;
 
-    public JugadorService() { //throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException {
+    public JugadorService() {
         this.gm = GameManagerImpl.getInstance();
         if (gm.JugadoresSize()==0) {
             try {

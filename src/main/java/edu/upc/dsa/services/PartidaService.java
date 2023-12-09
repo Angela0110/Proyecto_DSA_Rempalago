@@ -18,27 +18,21 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.GenericEntity;
 import java.util.List;
 
-
-@Api(value = "/avatares", description = "Endpoint to Avatar Service")
-@Path("/avatares")
-public class AvatarService {
-
+@Api(value = "/partidas", description = "Endpoint to Partida Service")
+@Path("/partidas")
+public class PartidaService {
     private GameManager gm;
 
-    public AvatarService() { //throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException {
+    public PartidaService() {
         this.gm = GameManagerImpl.getInstance();
-        if (gm.AvataresSize()==0) {
+        if (gm.JugadoresSize()==0) {
             try {
-                this.gm.addAvatar("AX-21",23,100,10,50);
-                this.gm.addAvatar("ZE-32",25,150,20,25);
-                this.gm.addAvatar("DC-25",29,110,50,100);
-                this.gm.addAvatar("RS-6",30,200,100,100);
-
+                this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
+                this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
+                this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         }
     }
-
-
 }

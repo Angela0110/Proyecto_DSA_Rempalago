@@ -8,20 +8,20 @@ public class Partida {
     String id;
     int dif;    // Nivel de dificultad de la partida
     // afectará a la intensidad de ataque de los enemigos
-    // 4 niveles, Fácil "0" Normal "1" Difícil "2" y Muy difícil "3"
+    // 3 niveles, Fácil "0" Normal "1"  y Difícil "2"
     int nivl;   // Nivel de la partida en el que se encuentra el jugador
-    String idPlayer;   // Identificador del jugador que está jugando la partida
+    String player;   // Identificador del jugador que está jugando la partida
     String idMapa;     // Identificador del mapa que se está jugando
     int puntos;
     String fecha;
 
     // Constructores
     public Partida(){this.id = RandomUtils.getId(); this.idMapa = "";}
-    public Partida(int dif, String idPlayer, String idMapa){
+    public Partida(int dif, String player, String idMapa){
         this();
         this.id = RandomUtils.getId();
         this.dif = dif;
-        this.idPlayer = idPlayer;
+        this.player = player;
         this.idMapa = idMapa;
         this.nivl = 1;   // Siempre se empieza por el nivel 1
         this.puntos = 0;
@@ -31,8 +31,8 @@ public class Partida {
     // Setters y Getters
 
     public String getPartidaId(){return this.id;}
-    public String getPlayerId(){return this.idPlayer;}
-    public void setPlayerId(String idPlayer){this.idPlayer = idPlayer;}
+    public String getPlayer(){return this.player;}
+    public void setPlayer(String player){this.player = player;}
     public String getMapId(){return this.idMapa;}
     public void setMapaId(String idMapa){this.idMapa = idMapa;}
     public int getNivel(){return this.nivl;}

@@ -2,10 +2,7 @@ package edu.upc.dsa;
 
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.CredencialesRespuesta;
-import edu.upc.dsa.models.Jugador;
-import edu.upc.dsa.models.Tienda;
-import edu.upc.dsa.models.Partida;
+import edu.upc.dsa.models.*;
 
 
 import java.util.List;
@@ -23,6 +20,11 @@ public interface GameManager {
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 
+    // Avatar Manager
+    public Avatar addAvatar(String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
+    public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException;
+    public List<Avatar> findAllAvatares();
+    public int AvataresSize();
 //    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
 //    public String stringToJSON(String args);
@@ -31,7 +33,12 @@ public interface GameManager {
 //    public int size();
 
     // Partida Manager
-    public List<Partida> consultarPartidas(String id) throws UserNotFoundException;
+    public Partida addPartida(Partida partida) throws PartidaYaExisteException, FaltanDatosException;
+    public Partida addPartida(int dif, String player, String idMapa) throws PartidaYaExisteException, FaltanDatosException;
+    public List<Partida> consultarPartidas(String username) throws UserNotFoundException;
+    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException;
+
+
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
 //    public Partida iniciarPartida(String identificadorJuego, String identificadorUsuario) throws JuegoNotFoundException, UserNotFoundException, UserEnPartidaException;
 //    public Partida consultarNivelActual(String identificadorUsuario) throws UserNotFoundException, UserNoEnPartidaException;
