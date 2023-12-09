@@ -40,12 +40,26 @@ public class GameManagerImpl implements GameManager {
         logger.info("Game size " + ret);
         return ret;
     }
+    public int AvataresSize(){      // Número de avatares disponibles
+        int ret = this.avatares.size();
+        logger.info("Avatares size " + ret);
+        return ret;
+    }
 
     public int JugadoresSize() {    // Número de jugadores
         int ret = this.jugadores.size();
         logger.info("Jugadores size " + ret);
         return ret;
     }
+
+    //          Organización
+    //   1        ---> Jugador Manager
+    //   2        ---> Tienda Manager
+    //   3        ---> Partida Manager
+    //   4        ---> Avatar Manager
+
+
+    // Jugador Manager
 
     public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException {
         logger.info("new Jugador " + jugador.getUsername());
@@ -278,32 +292,6 @@ public class GameManagerImpl implements GameManager {
     }*/
 
 
-    public List<Partida> consultarPartidas(String username) throws UserNotFoundException {
-        logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
-        List<Partida> par = new LinkedList<Partida>();
-        Jugador j = jugadores.get(username);
-        if (j == null){
-            logger.info("El usuario no existe");
-            throw new UserNotFoundException();
-        }
-        else{
-            for (Partida p:partidas){
-                if (p.getPlayerId().equals(username)){
-                    par.add(p);
-                }
-            }
-            if (par.isEmpty()) {
-                logger.info("El usuario aun no jugó ninguna partida");
-                return Collections.emptyList();
-            }
-            else {
-                return par;
-            }
-        }
-    }
-
-
-
     // Que pasa si yo ya tengo una partida guardada de antes??
     // Cómo se tendría que inciar?
 //    public void startPartida(Partida p, Jugador j, Mapa m, Avatar a) {        // El jugador inicicia una partida
@@ -327,7 +315,8 @@ public class GameManagerImpl implements GameManager {
 //    }
 
 
-    // Tienda
+    // Tienda Manager
+
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException{
         logger.info("new product " + producto.getNombre());
         if(producto.getNombre() == null || producto.getDescription() == null || producto.getEfect() < 1 || producto.getEfect_type() < 0  || producto.getEfect_type() > 3 || producto.getPrecio() < 0){
@@ -509,4 +498,65 @@ public class GameManagerImpl implements GameManager {
         if(!encontrado)
             logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
     }
+
+
+    // Partida Manager
+
+    public Partida addPartida(Partida partida) throws PartidaYaExisteException, FaltanDatosException{
+        return partida;
+    }
+
+    public List<Partida> consultarPartidas(String username) throws UserNotFoundException {
+        logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
+        List<Partida> par = new LinkedList<Partida>();
+        Jugador j = jugadores.get(username);
+        if (j == null){
+            logger.info("El usuario no existe");
+            throw new UserNotFoundException();
+        }
+        else{
+            for (Partida p:partidas){
+                if (p.getPlayer().equals(username)){
+                    par.add(p);
+                }
+            }
+            if (par.isEmpty()) {
+                logger.info("El usuario aun no jugó ninguna partida");
+                return Collections.emptyList();
+            }
+            else {
+                return par;
+            }
+        }
+    }
+
+    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException{
+        return newdif;
+    }
+
+    // Avatar Manager
+
+    public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException{
+        logger.info("new Avatar added " + avatar.getNombre());
+        logger.info(avatar.getNombre() + " Salud: " + avatar.getHealth() +" Daño: " +avatar.getDamg() + " Velocidad: " + avatar.getSpeed());
+        boolean igual = false;
+        if (avatar.getNombre() == null  || avatar.getHealth() == 0 || avatar.getDamg() == 0 || avatar.getSpeed() == 0){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
+        }
+        for (Avatar a : this.findAllAvatares()){
+            if (a.getNombre().equals(avatar.getNombre()) ){
+                logger.info("Ese jugador ya existe (el email y el usuario tienen que ser únicos)");
+                igual = true;
+                throw new AvatarYaExisteException();
+            }
+        }
+        this.avatares.add(avatar);
+        logger.info("new Avatar added");
+        return avatar;
+    }
+
+    public Avatar addAvatar(String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException{return this.addAvatar(new Avatar(nombre, idArma, health, damg, speed));}
+
+    public List<Avatar> findAllAvatares(){return this.avatares;}
 }

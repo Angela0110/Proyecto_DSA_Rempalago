@@ -26,7 +26,7 @@ public class JugadorService {
 
     private GameManager gm;
 
-    public JugadorService() { //throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException {
+    public JugadorService() {
         this.gm = GameManagerImpl.getInstance();
         /*if (gm.JugadoresSize()==0) {
             try {
@@ -100,7 +100,7 @@ public class JugadorService {
     @ApiOperation(value = "update nombre de un Jugador")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = CredencialesRespuesta.class),
-            @ApiResponse(code = 400, message = "Error", response = CredencialesRespuesta.class),
+            @ApiResponse(code = 404, message = "Error", response = CredencialesRespuesta.class),
 
     })
     @Path("/updateUsername")
