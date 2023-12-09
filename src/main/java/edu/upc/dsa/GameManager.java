@@ -18,9 +18,9 @@ public interface GameManager {
     public Jugador getJugador(String id) throws UserNotFoundException;
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
-    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException;
-    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException;
-    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException;
+    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException;
+    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 
 //    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;

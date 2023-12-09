@@ -1,9 +1,5 @@
 package edu.upc.dsa.models;
 
-import edu.upc.dsa.util.RandomUtils;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Tienda {
     int precio;
     String nombre;
@@ -28,8 +24,9 @@ public class Tienda {
     }
     public int getPrecio(){return this.precio;}
     public void setPrecio(int precio){this.precio = precio;}
-    public int getEfectType(){return this.efect_type;}
-    public void setEfectType(int efect_type){this.efect_type = efect_type;}
+    public int getEfect_type(){return this.efect_type;}
+
+    public void setEfect_type(int efect_type){this.efect_type = efect_type;}
     public int getEfect(){return this.efect;}
     public void setEfect(int efect){this.efect = efect;}
     public String getNombre(){return this.nombre;}

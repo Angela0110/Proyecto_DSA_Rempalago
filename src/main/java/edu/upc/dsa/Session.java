@@ -1,14 +1,16 @@
 package edu.upc.dsa;
 
-import java.util.HashMap;
+import edu.upc.dsa.exceptions.NoRecordsFoundException;
+
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-public interface Session {
-    void save(Object entity);
+
+public interface Session<E> {
+    void save(Object entity) throws SQLIntegrityConstraintViolationException;
     void close();
-    Object get(Class theClass, int ID);
-    void update(Object object);
-    void delete(Object object);
+    Object get(Class theClass, String columna, String value) throws SQLException;
+    void update(String columna, String user, String value) throws SQLIntegrityConstraintViolationException;
+    void delete(String username) throws NoRecordsFoundException;
     List<Object> findAll(Class theClass);
-    List<Object> findAll(Class theClass, HashMap params);
-    List<Object> query(String query, Class theClass, HashMap params);
 }
