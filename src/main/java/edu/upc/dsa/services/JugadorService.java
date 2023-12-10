@@ -92,7 +92,7 @@ public class JugadorService {
             return Response.status(400).entity(r).build();
         } catch (ErrorCredencialesException e){
             r.setMessage(e.getMessage());
-            return Response.status(400).entity(r).build();
+            return Response.status(401).entity(r).build();
         }
     }
 
