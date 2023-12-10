@@ -431,8 +431,23 @@ public class GameManagerImpl implements GameManager {
     // Partida Manager
 
     public Partida addPartida(Partida partida) throws PartidaYaExisteException, FaltanDatosException{
-
+        logger.info("Se quiere crear una nueva partida");
+        if(partida.getPlayer() == null|| partida.getNivel() > 2 || partida.getDificultad() < 0|| partida.getMapId() == null){
+            logger.warn("Faltan datos de la partida");
+            throw new FaltanDatosException();
+        }
+        for(Partida p : this.partidas) {
+            if (p.getPartidaId().equals(partida)) {
+                logger.warn("La partida ya existe, no puede haber un jugador en dos partidas diferentes");
+                throw new PartidaYaExisteException();
+            }
+        }
+        logger.info("Partida añadida correctamente");
+        this.partidas.add(partida);
+        return partida;
     }
+
+    public Partida addPartida(int dif, String player, String idMapa) throws PartidaYaExisteException, FaltanDatosException{return this.addPartida(new Partida(dif, player,idMapa));}
 
     public List<Partida> consultarPartidas(String username) throws UserNotFoundException {
         logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
@@ -459,7 +474,26 @@ public class GameManagerImpl implements GameManager {
     }
 
     public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException{
-
+        logger.info("El jugador "+player+" quiere cambiar la dificultad de su partida");
+        boolean encontrado = false;
+        for(Partida p : this.partidas){
+            if(p.getPlayer().equals(player)) {
+                if(p.getDificultad() == newdif) {
+                    logger.warn("La dificultad seleccionada es la misma que se está jugando");
+                    throw new MismaDificultadException();
+                }else {
+                    logger.info("Dificultad cambiada correctamente");
+                    p.setDificultad(newdif);
+                    encontrado = true;
+                }
+            }
+        }
+        if(!encontrado)
+            return 1;
+        else{
+            logger.warn("El jugador " +player+ " no está en ninguna partida");
+            throw new PartidaNotFoundException();
+        }
     }
 
     // Avatar Manager
