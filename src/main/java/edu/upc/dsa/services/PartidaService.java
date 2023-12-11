@@ -23,16 +23,28 @@ import java.util.List;
 public class PartidaService {
     private GameManager gm;
 
-    public PartidaService() {
+    public PartidaService() throws FaltanDatosException, UserNotFoundException {
         this.gm = GameManagerImpl.getInstance();
-        if (gm.JugadoresSize()==0) {
-            try {
-                this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
-                this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
-                this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
+    }
+    @POST
+    @ApiOperation(value = "register a new Partida")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Partida.class),
+            @ApiResponse(code=400,message="Bad request"),
+            @ApiResponse(code=409,message="Conflict")
+    })
+    @Path("/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+
+    public Response addPartida(Partida partida){
+
+        try {
+            this.gm.addPartida(partida.getDif(), partida.getPlayer(), partida.getIdMapa());
+            return Response.status(201).build();
+        } catch (FaltanDatosException e) {
+            return Response.status(400).build();
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

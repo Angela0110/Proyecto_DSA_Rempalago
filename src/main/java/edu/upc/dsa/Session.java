@@ -11,6 +11,9 @@ public interface Session<E> {
     void close();
     Object get(Class theClass, String columna, String value) throws SQLException;
     void update(String columna, String user, String value) throws SQLIntegrityConstraintViolationException;
-    void delete(String username) throws NoRecordsFoundException;
+    void delete(Class theClass, String columna, String username) throws NoRecordsFoundException;
     List<Object> findAll(Class theClass);
-}
+    public List<Object> findAllPartidas(Class theClass, String player);
+    public int size(Class theClass);
+
+    }

@@ -57,11 +57,19 @@ public class QueryHelper {
         return sb.toString();
     }
 
-
-    public static String createQueryDELETE(String username) {
+    public static String createQuerySELECTallPartidas(Class theClass, String player) {
         StringBuffer sb = new StringBuffer();
-        sb.append("DELETE FROM Jugador");
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName());
         sb.append(" WHERE USERNAME = ?");
+
+        return sb.toString();
+    }
+
+
+    public static String createQueryDELETE(Class theClass, String columna, String username) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("DELETE FROM ").append(theClass.getSimpleName());
+        sb.append(" WHERE " + columna + " = ?");
 
         return sb.toString();
     }

@@ -109,8 +109,8 @@ public class SessionImpl implements Session {
     }
 
 
-    public void delete(String username) throws NoRecordsFoundException {
-        String deleteQuery = QueryHelper.createQueryDELETE(username);
+    public void delete(Class theClass, String columna, String username) throws NoRecordsFoundException {
+        String deleteQuery = QueryHelper.createQueryDELETE(theClass, columna, username);
 
         try {
             PreparedStatement pstm = conn.prepareStatement(deleteQuery);
@@ -147,6 +147,39 @@ public class SessionImpl implements Session {
                     ObjectHelper.setter(o, columnName, rs.getObject(j));
                 }
                 list.add(o);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Object> findAllPartidas(Class theClass, String player) {
+
+        String query = QueryHelper.createQuerySELECTallPartidas(theClass, player);
+        PreparedStatement pstm =null;
+        ResultSet rs;
+        List<Object> list = new LinkedList<>();
+        try {
+            pstm = conn.prepareStatement(query);
+            pstm.setObject(1, player);
+            pstm.executeQuery();
+            rs = pstm.getResultSet();
+
+            ResultSetMetaData metadata = rs.getMetaData();
+            int numberOfColumns = metadata.getColumnCount();
+
+            while (rs.next()){
+                Object o = theClass.newInstance();
+                for (int j=1; j<=numberOfColumns; j++){
+                    String columnName = metadata.getColumnName(j);
+                    ObjectHelper.setter(o, columnName, rs.getObject(j));
+                }
+                list.add(o);
 
             }
             return list;
@@ -160,4 +193,23 @@ public class SessionImpl implements Session {
         return null;
     }
 
+    public int size(Class theClass){
+        String query = QueryHelper.createQuerySELECTall(theClass);
+        PreparedStatement pstm =null;
+        ResultSet rs;
+        int numberOfRows = 0;
+        try {
+            pstm = conn.prepareStatement(query);
+            rs = pstm.executeQuery();
+
+            // Itera sobre el ResultSet para contar las filas
+            while (rs.next()) {
+                numberOfRows++;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return numberOfRows;
+    }
 }

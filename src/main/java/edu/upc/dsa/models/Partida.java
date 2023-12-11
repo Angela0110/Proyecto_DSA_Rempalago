@@ -30,15 +30,15 @@ public class Partida {
 
     // Setters y Getters
 
-    public String getPartidaId(){return this.id;}
+    public String getId(){return this.id;}
     public String getPlayer(){return this.player;}
     public void setPlayer(String player){this.player = player;}
-    public String getMapId(){return this.idMapa;}
-    public void setMapaId(String idMapa){this.idMapa = idMapa;}
-    public int getNivel(){return this.nivl;}
-    public void setNivel(int nivel){this.nivl = nivel;}
-    public int getDificultad(){return this.dif;}
-    public void setDificultad(int dif) {
+    public String getIdMapa(){return this.idMapa;}
+    public void setIdMapa(String idMapa){this.idMapa = idMapa;}
+    public int getNivl(){return this.nivl;}
+    public void setNivl(int nivel){this.nivl = nivel;}
+    public int getDif(){return this.dif;}
+    public void setDif(int dif) {
         this.dif = dif;
     }
 

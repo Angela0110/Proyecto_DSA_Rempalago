@@ -72,7 +72,7 @@ public class TiendaService {
         }
     }
 
-    @GET
+   /* @GET
     @ApiOperation(value = "buy a Producto")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Jugador.class),
@@ -94,7 +94,7 @@ public class TiendaService {
         } catch (UserNotFoundException e) {
             return Response.status(404).build();
         }
-    }
+    }*/
 
     @POST
     @ApiOperation(value = "new producto")
@@ -126,8 +126,7 @@ public class TiendaService {
     @Path("/delete/{id}")
     public Response deleteProducto(@PathParam("id")String id) {
         try {
-            Tienda producto=this.gm.getProducto(id);
-            this.gm.deleteProducto(producto);
+            this.gm.deleteProducto(id);
             List<Tienda> p = this.gm.findAllProductos();
             GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(p) {};
             return Response.status(201).entity(entity).build();

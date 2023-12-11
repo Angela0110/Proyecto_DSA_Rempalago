@@ -5,6 +5,7 @@ import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.*;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface GameManager {
@@ -33,10 +34,10 @@ public interface GameManager {
 //    public int size();
 
     // Partida Manager
-    public Partida addPartida(Partida partida) throws PartidaYaExisteException, FaltanDatosException;
-    public Partida addPartida(int dif, String player, String idMapa) throws PartidaYaExisteException, FaltanDatosException;
-    public List<Partida> consultarPartidas(String username) throws UserNotFoundException;
-    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException;
+    public Partida addPartida(Partida partida) throws FaltanDatosException, UserNotFoundException;
+    public Partida addPartida(int dif, String player, String idMapa) throws FaltanDatosException, UserNotFoundException;
+    public List<Partida> consultarPartidas(String username);
+    //public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException, FaltanDatosException, UserNotFoundException;
 
 
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
@@ -48,11 +49,11 @@ public interface GameManager {
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda addProducto(int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda getProducto(String id) throws ProductoNotFoundException;
-    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException;
-    public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
+    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException;
+    public List<Tienda> deleteProducto(String nombre) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
-    public void increaseDamage(String jugadorUsername, int damage);
+    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException;
     public void increaseHealth(String jugadorUsername, int health);
     public void increaseSpeed(String jugadorUsername, int speed);
     public void invisibility(String jugadorUsername);
