@@ -18,6 +18,7 @@ public interface GameManager {
     public int JugadoresSize();
     public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException;
     public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException;
+    public void updateJugador(String columna, String user, String newValue);
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 

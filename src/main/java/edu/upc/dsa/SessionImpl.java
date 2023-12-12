@@ -1,6 +1,7 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.exceptions.NoRecordsFoundException;
+import edu.upc.dsa.models.Jugador;
 import edu.upc.dsa.util.ObjectHelper;
 import edu.upc.dsa.util.QueryHelper;
 import javassist.NotFoundException;
@@ -77,6 +78,7 @@ public class SessionImpl implements Session {
                     }
                 } while (rs.next());
             }
+
             return o;
 
         } catch (SQLException e) {

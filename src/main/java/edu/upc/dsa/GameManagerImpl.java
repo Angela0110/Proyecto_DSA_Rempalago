@@ -14,7 +14,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class GameManagerImpl implements GameManager {
 
     private static edu.upc.dsa.GameManager instance;
-    //protected List<Partida> partidas;
+    protected List<Partida> partidas;
     protected Map<String, Jugador> jugadores;
     protected List<Avatar> avatares;
     protected List<Mapa> mapas;
@@ -22,7 +22,7 @@ public class GameManagerImpl implements GameManager {
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
-        //this.partidas = new LinkedList<>();
+        this.partidas = new LinkedList<>();
         this.jugadores = new HashMap<>();
         this.avatares = new LinkedList<>();
         this.mapas = new LinkedList<>();
@@ -286,6 +286,27 @@ public class GameManagerImpl implements GameManager {
         return r;
     }
 
+    public void updateJugador(String columna, String user, String newValue) {
+
+
+        CredencialesRespuesta r = new CredencialesRespuesta();
+        Session session = null;
+        Jugador jugador;
+
+        try {
+            session = FactorySession.openSession();
+            session.update(columna, user, newValue);
+
+        }catch (Exception e) {
+            // LOG
+            e.printStackTrace();
+        }
+        finally {
+            assert session != null;
+            session.close();
+        }
+    }
+
 
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException {
         CredencialesRespuesta respuesta = new CredencialesRespuesta();
@@ -434,6 +455,7 @@ public class GameManagerImpl implements GameManager {
         try {
             Tienda p = this.getProducto(Pnombre);
             Jugador j = this.getJugador(usrnm);
+            logger.info(j.getUsername() + j.getMail() + j.getEurillos());
             int precio = p.getPrecio();
             if(j.getEurillos() < precio) {
                 logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
@@ -441,7 +463,7 @@ public class GameManagerImpl implements GameManager {
             }
             else{
                 logger.info(usrnm + " se ha comprado " + Pnombre);
-                j.setEurillos((j.getEurillos() - precio));
+                this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
                 if(p.getEfect_type() == 0) {
                     logger.info("Se ha incrementado la salud");
                     this.increaseHealth(usrnm, p.getEfect());
@@ -652,6 +674,28 @@ public class GameManagerImpl implements GameManager {
         return this.addPartida(new Partida(dif, player, idMapa));
     }
 
+    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException{
+        logger.info("El jugador "+player+" quiere cambiar la dificultad de su partida");
+        boolean encontrado = false;
+        for(Partida p : this.partidas){
+            if(p.getPlayer().equals(player)) {
+                if(p.getDif() == newdif) {
+                    logger.warn("La dificultad seleccionada es la misma que se está jugando");
+                    throw new MismaDificultadException();
+                }else {
+                    logger.info("Dificultad cambiada correctamente");
+                    p.setDif(newdif);
+                    encontrado = true;
+                }
+            }
+        }
+        if(!encontrado)
+            return 1;
+        else{
+            logger.warn("El jugador " +player+ " no está en ninguna partida");
+            throw new PartidaNotFoundException();
+        }
+    }
 
     public List<Partida> consultarPartidas(String username) {
         logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
@@ -670,33 +714,6 @@ public class GameManagerImpl implements GameManager {
         }
         return par;
     }
-
-   /* public int cambiarDificultad(String id, int newdif) throws PartidaNotFoundException, MismaDificultadException, FaltanDatosException, UserNotFoundException {
-        logger.info( "El jugador quiere cambiar la dificultad a " + newdif);
-
-        if(id == null ||newdif > 2){
-            logger.info("Faltan datos");
-            throw new FaltanDatosException();
-        }
-
-        Session session = null;
-
-        try {
-            session = FactorySession.openSession();
-            session.update("dif",,newdif);
-            logger.info(player + " cambió la dificultad a " + newdif);
-        } catch (SQLIntegrityConstraintViolationException e){
-            logger.info("No existe ese usuario");
-            throw new UserNotFoundException();
-        } catch (Exception e) {
-            // LOG
-            e.printStackTrace();
-        }
-        finally {
-            session.close();
-        }
-        return r;
-    }*/
 
     // Avatar Manager
 

@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -72,7 +73,7 @@ public class TiendaService {
         }
     }
 
-   /* @GET
+    @GET
     @ApiOperation(value = "buy a Producto")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Jugador.class),
@@ -93,8 +94,12 @@ public class TiendaService {
             return Response.status(400).build();
         } catch (UserNotFoundException e) {
             return Response.status(404).build();
+        } catch (FaltanDatosException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-    }*/
+    }
 
     @POST
     @ApiOperation(value = "new producto")
