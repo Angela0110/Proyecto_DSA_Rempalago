@@ -50,6 +50,15 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTAvatar(String player, String nombre) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM Avatar");
+        sb.append(" WHERE JUGADOR = ?");
+        sb.append(" AND NOMBRE = ?");
+
+        return sb.toString();
+    }
+
     public static String createQuerySELECTall(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
@@ -60,7 +69,7 @@ public class QueryHelper {
     public static String createQuerySELECTallPartidas(Class theClass, String player) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-        sb.append(" WHERE USERNAME = ?");
+        sb.append(" WHERE PLAYER = ?");
 
         return sb.toString();
     }
@@ -82,4 +91,14 @@ public class QueryHelper {
 
         return sb.toString();
     }
+    public static String createQueryUPDATEAvatar(String columna, String user, String avatar, String newvalue) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE Avatar ");
+        sb.append("SET " + columna + " = ?");
+        sb.append(" WHERE NOMBRE = ?");
+        sb.append(" AND JUGADOR = ?");
+
+        return sb.toString();
+    }
+
 }

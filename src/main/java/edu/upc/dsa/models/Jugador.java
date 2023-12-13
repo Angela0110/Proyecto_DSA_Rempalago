@@ -29,7 +29,9 @@ public class Jugador {
         this.eurillos = 500;
     }
 
-    public Jugador(){}
+    public Jugador(){
+
+    }
 
     // Setters y Getters
     public String getUsername(){return this.username;}

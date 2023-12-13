@@ -1,7 +1,9 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.exceptions.NoRecordsFoundException;
+import edu.upc.dsa.models.Avatar;
 import edu.upc.dsa.models.Jugador;
+import edu.upc.dsa.models.Tienda;
 import edu.upc.dsa.util.ObjectHelper;
 import edu.upc.dsa.util.QueryHelper;
 import javassist.NotFoundException;
@@ -90,6 +92,46 @@ public class SessionImpl implements Session {
         }
     }
 
+    public Object getAvatar(String player, String nombre) throws SQLException {
+
+        String selectQuery  = QueryHelper.createQuerySELECTAvatar(player, nombre);
+        ResultSet rs;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(selectQuery);
+            pstm.setObject(1, player);
+            pstm.setObject(2, nombre); //son los ?
+            rs = pstm.executeQuery();
+            Object o = Avatar.class.newInstance();
+
+            if (!rs.next()) {
+                // No records found
+                o = null;
+            } else{
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int numberOfColumns = rsmd.getColumnCount();
+
+                do {
+                    for (int i = 1; i <= numberOfColumns; i++) {
+                        String columnName = rsmd.getColumnName(i);
+                        ObjectHelper.setter(o, columnName, rs.getObject(i));
+                    }
+                } while (rs.next());
+            }
+
+            return o;
+
+        } catch (SQLException e) {
+            throw new SQLException();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public void update(String columna, String user, String value) throws SQLIntegrityConstraintViolationException {
         String updateQuery = QueryHelper.createQueryUPDATEJugador(columna, user, value);
 
@@ -99,6 +141,27 @@ public class SessionImpl implements Session {
             pstm = conn.prepareStatement(updateQuery);
             pstm.setObject(1, value);
             pstm.setObject(2, user);
+
+            pstm.executeUpdate();
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Handle constraint violation exception (e.g., unique constraint violation)
+            throw new SQLIntegrityConstraintViolationException();
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAvatar(String columna, String user, String avatar, String value) throws SQLIntegrityConstraintViolationException {
+        String updateQuery = QueryHelper.createQueryUPDATEAvatar(columna, user, avatar, value);
+
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(updateQuery);
+            pstm.setObject(1, value);
+            pstm.setObject(2, avatar);
+            pstm.setObject(3, user);
 
             pstm.executeUpdate();
 

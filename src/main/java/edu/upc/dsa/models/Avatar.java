@@ -5,6 +5,7 @@ import edu.upc.dsa.util.RandomUtils;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Avatar {
+    String jugador;
     String nombre;
     int idArma;
     int health;
@@ -14,8 +15,9 @@ public class Avatar {
 
     // Constructores
     public Avatar(){}
-    public Avatar(String nombre, int idArma, int health, int damg, int speed){
+    public Avatar(String jugador, String nombre, int idArma, int health, int damg, int speed){
         this();
+        this.jugador = jugador;
         this.nombre = nombre;
         this.idArma = idArma;
         this.health = health;
@@ -23,6 +25,19 @@ public class Avatar {
         this.speed = speed;
         this.visible = 0;
     }
+
+    public String getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(String jugador) {
+        this.jugador = jugador;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getNombre(){return this.nombre;}
     // Setters y Getters
     public int getIdArma(){return this.idArma;}

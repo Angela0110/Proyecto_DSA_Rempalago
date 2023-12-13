@@ -14,19 +14,19 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class GameManagerImpl implements GameManager {
 
     private static edu.upc.dsa.GameManager instance;
-    protected List<Partida> partidas;
+    /*protected List<Partida> partidas;
     protected Map<String, Jugador> jugadores;
     protected List<Avatar> avatares;
     protected List<Mapa> mapas;
-    //protected List<Tienda> productos;
+    protected List<Tienda> productos;*/
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
-        this.partidas = new LinkedList<>();
+        /*this.partidas = new LinkedList<>();
         this.jugadores = new HashMap<>();
         this.avatares = new LinkedList<>();
         this.mapas = new LinkedList<>();
-        //this.productos = new LinkedList<>();
+        this.productos = new LinkedList<>();*/
     }
 
     public static edu.upc.dsa.GameManager getInstance() {
@@ -84,6 +84,23 @@ public class GameManagerImpl implements GameManager {
             session.close();
         }
         logger.info("Jugadores size " + ret);
+        return ret;
+    }
+    public int TiendasSize(){
+        int ret = 0;
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            ret = session.size(Tienda.class);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            assert session != null;
+            session.close();
+        }
+        logger.info("Producto size " + ret);
         return ret;
     }
 
@@ -211,7 +228,7 @@ public class GameManagerImpl implements GameManager {
     }
 
 
-    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException {
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException {
 
         logger.info(username + " quiere cambiar su username a " + newUsername);
 
@@ -224,17 +241,16 @@ public class GameManagerImpl implements GameManager {
         Session session = null;
         Jugador jugador;
 
+        jugador = this.getJugador(username);
+        if (jugador == null || !jugador.getPassword().equals(password)) {
+            logger.info("No existe el usuario o la contraseña no es correcta");
+            throw new ErrorCredencialesException();
+        }
         try {
             session = FactorySession.openSession();
-            jugador = (Jugador)session.get(Jugador.class,"username", username);
-            if (jugador == null || !jugador.getPassword().equals(password)){
-                logger.info("No existe el usuario o la contraseña no es correcta");
-                throw new ErrorCredencialesException();
-            }else{
-                session.update("username",username,newUsername);
-                r.setSuccess(true);
-                logger.info(username + " se cambió el username a " + newUsername);
-            }
+            session.update("username",username,newUsername);
+            r.setSuccess(true);
+            logger.info(username + " se cambió el username a " + newUsername);
 
         } catch (SQLIntegrityConstraintViolationException e){
             logger.info("No se puede hacer el cambio porque ya hay un jugador con ese username");
@@ -250,7 +266,7 @@ public class GameManagerImpl implements GameManager {
         return r;
     }
 
-    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException {
+    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException, UserNotFoundException {
 
         logger.info(user + " quiere cambiar su contraseña a " + password);
 
@@ -261,19 +277,17 @@ public class GameManagerImpl implements GameManager {
 
         CredencialesRespuesta r = new CredencialesRespuesta();
         Session session = null;
-        Jugador jugador;
+        Jugador jugador = this.getJugador(user);
+        if (jugador == null || !jugador.getPassword().equals(password)) {
+            logger.info("No existe el usuario o la contraseña no es correcta");
+            throw new ErrorCredencialesException();
+        }
 
         try {
             session = FactorySession.openSession();
-            jugador = (Jugador)session.get(Jugador.class,"username", user);
-            if (jugador == null || !jugador.getPassword().equals(password)){
-                logger.info("No existe el usuario o la contraseña no es correcta");
-                throw new ErrorCredencialesException();
-            }else{
-                session.update("password", user, newPass);
-                r.setSuccess(true);
-                logger.info(user + " se cambió el password a " + newPass);
-            }
+            session.update("password", user, newPass);
+            r.setSuccess(true);
+            logger.info(user + " se cambió el password a " + newPass);
 
         }catch (Exception e) {
             // LOG
@@ -296,6 +310,7 @@ public class GameManagerImpl implements GameManager {
         try {
             session = FactorySession.openSession();
             session.update(columna, user, newValue);
+            logger.info("update de " + columna + ": pasa a tener " + newValue);
 
         }catch (Exception e) {
             // LOG
@@ -335,7 +350,6 @@ public class GameManagerImpl implements GameManager {
 
         return respuesta;
     }
-
 
 
 
@@ -381,7 +395,7 @@ public class GameManagerImpl implements GameManager {
 
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException{
         logger.info("new product " + producto.getNombre());
-        if(producto.getNombre() == null || producto.getDescription() == null || producto.getEfect() < 1 || producto.getEfect_type() < 0  || producto.getEfect_type() > 3 || producto.getPrecio() < 0){
+        if(producto.getNombre() == null || producto.getDescription() == null || producto.getEfect() < 1 || producto.getType() < 0  || producto.getType() > 3 || producto.getPrecio() < 0){
             throw new FaltanDatosException();
         } else {
             Session session = null;
@@ -414,11 +428,11 @@ public class GameManagerImpl implements GameManager {
             session = FactorySession.openSession();
             tienda = (Tienda)session.get(Tienda.class,"nombre", nombre);
             if (tienda == null){
-                logger.info("El usuario no existe");
+                logger.info("El producto no existe");
                 throw new ProductoNotFoundException();
             }
             else{
-                logger.info("getUser("+nombre+"): "+ tienda);
+                logger.info("getProducto("+nombre+"): " + tienda);
             }
         }
         catch (Exception e) {
@@ -429,7 +443,6 @@ public class GameManagerImpl implements GameManager {
             assert session != null;
             session.close();
         }
-
         return tienda;
     }
 
@@ -450,45 +463,47 @@ public class GameManagerImpl implements GameManager {
         return productos;
     }
 
-    public void comprarProducto(String Pnombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException {
+    public void comprarProducto(String Pnombre, String usrnm) throws CapitalInsuficienteException, FaltanDatosException, SQLException, AvatarNotFound, UserNotFoundException, ProductoNotFoundException {
         logger.info("Entramos en la función de comprar");
-        try {
-            Tienda p = this.getProducto(Pnombre);
-            Jugador j = this.getJugador(usrnm);
-            logger.info(j.getUsername() + j.getMail() + j.getEurillos());
-            int precio = p.getPrecio();
-            if(j.getEurillos() < precio) {
-                logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
-                throw new CapitalInsuficienteException();
-            }
-            else{
-                logger.info(usrnm + " se ha comprado " + Pnombre);
-                this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
-                if(p.getEfect_type() == 0) {
-                    logger.info("Se ha incrementado la salud");
-                    this.increaseHealth(usrnm, p.getEfect());
-                }
-                if(p.getEfect_type() == 1) {
-                    logger.info("Se ha incrementado el daño");
-                    this.increaseDamage(usrnm, p.getEfect());
-                }
-                if(p.getEfect_type() == 2) {
-                    logger.info("Se ha incrementado la velocidad");
-                    this.increaseSpeed(usrnm, p.getEfect());
-                }
-                if(p.getEfect_type() == 3) {
-                    logger.info("El jugador se ha hecho invisible...");
-                    this.invisibility(usrnm);
-                }
-            }
-        }
-        catch (UserNotFoundException e) {
-            logger.error("User not found");
-            throw new RuntimeException(e);
-        }
-        catch (ProductoNotFoundException e){
+        Tienda p = this.getProducto(Pnombre);
+        if (p == null) {
             logger.error("Producto no encontrado");
-            throw new RuntimeException(e);
+            throw new ProductoNotFoundException();
+        }
+        Jugador j = this.getJugador(usrnm);
+        if (j == null) {
+            logger.error("User not found");
+            throw new UserNotFoundException();
+        }
+        logger.info(j.getUsername() + j.getMail() + j.getEurillos());
+        int precio = p.getPrecio();
+        if(j.getEurillos() < precio) {
+            logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
+            throw new CapitalInsuficienteException();
+        }
+        if(j.getAvatar() == null){
+            logger.info("El jugador no tiene avatar");
+            throw new AvatarNotFound();
+        } else{
+            logger.info(usrnm + " se ha comprado " + Pnombre);
+            int type = p.getType();
+            this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
+            if(type == 0) {
+                logger.info("Se ha incrementado la salud");
+                this.increaseHealth(usrnm, p.getEfect());
+            }
+            else if(type == 1) {
+                logger.info("Se ha incrementado el daño");
+                this.increaseDamage(usrnm, p.getEfect());
+            }
+            else if(type == 2) {
+                logger.info("Se ha incrementado la velocidad");
+                this.increaseSpeed(usrnm, p.getEfect());
+            }
+            else if(type == 3) {
+                logger.info("El jugador se ha hecho invisible...");
+                this.invisibility(usrnm);
+            }
         }
     }
     public List<Tienda> deleteProducto(String nombre) throws ProductoNotFoundException, FaltanDatosException {
@@ -519,26 +534,8 @@ public class GameManagerImpl implements GameManager {
 
         return lista;
     }
-    public int TiendasSize(){
-        int ret = 0;
-        Session session = null;
-        try {
-            session = FactorySession.openSession();
-            ret = session.size(Partida.class);
 
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            assert session != null;
-            session.close();
-        }
-        logger.info("Producto size " + ret);
-        return ret;
-    }
-
-    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException {
-/*
+    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException, AvatarNotFound {
         if(jugadorUsername == null){
             logger.info("Faltan datos");
             throw new FaltanDatosException();
@@ -557,8 +554,10 @@ public class GameManagerImpl implements GameManager {
                 logger.warn("El jugador" + jugadorUsername + " no tiene un avatar actual");
             }
             else {
-                session.update("username", jugadorUsername, jugador.g);
-                logger.info(username + " se cambió el username a " + newUsername);
+                Avatar avatar = this.getAvatar(jugadorUsername, jugador.getAvatar());
+                int damg = avatar.getDamg() + damage;
+                session.updateAvatar("damg",jugadorUsername, jugador.getAvatar(), String.valueOf(damg));
+                logger.info("Se imcrementó el daño");
 
             }
         }
@@ -569,76 +568,111 @@ public class GameManagerImpl implements GameManager {
         finally {
             session.close();
         }
-        return r;
-
-            for(Avatar avatar : this.avatares){
-                if(avatar.getNombre().equals(av)){
-                    int damg=avatar.getDamg()+ damage;
-                    avatar.setDamg(damg);
-                    encontrado = true;
-                    logger.info("El jugador " + jugadorUsername + " ha incrementado su daño");
-                }
-            }
-        }*/
 
     }
 
-    public void increaseHealth(String jugadorUsername, int health){
-        Jugador jugador=jugadores.get(jugadorUsername);
-        boolean encontrado = false;
-        if(jugador!=null) {
-            String av = jugador.getAvatar();
-            for(Avatar avatar : this.avatares){
-                if (avatar.getNombre().equals(av)) {
-                    int hlth = avatar.getHealth() + health;
-                    avatar.setHealth(hlth);
-                    logger.info("El jugador " + jugadorUsername + " ha incrementado su vida");
-                    encontrado = true;
-                }
+    public void increaseHealth(String jugadorUsername, int health) throws FaltanDatosException, UserNotFoundException, AvatarNotFound {
+        if(jugadorUsername == null){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
+        }
+
+        Session session = null;
+
+        try {
+            session = FactorySession.openSession();
+            Jugador jugador = (Jugador) session.get(Jugador.class, "username", jugadorUsername);
+            if (jugador == null) {
+                logger.info("No existe el usuario");
+                throw new UserNotFoundException();
+            }
+            if (jugador.getAvatar() == null) {
+                logger.warn("El jugador" + jugadorUsername + " no tiene un avatar actual");
+            }
+            else {
+                Avatar avatar = this.getAvatar(jugadorUsername, jugador.getAvatar());
+                int hlth = avatar.getHealth() + health;
+                session.updateAvatar("health",jugadorUsername, jugador.getAvatar(), String.valueOf(hlth));
+                logger.info("El jugador " + jugadorUsername + " ha incrementado su vida");
             }
         }
-        else{
-            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+        catch (Exception e) {
+            // LOG
+            e.printStackTrace();
         }
-        if(!encontrado)
-            logger.warn("El jugador " + jugadorUsername + " no tiene un avatar actual");
+        finally {
+            session.close();
+        }
+
     }
-    public void increaseSpeed(String jugadorUsername, int speed){
-        Jugador jugador=jugadores.get(jugadorUsername);
-        boolean encontrado = false;
-        if(jugador!=null){
-            String av=jugador.getAvatar();
-            for(Avatar avatar : this.avatares){
-                if(avatar.getNombre().equals(av)){
-                    int spd=avatar.getSpeed() + speed;
-                    avatar.setSpeed(spd);
-                    encontrado = true;
-                    logger.info("El jugador " + jugadorUsername + " ha incrementado su velocidad");
-                }
-            }
-        }else{
-            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+
+
+    public void increaseSpeed(String jugadorUsername, int speed) throws FaltanDatosException, AvatarNotFound {
+        if(jugadorUsername == null){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
         }
-        if(!encontrado)
-            logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+
+        Session session = null;
+
+        try {
+            session = FactorySession.openSession();
+            Jugador jugador = (Jugador) session.get(Jugador.class, "username", jugadorUsername);
+            if (jugador == null) {
+                logger.info("No existe el usuario");
+                throw new UserNotFoundException();
+            }
+            if (jugador.getAvatar() == null) {
+                logger.warn("El jugador" + jugadorUsername + " no tiene un avatar actual");
+            }
+            else {
+                Avatar avatar = this.getAvatar(jugadorUsername, jugador.getAvatar());
+                int spd=avatar.getSpeed() + speed;
+                session.updateAvatar("speed",jugadorUsername, jugador.getAvatar(), String.valueOf(spd));
+                logger.info("El jugador " + jugadorUsername + " ha incrementado su velocidad");
+            }
+        }
+        catch (Exception | UserNotFoundException e) {
+            // LOG
+            e.printStackTrace();
+        }
+        finally {
+            assert session != null;
+            session.close();
+        }
     }
-    public void invisibility(String jugadorUsername){
-        Jugador jugador=jugadores.get(jugadorUsername);
-        boolean encontrado = false;
-        if(jugador!=null){
-            String av = jugador.getAvatar();
-            for(Avatar avatar : this.avatares){
-                if(avatar.getNombre().equals(av)){
-                    avatar.setVisible(1);
-                    encontrado = true;
-                    logger.info("El jugador " + jugadorUsername + " se ha hecho invisible");
-                }
-            }
-        }else{
-            logger.warn("No se encontró al jugador con username " + jugadorUsername);
+
+    public void invisibility(String jugadorUsername) throws UserNotFoundException, FaltanDatosException, AvatarNotFound {
+        if(jugadorUsername == null){
+            logger.info("Faltan datos");
+            throw new FaltanDatosException();
         }
-        if(!encontrado)
-            logger.warn("El jugador "+jugadorUsername+" no tiene un avatar actual");
+
+        Session session = null;
+
+        try {
+            session = FactorySession.openSession();
+            Jugador jugador = (Jugador) session.get(Jugador.class, "username", jugadorUsername);
+            if (jugador == null) {
+                logger.info("No existe el usuario");
+                throw new UserNotFoundException();
+            }
+            if (jugador.getAvatar() == null) {
+                logger.warn("El jugador" + jugadorUsername + " no tiene un avatar actual");
+            }
+            else {
+                session.updateAvatar("visible",jugadorUsername, jugador.getAvatar(), String.valueOf(1));
+                logger.info("El jugador " + jugadorUsername + " se ha hecho invisible");
+            }
+        }
+        catch (Exception | UserNotFoundException e) {
+            // LOG
+            e.printStackTrace();
+        }
+        finally {
+            assert session != null;
+            session.close();
+        }
     }
 
 
@@ -674,7 +708,7 @@ public class GameManagerImpl implements GameManager {
         return this.addPartida(new Partida(dif, player, idMapa));
     }
 
-    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException{
+   /* public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException{
         logger.info("El jugador "+player+" quiere cambiar la dificultad de su partida");
         boolean encontrado = false;
         for(Partida p : this.partidas){
@@ -695,20 +729,26 @@ public class GameManagerImpl implements GameManager {
             logger.warn("El jugador " +player+ " no está en ninguna partida");
             throw new PartidaNotFoundException();
         }
-    }
+    }*/
 
-    public List<Partida> consultarPartidas(String username) {
+    public List<Partida> consultarPartidas(String username) throws UserNotFoundException {
         logger.info("El usuario " + username + " quiere consultar una lista con sus partidas");
         Session session = null;
         List<Partida> par = null;
         try {
             session = FactorySession.openSession();
-            par = session.findAllPartidas(Tienda.class, username);
+            session = FactorySession.openSession();
+            Jugador jugador = (Jugador) session.get(Jugador.class, "username", username);
+            if (jugador == null) {
+                logger.info("No existe el usuario");
+                throw new UserNotFoundException();
+            }else{
+                par = session.findAllPartidas(Partida.class, username);
+            }
         }
         catch (Exception e) {
             // LOG
-        }
-        finally {
+        } finally {
             assert session != null;
             session.close();
         }
@@ -729,6 +769,7 @@ public class GameManagerImpl implements GameManager {
             try {
                 session = FactorySession.openSession();
                 session.save(avatar);
+                this.updateJugador("avatar", avatar.getJugador(), avatar.getNombre());
                 logger.info("new avatar added");
 
             } catch (SQLIntegrityConstraintViolationException e) {
@@ -744,8 +785,36 @@ public class GameManagerImpl implements GameManager {
         return avatar;
     }
 
-    public Avatar addAvatar(String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException{return this.addAvatar(new Avatar(nombre, idArma, health, damg, speed));}
+    public Avatar addAvatar(String username, String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException{return this.addAvatar(new Avatar(username, nombre, idArma, health, damg, speed));}
 
+    public Avatar getAvatar(String player, String nombreAvatar) throws AvatarNotFound {
+        logger.info("getAvatar("+player+")");
+
+        Session session = null;
+        Avatar avatar = null;
+
+        try {
+            session = FactorySession.openSession();
+            avatar = (Avatar) session.getAvatar(player,nombreAvatar);
+            if (avatar == null){
+                logger.info("El avatar no existe");
+                throw new AvatarNotFound();
+            }
+            else{
+                logger.info("getAvatar("+player+"): " + nombreAvatar);
+            }
+        }
+        catch (Exception e) {
+            // LOG
+            e.printStackTrace();
+        }
+        finally {
+            assert session != null;
+            session.close();
+        }
+
+        return avatar;
+    }
     public List<Avatar> findAllAvatares(){
         logger.info("Lista de avatares");
         Session session = null;

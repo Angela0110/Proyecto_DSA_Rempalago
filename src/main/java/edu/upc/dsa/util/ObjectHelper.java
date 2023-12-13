@@ -30,7 +30,6 @@ public class ObjectHelper {
         try {
             Method m = methods.stream().filter((Method method) -> method.getName().contains("set" + getMethodName(property))).findFirst().get();
             m.invoke(object,  value);
-            System.out.println(value);
         }catch ( IllegalAccessException e) {
             //logger.warn("No setter found for: " + property + " in " + object.getClass().getName());
         } catch (InvocationTargetException e) {
