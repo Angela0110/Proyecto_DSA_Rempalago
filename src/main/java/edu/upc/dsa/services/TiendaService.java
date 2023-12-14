@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -41,18 +42,18 @@ public class TiendaService {
     }
 
 
-        @GET
-        @ApiOperation(value = "get all productos")
-        @ApiResponses(value = {
-                @ApiResponse(code = 201, message = "Successful", response = Tienda.class, responseContainer="List"),
-        })
-        @Path("/todos")
-        @Produces(MediaType.APPLICATION_JSON)
-        public Response getProductos() {
-            List<Tienda> productos = this.gm.findAllProductos();
-            GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
-            return Response.status(201).entity(entity).build();
-        }
+    @GET
+    @ApiOperation(value = "get all productos")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Tienda.class, responseContainer="List"),
+    })
+    @Path("/todos")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductos() {
+        List<Tienda> productos = this.gm.findAllProductos();
+        GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(productos) {};
+        return Response.status(201).entity(entity).build();
+    }
 
     @GET
     @ApiOperation(value = "get a Producto")
@@ -87,12 +88,10 @@ public class TiendaService {
             Jugador j = this.gm.getJugador(usrnm);
             return Response.status(201).entity(j).build();
         }
-        catch (ProductoNotFoundException e) {
-            return Response.status(404).build();
-        } catch (CapitalInsuficienteException e) {
-            return Response.status(400).build();
-        } catch (UserNotFoundException e) {
-            return Response.status(404).build();
+        catch (ProductoNotFoundException | AvatarNotFound | UserNotFoundException | SQLException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        } catch (CapitalInsuficienteException | FaltanDatosException e) {
+            return Response.status(400).entity(e.getMessage()).build();
         }
     }
 
@@ -126,8 +125,7 @@ public class TiendaService {
     @Path("/delete/{id}")
     public Response deleteProducto(@PathParam("id")String id) {
         try {
-            Tienda producto=this.gm.getProducto(id);
-            this.gm.deleteProducto(producto);
+            this.gm.deleteProducto(id);
             List<Tienda> p = this.gm.findAllProductos();
             GenericEntity<List<Tienda>> entity = new GenericEntity<List<Tienda>>(p) {};
             return Response.status(201).entity(entity).build();

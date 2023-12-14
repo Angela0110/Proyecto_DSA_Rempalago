@@ -25,7 +25,7 @@ public class AvatarService {
 
     private GameManager gm;
 
-    public AvatarService() { //throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException {
+    public AvatarService() {
         this.gm = GameManagerImpl.getInstance();
         if (gm.AvataresSize()==0) {
             try {

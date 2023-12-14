@@ -1,7 +1,13 @@
 package edu.upc.dsa.models;
 
+import edu.upc.dsa.FactorySession;
+import edu.upc.dsa.Session;
+import edu.upc.dsa.exceptions.ErrorCredencialesException;
+import edu.upc.dsa.exceptions.FaltanDatosException;
+import edu.upc.dsa.exceptions.JugadorYaExisteException;
 import edu.upc.dsa.util.RandomUtils;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Jugador {
@@ -23,7 +29,9 @@ public class Jugador {
         this.eurillos = 500;
     }
 
-    public Jugador(){}
+    public Jugador(){
+
+    }
 
     // Setters y Getters
     public String getUsername(){return this.username;}
@@ -35,7 +43,9 @@ public class Jugador {
     public int getPoints(){return this.points;}
     public void setPoints(int points){this.points = this.points + points;}
     public int getEurillos(){return this.eurillos;}
-    public void setEurillos(int e){this.eurillos = e;}
+    public void setEurillos(int e){
+       this.eurillos=e;
+    }
 
     public String getAvatar() {
         return avatar;

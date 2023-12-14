@@ -26,16 +26,16 @@ public class JugadorService {
 
     private GameManager gm;
 
-    public JugadorService() {
+    public JugadorService() throws JugadorYaExisteException, NotAnEmailException, FaltanDatosException, AvatarYaExisteException {
         this.gm = GameManagerImpl.getInstance();
         if (gm.JugadoresSize()==0) {
-            try {
-                this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
-                this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
-                this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
+
+            this.gm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
+            this.gm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
+            this.gm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
+            this.gm.addAvatar("Lobi","AX-21",23,100,10,50);
+            this.gm.addAvatar("Antonio","ZE-32",25,150,20,25);
+            this.gm.addAvatar("Fernando33", "DC-25",29,110,50,100);
         }
     }
 
@@ -113,6 +113,9 @@ public class JugadorService {
         } catch (ErrorCredencialesException e) {
             r.setMessage(e.getMessage());
             return Response.status(404).entity(r).build();
+        } catch (JugadorYaExisteException | UserNotFoundException | FaltanDatosException e) {
+            r.setMessage(e.getMessage());
+            return Response.status(400).entity(r).build();
         }
     }
 
@@ -131,6 +134,12 @@ public class JugadorService {
             r = this.gm.updatePassword(credencialesUpdatePassword.getUsername(), credencialesUpdatePassword.getNewPassword(), credencialesUpdatePassword.getPassword());
             return Response.status(201).entity(r).build();
         } catch (ErrorCredencialesException e) {
+            r.setMessage(e.getMessage());
+            return Response.status(404).entity(r).build();
+        } catch (FaltanDatosException e) {
+            r.setMessage(e.getMessage());
+            return Response.status(400).entity(r).build();
+        } catch (UserNotFoundException e) {
             r.setMessage(e.getMessage());
             return Response.status(404).entity(r).build();
         }
@@ -152,7 +161,9 @@ public class JugadorService {
         } catch (UserNotFoundException e) {
             r.setMessage(e.getMessage());
             return Response.status(404).entity(r).build();
-        }
+        } catch (FaltanDatosException e) {
+            r.setMessage(e.getMessage());
+            return Response.status(400).entity(r).build();        }
     }
 
     @GET

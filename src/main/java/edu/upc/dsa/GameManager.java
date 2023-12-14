@@ -5,6 +5,7 @@ import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.*;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface GameManager {
@@ -15,14 +16,17 @@ public interface GameManager {
     public Jugador getJugador(String id) throws UserNotFoundException;
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
-    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException;
-    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException;
-    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException;
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException;
+    public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException, UserNotFoundException;
+    public void updateJugador(String columna, String user, String newValue);
+    public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 
     // Avatar Manager
-    public Avatar addAvatar(String nombre, String jugador, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
+
+    public Avatar addAvatar(String username, String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
     public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException;
+    public Avatar getAvatar(String player, String nombreAvatar) throws AvatarNotFound;
     public List<Avatar> findAllAvatares();
     public int AvataresSize();
 //    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
@@ -33,10 +37,11 @@ public interface GameManager {
 //    public int size();
 
     // Partida Manager
-    public Partida addPartida(Partida partida) throws PartidaYaExisteException, FaltanDatosException;
-    public Partida addPartida(int dif, String player, String idMapa) throws PartidaYaExisteException, FaltanDatosException;
+    public Partida addPartida(Partida partida) throws FaltanDatosException, UserNotFoundException;
+    public Partida addPartida(int dif, String player, String idMapa) throws FaltanDatosException, UserNotFoundException;
     public List<Partida> consultarPartidas(String username) throws UserNotFoundException;
-    public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException;
+    public int PartidaSize();
+    //public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException, FaltanDatosException, UserNotFoundException;
 
 
 //    public Partida pasarDeNivel(int puntosConseguidos, String id) throws UserNoEnPartidaException, UserNotFoundException;
@@ -48,12 +53,12 @@ public interface GameManager {
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda addProducto(int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda getProducto(String id) throws ProductoNotFoundException;
-    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException;
-    public List<Tienda> deleteProducto(Tienda producto) throws ProductoNotFoundException, FaltanDatosException;
+    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException, AvatarNotFound;
+    public List<Tienda> deleteProducto(String nombre) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
-    public void increaseDamage(String jugadorUsername, int damage);
-    public void increaseHealth(String jugadorUsername, int health);
-    public void increaseSpeed(String jugadorUsername, int speed);
-    public void invisibility(String jugadorUsername);
+    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException, AvatarNotFound;
+    public void increaseHealth(String jugadorUsername, int health) throws FaltanDatosException, UserNotFoundException, AvatarNotFound;
+    public void increaseSpeed(String jugadorUsername, int speed) throws FaltanDatosException, AvatarNotFound;
+    public void invisibility(String jugadorUsername) throws UserNotFoundException, FaltanDatosException, AvatarNotFound;
 }

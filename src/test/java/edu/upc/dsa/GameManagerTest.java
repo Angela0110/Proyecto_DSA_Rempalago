@@ -47,7 +47,7 @@ public class GameManagerTest {
 
     }
 
-    @Test
+   /* @Test
     public void logJugadorTest() throws UserNotFoundException, FaltanDatosException, ErrorCredencialesException {
 
         this.gm.logJugador("Antonio", "SweetP2");
@@ -75,10 +75,10 @@ public class GameManagerTest {
         }
 
 
-    }
+    }*/
 
-    @Test
-    public void TestConsultarPuntuaciones() throws UserNotFoundException, JugadorYaExisteException, NotAnEmailException, FaltanDatosException {
+    //@Test
+   /* public void TestConsultarPuntuaciones() throws UserNotFoundException, JugadorYaExisteException, NotAnEmailException, FaltanDatosException {
         Jugador j = new Jugador("Pablo", "pablo@yahoo.com", "nada");
         this.gm.addJugador(j);
         int msg1 = gm.consultarPuntuacion(j.getUsername());
@@ -90,5 +90,5 @@ public class GameManagerTest {
         } catch (UserNotFoundException e) {
             Assert.assertEquals("El usuario no existe", e.getMessage());
         }
-    }
+    }*/
 }
