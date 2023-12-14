@@ -51,7 +51,7 @@ public interface GameManager {
 
     // Tienda Manager
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
-    public Tienda addProducto(int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
+    public Tienda addProducto(String imagen, int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda getProducto(String id) throws ProductoNotFoundException;
     public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException, AvatarNotFound;
     public List<Tienda> deleteProducto(String nombre) throws ProductoNotFoundException, FaltanDatosException;

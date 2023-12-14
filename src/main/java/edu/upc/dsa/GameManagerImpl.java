@@ -416,7 +416,7 @@ public class GameManagerImpl implements GameManager {
         }
         return producto;
     }
-    public Tienda addProducto(int precio, String nombre, String descripcion, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException {return this.addProducto(new Tienda(precio, nombre, descripcion, efect_type,efect));}
+    public Tienda addProducto(String imagen, int precio, String nombre, String descripcion, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException {return this.addProducto(new Tienda(precio, nombre, descripcion, efect_type,efect, imagen));}
 
     public Tienda getProducto(String nombre) throws ProductoNotFoundException{
         logger.info("getProducto("+nombre+")");
@@ -488,7 +488,9 @@ public class GameManagerImpl implements GameManager {
         } else{
             logger.info(usrnm + " se ha comprado " + Pnombre);
             int type = p.getType();
+            logger.info(j.getEurillos());
             this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
+            logger.info(j.getEurillos());
             if(type == 0) {
                 logger.info("Se ha incrementado la salud");
                 this.increaseHealth(usrnm, p.getEfect());
@@ -783,12 +785,7 @@ public class GameManagerImpl implements GameManager {
                 session.close();
             }
         }
-        //String jugador = avatar.getJugador();
-        /*for(Jugador j : this.jugadores){
-            if(j.getUsername().equals(jugador))
-                j.setAvatar(avatar.getNombre());
-        }*/
-        // this.avatares.add(avatar);
+
         logger.info("new Avatar added");
         return avatar;
     }

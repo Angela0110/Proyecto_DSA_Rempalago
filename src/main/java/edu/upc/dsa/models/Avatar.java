@@ -16,11 +16,10 @@ public class Avatar {
 
     // Constructores
     public Avatar(){}
-    public Avatar(String nombre, String jugador,int idArma, int health, int damg, int speed){
+    public Avatar(String jugador, String nombre, int idArma, int health, int damg, int speed){
         this();
         this.jugador = jugador;
         this.nombre = nombre;
-       // this.jugador = jugador;
         this.idArma = idArma;
         this.health = health;
         this.damg = damg;

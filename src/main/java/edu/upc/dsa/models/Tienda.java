@@ -10,17 +10,20 @@ public class Tienda {
     // Invisibilidad "3"
     int efect;              // Si el efecto es de tipo invisibilidad siempre será 1
     String description;     // Pequeña descripción del producto
+    String imagen;
+
 
     // Constructores
     public Tienda(){
 
     }
-    public Tienda(int precio, String nombre, String description, int type, int efect){
+    public Tienda(int precio, String nombre, String description, int type, int efect, String imagen){
         this.nombre = nombre;
         this.description = description;
         this.precio = precio;
         this.type = type;
         this.efect = efect;
+        this.imagen = imagen;
     }
     public int getPrecio(){return this.precio;}
     public void setPrecio(int precio){this.precio = precio;}
@@ -38,4 +41,12 @@ public class Tienda {
     public void setNombre(String nombre){this.nombre = nombre;}
     public String getDescription(){return this.description;}
     public void setDescription(String description){this.description = description;}
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
 }

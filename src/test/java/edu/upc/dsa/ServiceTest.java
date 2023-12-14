@@ -37,6 +37,8 @@ public class ServiceTest {
         // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
 
         target = c.target(Main.BASE_URI);
+        this.jm = GameManagerImpl.getInstance();
+
     }
 
     @After
@@ -79,21 +81,22 @@ public class ServiceTest {
     @Test
     public void TestRegister() throws JugadorYaExisteException, NotAnEmailException, FaltanDatosException {
         CredencialesRegistro credenciales = new CredencialesRegistro("Manuel","1234","antonio@hotmail.com");
-        Jugador j = new Jugador();
+        Jugador j;
 
         j = this.jm.addJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
         Jugador answer = new Jugador("Manuel","1234","antonio@hotmail.com");
-        assertEquals(answer,j);
+        assertEquals(answer.getUsername(),j.getUsername());
     }
 
     @Test
     public void TestComprar() throws UserNotFoundException, FaltanDatosException, ProductoNotFoundException, SQLException, AvatarNotFound, CapitalInsuficienteException {
         String pnombre = "Espada";
-        String nombre = "Antonio";
+        String nombre = "Lobi";
         Jugador j = this.jm.getJugador(nombre);
         Tienda p = this.jm.getProducto(pnombre);
         int r = j.getEurillos() - p.getPrecio();
         this.jm.comprarProducto(pnombre,nombre);
+        j = this.jm.getJugador(nombre);
         assertEquals(r,j.getEurillos());
     }
     

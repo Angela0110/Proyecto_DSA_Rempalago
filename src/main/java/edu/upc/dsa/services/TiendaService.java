@@ -32,12 +32,13 @@ public class TiendaService {
     public TiendaService() throws ProductoYaExisteException, FaltanDatosException {
         this.gm = GameManagerImpl.getInstance();
         if (gm.TiendasSize() == 0) {
-            this.gm.addProducto(150, "Espada", "Espada pesada de combate,+50 de daño,-10 de velocidad", 1, 50);
-            this.gm.addProducto(200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
-            this.gm.addProducto(250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
-            this.gm.addProducto(100,"Mejora de daño", "+20 de daño", 1,20);
-            this.gm.addProducto(100,"Mejora de velocidad","+20 de vida",2,20);
-            this.gm.addProducto(200,"Escopeta","+100 de daño,-20 de velocidad",1,100);
+            this.gm.addProducto("https://img1.freepng.es/20180317/kce/kisspng-the-legend-of-zelda-the-wind-waker-the-legend-of-master-sword-cliparts-5aacb91e87cbb4.6204607315212690225562.jpg",150, "Espada", "Espada pesada de combate,+50 de daño -10 de velocidad", 1, 50);
+            this.gm.addProducto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSLDNmYWkEM8wHLMdN5mfncTKoGxHCXr3mzcOZHXwYw&s",200, "Mejora de vida", "Mejora en la salud del avatar", 0, 200);
+            this.gm.addProducto("https://wow.zamimg.com/modelviewer/live/webthumbs/npc/114/101746.png", 250, "Unobtanium", "Confiere invisivilidad a la persona que la use", 3, 1);
+            this.gm.addProducto("https://i.etsystatic.com/22467704/r/il/359084/2613034126/il_570xN.2613034126_ehhd.jpg", 100,"Mejora de daño", "+20 de daño", 1,20);
+            this.gm.addProducto("https://cdn-icons-png.flaticon.com/512/84/84570.png", 100,"Mejora de velocidad","+20 de vida",2,20);
+            this.gm.addProducto("https://cdn-icons-png.flaticon.com/512/6753/6753736.png", 200,"Escopeta","+100 de daño,-20 de velocidad",1,100);
+
         }
     }
 
