@@ -488,9 +488,7 @@ public class GameManagerImpl implements GameManager {
         } else{
             logger.info(usrnm + " se ha comprado " + Pnombre);
             int type = p.getType();
-            logger.info(j.getEurillos());
             this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
-            logger.info(j.getEurillos());
             if(type == 0) {
                 logger.info("Se ha incrementado la salud");
                 this.increaseHealth(usrnm, p.getEfect());

@@ -21,10 +21,9 @@ public class FactorySession {
         Connection conn = null;
         try {
             conn =
+
                     DriverManager.getConnection("jdbc:mysql://localhost:3306/dsa?" +
-                        "user=root&password=admin");
-                    //DriverManager.getConnection("jdbc:mysql://localhost:3306/dsa?" +
-                         //   "user=dsaUser&password=dsaMola");
+                            "user=dsaUser&password=dsaMola");
 
         } catch (SQLException ex) {
             // handle any errors
