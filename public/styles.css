@@ -7,22 +7,33 @@ body{
     background-color: #f4511e;
     color: #fff;
     margin: 0px 0;
-    padding: 50px 25px;
+    padding: 5px 25px;
 
    }
    .bg-1{
     background-color: #f4511e;
     color: #fff;
-    margin: 10px 0;
-    padding: 10px 25px;
+    margin-top: 50px;
+    padding: 20px 25px;
 
    }
+   .bg-2{
+       background-color: #f4511e;
+       color: #000;
+       margin-top: 50px;
+       padding: 20px 25px;
+
+   }
+
    .form-group {
     margin-bottom:15px;
+    margin-top:15px;
     background-color: #fff;
+    color: #000;
    }
    .form-group label{
-    display:block;
+    color: #000;
+
     margin-bottom: 5px;
    }
    .form-group input{
@@ -83,7 +94,7 @@ color: #fff !important;
  }
 
  .custom-row-margin{
-     margin-bottom: 20px;
+
    }
 
 #miAlerta {
@@ -92,4 +103,5 @@ color: #fff !important;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+
 }
