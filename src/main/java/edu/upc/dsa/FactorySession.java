@@ -22,7 +22,7 @@ public class FactorySession {
         try {
             conn =
                     DriverManager.getConnection("jdbc:mysql://localhost:3306/dsa?" +
-                            "user=root&password=admin");
+                            "user=dsaUser&password=dsaMola");
 
         } catch (SQLException ex) {
             // handle any errors
