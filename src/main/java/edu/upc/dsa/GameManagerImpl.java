@@ -479,6 +479,7 @@ public class GameManagerImpl implements GameManager {
         int precio = p.getPrecio();
         if(j.getEurillos() < precio) {
             logger.error("Estas tieso hermano, el producto " +p.getNombre()+" cuesta " + p.getPrecio() +" y tu tienes "+ j.getEurillos()+" eurillos");
+
             throw new CapitalInsuficienteException();
         }
         if(j.getAvatar() == null){
