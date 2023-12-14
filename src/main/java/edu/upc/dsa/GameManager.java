@@ -21,7 +21,7 @@ public interface GameManager {
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 
     // Avatar Manager
-    public Avatar addAvatar(String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
+    public Avatar addAvatar(String nombre, String jugador, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
     public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException;
     public List<Avatar> findAllAvatares();
     public int AvataresSize();

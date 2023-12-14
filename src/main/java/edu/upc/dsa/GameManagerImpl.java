@@ -513,12 +513,17 @@ public class GameManagerImpl implements GameManager {
                 throw new AvatarYaExisteException();
             }
         }
+        //String jugador = avatar.getJugador();
+        /*for(Jugador j : this.jugadores){
+            if(j.getUsername().equals(jugador))
+                j.setAvatar(avatar.getNombre());
+        }*/
         this.avatares.add(avatar);
         logger.info("new Avatar added");
         return avatar;
     }
 
-    public Avatar addAvatar(String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException{return this.addAvatar(new Avatar(nombre, idArma, health, damg, speed));}
+    public Avatar addAvatar(String nombre, String jugador,int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException{return this.addAvatar(new Avatar(nombre, jugador,idArma, health, damg, speed));}
 
     public List<Avatar> findAllAvatares(){return this.avatares;}
 }

@@ -11,12 +11,14 @@ public class Avatar {
     int damg;
     int visible;    // Visible "0" Invisible "1"
     int speed;
+   // String jugador;
 
     // Constructores
     public Avatar(){}
-    public Avatar(String nombre, int idArma, int health, int damg, int speed){
+    public Avatar(String nombre, String jugador,int idArma, int health, int damg, int speed){
         this();
         this.nombre = nombre;
+       // this.jugador = jugador;
         this.idArma = idArma;
         this.health = health;
         this.damg = damg;
@@ -24,6 +26,8 @@ public class Avatar {
         this.visible = 0;
     }
     public String getNombre(){return this.nombre;}
+    //public String getJugador(){return this.jugador;}
+    //public void setJugador(String jugador){this.jugador = jugador;}
     // Setters y Getters
     public int getIdArma(){return this.idArma;}
     public void setIdArma(int idArma){this.idArma = idArma;}
