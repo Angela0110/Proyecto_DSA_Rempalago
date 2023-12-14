@@ -1,6 +1,6 @@
 package edu.upc.dsa;
 
-import edu.upc.dsa.models.Jugador;
+import edu.upc.dsa.models.*;
 import edu.upc.dsa.models.Partida;
 import edu.upc.dsa.exceptions.*;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -12,6 +12,7 @@ import org.junit.Test;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -45,34 +46,58 @@ public class ServiceTest {
 
 
 
-   /* private GameManager jm;
+    private GameManager jm;
     private static Partida p;
     private static String idJ;
     private static String idJ2;
 
 
-    @Before
-    public void setUp() throws UserNotFoundException, UserEnPartidaException, JuegoNotFoundException, NoNivelException, JuegoYaExisteException {
+   /* @Before
+    public void setUp() throws JugadorYaExisteException, NotAnEmailException, FaltanDatosException, AvatarYaExisteException {
 
         this.jm = GameManagerImpl.getInstance();
-        if (jm.size() == 0) {
-            this.jm.addJuego("Pokemon","Juego sobre...", 2);
-            this.jm.addJuego("GTA","Juego sobre...", 3);
-            this.jm.addJuego("Super Mario","Juego sobre...", 5);
-
-            Jugador j = new Jugador();
-            Jugador j2 = new Jugador();
-            this.jm.addJugador(j);
-            this.jm.addJugador(j2);
-            idJ = j.getId();
-            idJ2 =j2.getId();
-
-            p = this.jm.iniciarPartida("GTA", j.getId());
-
+        if (this.jm.JugadoresSize() == 0) {
+            this.jm.addJugador("Antonio","Fernanditox_47@gmail.com","SweetP2");
+            this.jm.addJugador("Lobi","malasia.2010@gmail.com","Perico23");
+            this.jm.addJugador("Fernando33","brasil.2005@gmail.com","33?");
+            this.jm.addAvatar("Lobi","AX-21",23,100,10,50);
+            this.jm.addAvatar("Antonio","ZE-32",25,150,20,25);
+            this.jm.addAvatar("Fernando33", "DC-25",29,110,50,100);
         }
+    } */
+
+    @Test
+    public void TestLogin() throws UserNotFoundException, FaltanDatosException, ErrorCredencialesException {
+        Credenciales credenciales = new Credenciales("Antonio","SweetP2");
+        CredencialesRespuesta r = new CredencialesRespuesta();
+
+        r = this.jm.logJugador(credenciales.getUsername(), credenciales.getPassword());
+        boolean answer = true;
+        assertEquals(answer,r.getSuccess());
     }
 
     @Test
+    public void TestRegister() throws JugadorYaExisteException, NotAnEmailException, FaltanDatosException {
+        CredencialesRegistro credenciales = new CredencialesRegistro("Manuel","1234","antonio@hotmail.com");
+        Jugador j = new Jugador();
+
+        j = this.jm.addJugador(credenciales.getUsername(), credenciales.getEmail(), credenciales.getPassword());
+        Jugador answer = new Jugador("Manuel","1234","antonio@hotmail.com");
+        assertEquals(answer,j);
+    }
+
+    @Test
+    public void TestComprar() throws UserNotFoundException, FaltanDatosException, ProductoNotFoundException, SQLException, AvatarNotFound, CapitalInsuficienteException {
+        String pnombre = "Espada";
+        String nombre = "Antonio";
+        Jugador j = this.jm.getJugador(nombre);
+        Tienda p = this.jm.getProducto(pnombre);
+        int r = j.getEurillos() - p.getPrecio();
+        this.jm.comprarProducto(pnombre,nombre);
+        assertEquals(r,j.getEurillos());
+    }
+    
+   /* @Test
     public void TestFinalizarPartida() throws UserNotFoundException, UserNoEnPartidaException, UserEnPartidaException, JuegoNotFoundException {
         Partida partida = this.jm.iniciarPartida("Pokemon", idJ2);
         String mensaje = jm.FinalizarPartida(idJ2);
