@@ -105,7 +105,7 @@ public class JugadorService {
     })
     @Path("/updateUsername")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUsername(CredencialesUpdateUsername credencialesUpdateUsername) {
+    public Response updateUsername(CredencialesUpdateUsername credencialesUpdateUsername) throws AvatarNotFound {
         CredencialesRespuesta r = new CredencialesRespuesta();
         try {
             r = this.gm.updateUsername(credencialesUpdateUsername.getUsername(), credencialesUpdateUsername.getNewUsername(), credencialesUpdateUsername.getPassword());

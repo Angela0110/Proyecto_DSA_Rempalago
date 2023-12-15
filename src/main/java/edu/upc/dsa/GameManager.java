@@ -16,7 +16,7 @@ public interface GameManager {
     public Jugador getJugador(String id) throws UserNotFoundException;
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
-    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException;
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException, AvatarNotFound;
     public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException, UserNotFoundException;
     public void updateJugador(String columna, String user, String newValue);
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException;
@@ -27,6 +27,7 @@ public interface GameManager {
     public Avatar addAvatar(String username, String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
     public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException;
     public Avatar getAvatar(String player, String nombreAvatar) throws AvatarNotFound;
+    public void updateAvatar(String newJugadorUsername, String user) throws UserNotFoundException, AvatarNotFound;
     public List<Avatar> findAllAvatares();
     public int AvataresSize();
 //    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
