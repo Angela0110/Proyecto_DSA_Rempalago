@@ -230,7 +230,7 @@ public class GameManagerImpl implements GameManager {
     }
 
 
-    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException {
+    public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException, AvatarNotFound {
 
         logger.info(username + " quiere cambiar su username a " + newUsername);
 
@@ -253,6 +253,7 @@ public class GameManagerImpl implements GameManager {
             session.update("username",username,newUsername);
             r.setSuccess(true);
             logger.info(username + " se cambió el username a " + newUsername);
+            this.updateAvatar(newUsername, username);
 
         } catch (SQLIntegrityConstraintViolationException e){
             logger.info("No se puede hacer el cambio porque ya hay un jugador con ese username");
@@ -490,9 +491,8 @@ public class GameManagerImpl implements GameManager {
         } else{
             logger.info(usrnm + " se ha comprado " + Pnombre);
             int type = p.getType();
-            logger.info(j.getEurillos());
             this.updateJugador("eurillos", j.getUsername(), String.valueOf(j.getEurillos() - precio));
-            logger.info(j.getEurillos());
+
             if(type == 0) {
                 logger.info("Se ha incrementado la salud");
                 this.increaseHealth(usrnm, p.getEfect());
@@ -823,6 +823,34 @@ public class GameManagerImpl implements GameManager {
 
         return avatar;
     }
+
+    public void updateAvatar(String newJugadorUsername, String user) throws UserNotFoundException, AvatarNotFound {
+
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            Jugador jugador = (Jugador) session.get(Jugador.class, "username", newJugadorUsername);
+            if (jugador == null) {
+                logger.info("No existe el usuario");
+                throw new UserNotFoundException();
+            }
+            if (jugador.getAvatar() == null) {
+                logger.warn("El jugador" + newJugadorUsername + " no tiene un avatar actual");
+            }
+            else {
+                session.updateAvatar("jugador", user, jugador.getAvatar(), newJugadorUsername);
+                logger.info("Se actualiza el nombre del jugador del avatar a " + newJugadorUsername);
+            }
+        }
+        catch (Exception e) {
+            // LOG
+            e.printStackTrace();
+        }
+        finally {
+            session.close();
+        }
+    }
+
     public List<Avatar> findAllAvatares(){
         logger.info("Lista de avatares");
         Session session = null;
