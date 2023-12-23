@@ -61,4 +61,10 @@ public interface GameManager {
     public void increaseHealth(String jugadorUsername, int health) throws FaltanDatosException, UserNotFoundException, AvatarNotFound;
     public void increaseSpeed(String jugadorUsername, int speed) throws FaltanDatosException, AvatarNotFound;
     public void invisibility(String jugadorUsername) throws UserNotFoundException, FaltanDatosException, AvatarNotFound;
+
+    //Mensajes Manager
+    public int mensajesSize();
+    public Mensaje addMensaje(Mensaje mensaje);
+
+    public List<Mensaje> getAllMensajes();
 }

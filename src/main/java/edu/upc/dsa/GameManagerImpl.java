@@ -19,6 +19,7 @@ public class GameManagerImpl implements GameManager {
     protected List<Avatar> avatares;
     protected List<Mapa> mapas;
     protected List<Tienda> productos;*/
+    private List<Mensaje> mensajes;
 
     final static Logger logger = Logger.getLogger(GameManagerImpl.class);
     private GameManagerImpl() {
@@ -27,6 +28,7 @@ public class GameManagerImpl implements GameManager {
         this.avatares = new LinkedList<>();
         this.mapas = new LinkedList<>();
         this.productos = new LinkedList<>();*/
+        this.mensajes=new ArrayList<>();
     }
 
     public static edu.upc.dsa.GameManager getInstance() {
@@ -837,5 +839,20 @@ public class GameManagerImpl implements GameManager {
             session.close();
         }
         return avatares;
+    }
+
+    //Mensajes Manager
+    public int mensajesSize(){
+        int r=this.mensajes.size();
+        logger.info("Mensajes size"+r);
+        return r;
+    }
+    public List<Mensaje> getAllMensajes(){
+        return this.mensajes;
+    }
+    public Mensaje addMensaje(Mensaje mensaje){
+        mensajes.add(mensaje);
+        logger.info("Mensaje agregado");
+        return mensaje;
     }
 }
