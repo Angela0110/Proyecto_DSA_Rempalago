@@ -30,16 +30,16 @@ public interface GameManager {
     public void updateAvatar(String newJugadorUsername, String user) throws UserNotFoundException, AvatarNotFound;
     public List<Avatar> findAllAvatares();
     public int AvataresSize();
-//    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
+    public List<Avatar> consultarAvatares(String username) throws UserNotFoundException;
+
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
-//    public String stringToJSON(String args);
 //    public Juego addJuego(Juego j);
 //    public Juego addJuego(String id, String descripcion, int niveles) throws NoNivelException, JuegoYaExisteException;
 //    public int size();
 
     // Partida Manager
     public Partida addPartida(Partida partida) throws FaltanDatosException, UserNotFoundException;
-    public Partida addPartida(int dif, String player, String idMapa) throws FaltanDatosException, UserNotFoundException;
+    public Partida addPartida(int dif, String player, String idMapa, int puntos) throws FaltanDatosException, UserNotFoundException;
     public List<Partida> consultarPartidas(String username) throws UserNotFoundException;
     public int PartidaSize();
     //public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException, FaltanDatosException, UserNotFoundException;
@@ -68,4 +68,9 @@ public interface GameManager {
     public Mensaje addMensaje(Mensaje mensaje);
 
     public List<Mensaje> getAllMensajes();
+
+    // Questions
+    public Question addQuestion(String title, String messsage, String sender);
+    public List<Question> findAllQuestions();
+
 }

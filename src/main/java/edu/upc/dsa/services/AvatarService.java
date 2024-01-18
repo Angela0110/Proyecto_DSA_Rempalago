@@ -30,5 +30,24 @@ public class AvatarService {
 
     }
 
+    @GET
+    @ApiOperation(value = "avatares de un jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Avatar.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "Not found"),
+    })
 
+    @Path("/listaAvatares/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAvatares(@PathParam("username") String username) {
+        List<Avatar> avatars = null;
+        try {
+            avatars = this.gm.consultarAvatares(username);
+            GenericEntity<List<Avatar>> entity = new GenericEntity<List<Avatar>>(avatars) {};
+            return Response.status(201).entity(entity).build();
+        } catch (UserNotFoundException e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+
+    }
 }

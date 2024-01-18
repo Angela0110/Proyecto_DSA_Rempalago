@@ -66,10 +66,10 @@ public class QueryHelper {
         return sb.toString();
     }
 
-    public static String createQuerySELECTallPartidas(Class theClass, String player) {
+    public static String createQuerySELECTallPorUser(Class theClass, String columna, String player) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
-        sb.append(" WHERE PLAYER = ?");
+        sb.append(" WHERE " + columna + " = ?");
 
         return sb.toString();
     }
@@ -91,12 +91,29 @@ public class QueryHelper {
 
         return sb.toString();
     }
+
+    public static String createQueryUPDATEPartida(String columna, String user, String newvalue) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE Partida ");
+        sb.append("SET " + columna + " = ?");
+        sb.append(" WHERE PLAYER = ?");
+
+        return sb.toString();
+    }
+
     public static String createQueryUPDATEAvatar(String columna, String user, String avatar, String newvalue) {
         StringBuffer sb = new StringBuffer();
         sb.append("UPDATE Avatar ");
         sb.append("SET " + columna + " = ?");
         sb.append(" WHERE NOMBRE = ?");
         sb.append(" AND JUGADOR = ?");
+
+        return sb.toString();
+    }
+
+    public static String createQueryFOREIGN(int si) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SET foreign_key_checks = ?");
 
         return sb.toString();
     }

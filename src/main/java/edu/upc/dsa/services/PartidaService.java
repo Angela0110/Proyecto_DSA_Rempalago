@@ -25,8 +25,11 @@ public class PartidaService {
 
     public PartidaService() throws FaltanDatosException, UserNotFoundException {
         this.gm = GameManagerImpl.getInstance();
-        if (gm.PartidaSize() == 0) {
-
+        if (this.gm.PartidaSize() == 0){
+            Partida partida = new Partida(1,"Antonio", "0", 1000);
+            this.addPartida(partida);
+            Partida partida2 = new Partida(1,"Antonio", "string",2000);
+            this.addPartida(partida2);
         }
     }
     @POST
@@ -42,7 +45,7 @@ public class PartidaService {
     public Response addPartida(Partida partida){
 
         try {
-            this.gm.addPartida(partida.getDif(), partida.getPlayer(), partida.getIdMapa());
+            this.gm.addPartida(partida.getDif(), partida.getPlayer(), partida.getIdMapa(), partida.getPuntos());
             return Response.status(201).build();
         } catch (FaltanDatosException e) {
             return Response.status(400).build();

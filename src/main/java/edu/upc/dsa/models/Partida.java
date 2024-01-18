@@ -17,14 +17,14 @@ public class Partida {
 
     // Constructores
     public Partida(){this.id = RandomUtils.getId(); this.idMapa = "";}
-    public Partida(int dif, String player, String idMapa){
+    public Partida(int dif, String player, String idMapa, int puntos){
         this();
         this.id = RandomUtils.getId();
         this.dif = dif;
         this.player = player;
         this.idMapa = idMapa;
         this.nivl = 1;   // Siempre se empieza por el nivel 1
-        this.puntos = 0;
+        this.puntos = puntos;
         this.fecha = Fecha.getFecha();
     }
 
