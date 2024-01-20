@@ -29,6 +29,24 @@ public class AvatarService {
         this.gm = GameManagerImpl.getInstance();
 
     }
+    @GET
+    @ApiOperation(value = "avatar de un jugador")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Avatar.class),
+            @ApiResponse(code = 404, message = "Not found"),
+    })
+
+    @Path("/{username}/{avatar}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAvatar(@PathParam("username") String username, @PathParam("avatar") String a) {
+        try {
+            Avatar avatar = this.gm.getAvatar(username,a);
+            return Response.status(201).entity(avatar).build();
+        }  catch (AvatarNotFound e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+
+    }
 
     @GET
     @ApiOperation(value = "avatares de un jugador")
