@@ -11,35 +11,35 @@ import java.util.List;
 public interface GameManager {
 
     // Jugador manager
-    public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException;
-    public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException;
+    public Jugador addJugador(String username, String mail, String pasword) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException;
+    public Jugador addJugador(Jugador jugador) throws NotAnEmailException, FaltanDatosException, JugadorYaExisteException, UserNotFoundException;
     public Jugador getJugador(String id) throws UserNotFoundException;
     public List<Jugador> findAllJugadores();
     public int JugadoresSize();
     public CredencialesRespuesta updateUsername(String username, String newUsername, String password) throws ErrorCredencialesException, JugadorYaExisteException, FaltanDatosException, UserNotFoundException, AvatarNotFound;
     public CredencialesRespuesta updatePassword(String user, String newPass, String password) throws ErrorCredencialesException, FaltanDatosException, UserNotFoundException;
-    public void updateJugador(String columna, String user, String newValue);
+    public void updateJugador(String columna, String user, String newValue) throws UserNotFoundException;
     public CredencialesRespuesta deleteUser(String username) throws UserNotFoundException, FaltanDatosException;
     public CredencialesRespuesta logJugador(String username, String password) throws FaltanDatosException, ErrorCredencialesException;
 
     // Avatar Manager
 
-    public Avatar addAvatar(String username, String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException;
-    public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException;
+    public Avatar addAvatar(String username, String nombre, int idArma, int health, int damg, int speed) throws AvatarYaExisteException, FaltanDatosException, UserNotFoundException;
+    public Avatar addAvatar(Avatar avatar) throws AvatarYaExisteException, FaltanDatosException, UserNotFoundException;
     public Avatar getAvatar(String player, String nombreAvatar) throws AvatarNotFound;
     public void updateAvatar(String newJugadorUsername, String user) throws UserNotFoundException, AvatarNotFound;
     public List<Avatar> findAllAvatares();
     public int AvataresSize();
-//    public int consultarPuntuacion(String identificadorUsuario) throws UserNotFoundException;
+    public List<Avatar> consultarAvatares(String username) throws UserNotFoundException;
+
 //    public String FinalizarPartida(String id) throws UserNotFoundException, UserNoEnPartidaException;
-//    public String stringToJSON(String args);
 //    public Juego addJuego(Juego j);
 //    public Juego addJuego(String id, String descripcion, int niveles) throws NoNivelException, JuegoYaExisteException;
 //    public int size();
 
     // Partida Manager
     public Partida addPartida(Partida partida) throws FaltanDatosException, UserNotFoundException;
-    public Partida addPartida(int dif, String player, String idMapa) throws FaltanDatosException, UserNotFoundException;
+    public Partida addPartida(int dif, String player, String idMapa, int puntos) throws FaltanDatosException, UserNotFoundException;
     public List<Partida> consultarPartidas(String username) throws UserNotFoundException;
     public int PartidaSize();
     //public int cambiarDificultad(String player, int newdif) throws PartidaNotFoundException, MismaDificultadException, FaltanDatosException, UserNotFoundException;
@@ -54,13 +54,13 @@ public interface GameManager {
     public Tienda addProducto(Tienda producto) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda addProducto(String imagen, int precio, String nombre, String description, int efect_type, int efect) throws ProductoYaExisteException, FaltanDatosException;
     public Tienda getProducto(String id) throws ProductoNotFoundException;
-    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException, AvatarNotFound;
+    public void comprarProducto(String nombre, String usrnm) throws ProductoNotFoundException, CapitalInsuficienteException, UserNotFoundException, FaltanDatosException, SQLException, AvatarNotFound, MaximoException;
     public List<Tienda> deleteProducto(String nombre) throws ProductoNotFoundException, FaltanDatosException;
     public int TiendasSize();
     public List<Tienda> findAllProductos();
-    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException, AvatarNotFound;
-    public void increaseHealth(String jugadorUsername, int health) throws FaltanDatosException, UserNotFoundException, AvatarNotFound;
-    public void increaseSpeed(String jugadorUsername, int speed) throws FaltanDatosException, AvatarNotFound;
+    public void increaseDamage(String jugadorUsername, int damage) throws FaltanDatosException, UserNotFoundException, SQLException, AvatarNotFound, MaximoException;
+    public void increaseHealth(String jugadorUsername, int health) throws FaltanDatosException, UserNotFoundException, AvatarNotFound, MaximoException;
+    public void increaseSpeed(String jugadorUsername, int speed) throws FaltanDatosException, AvatarNotFound, MaximoException;
     public void invisibility(String jugadorUsername) throws UserNotFoundException, FaltanDatosException, AvatarNotFound;
 
     //Mensajes Manager
@@ -68,4 +68,9 @@ public interface GameManager {
     public Mensaje addMensaje(Mensaje mensaje);
 
     public List<Mensaje> getAllMensajes();
+
+    // Questions
+    public Question addQuestion(String title, String messsage, String sender);
+    public List<Question> findAllQuestions();
+
 }

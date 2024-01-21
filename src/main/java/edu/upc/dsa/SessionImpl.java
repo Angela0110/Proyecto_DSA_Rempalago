@@ -132,11 +132,29 @@ public class SessionImpl implements Session {
     }
 
 
-    public void update(String columna, String user, String value) throws SQLIntegrityConstraintViolationException {
+    public void updateJugador(String columna, String user, String value) throws SQLIntegrityConstraintViolationException {
         String updateQuery = QueryHelper.createQueryUPDATEJugador(columna, user, value);
 
         PreparedStatement pstm = null;
+        try {
+            pstm = conn.prepareStatement(updateQuery);
+            pstm.setObject(1, value);
+            pstm.setObject(2, user);
 
+            pstm.executeUpdate();
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // Handle constraint violation exception (e.g., unique constraint violation)
+            throw new SQLIntegrityConstraintViolationException();
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePartida(String columna, String user, String value) throws SQLIntegrityConstraintViolationException {
+        String updateQuery = QueryHelper.createQueryUPDATEPartida(columna, user, value);
+
+        PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(updateQuery);
             pstm.setObject(1, value);
@@ -223,9 +241,9 @@ public class SessionImpl implements Session {
         return list;
     }
 
-    public List<Object> findAllPartidas(Class theClass, String player) {
+    public List<Object> findAllPorUser(Class theClass, String columna, String player) {
 
-        String query = QueryHelper.createQuerySELECTallPartidas(theClass, player);
+        String query = QueryHelper.createQuerySELECTallPorUser(theClass, columna, player);
         PreparedStatement pstm =null;
         ResultSet rs;
         List<Object> list = new LinkedList<>();
@@ -276,5 +294,20 @@ public class SessionImpl implements Session {
             e.printStackTrace();
         }
         return numberOfRows;
+    }
+
+    public void foreign(int si){
+        String query = QueryHelper.createQueryFOREIGN(si);
+        PreparedStatement pstm =null;
+        ResultSet rs;
+
+        try {
+            pstm = conn.prepareStatement(query);
+            pstm.setObject(1, si);
+            rs = pstm.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
