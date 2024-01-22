@@ -26,10 +26,19 @@ public class PartidaService {
     public PartidaService() throws FaltanDatosException, UserNotFoundException {
         this.gm = GameManagerImpl.getInstance();
         if (this.gm.PartidaSize() == 0){
-            Partida partida = new Partida(1,"Antonio", "0", 1000);
+
+            Partida partida = new Partida(1,"Antonio", "Dungeon", 1000);
             this.addPartida(partida);
-            Partida partida2 = new Partida(1,"Antonio", "string",2000);
+            Partida partida2 = new Partida(1,"Antonio", "Hometown",2000);
             this.addPartida(partida2);
+            Partida partida3 = new Partida(1,"Antonio", "Dungeon",5800);
+            this.addPartida(partida3);
+            Partida partida4 = new Partida(2,"Antonio", "Dungeon",1000);
+            this.addPartida(partida4);
+            Partida partida8 = new Partida(1,"Antonio", "Hometown",2000);
+            this.addPartida(partida8);
+            Partida partida9 = new Partida(0,"Antonio", "Hometown",4802);
+            this.addPartida(partida9);
         }
     }
     @POST
@@ -37,7 +46,6 @@ public class PartidaService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Partida.class),
             @ApiResponse(code=400,message="Bad request"),
-            @ApiResponse(code=409,message="Conflict")
     })
     @Path("/addPartida")
     @Consumes(MediaType.APPLICATION_JSON)

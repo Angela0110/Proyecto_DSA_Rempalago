@@ -12,7 +12,6 @@ public class Avatar {
     int damg;
     int visible;    // Visible "0" Invisible "1"
     int speed;
-   // String jugador;
 
     // Constructores
     public Avatar(){}

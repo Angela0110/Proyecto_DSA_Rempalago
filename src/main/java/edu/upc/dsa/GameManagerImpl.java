@@ -124,10 +124,9 @@ public class GameManagerImpl implements GameManager {
                 session = FactorySession.openSession();
                 session.save(jugador);
                 logger.info("new Jugador added");
-                this.addAvatar(jugador.getUsername(),"AX-21",23,5,5,5);
-                this.addAvatar(jugador.getUsername(),"ZE-32",25,7,3,5);
-                this.addAvatar(jugador.getUsername(), "DC-25",29,6,4,4);
-                this.addAvatar(jugador.getUsername(), "KN-46",29,6,5,3);
+                this.addAvatar(jugador.getUsername(),"Tom",23,5,5,5);
+                this.addAvatar(jugador.getUsername(), "Paco",29,3,6,4);
+                this.addAvatar(jugador.getUsername(),"Mario",25,7,3,5);
 
             } catch (SQLIntegrityConstraintViolationException e) {
                 logger.info("Ese jugador ya existe (el email y el usuario tienen que ser únicos)");

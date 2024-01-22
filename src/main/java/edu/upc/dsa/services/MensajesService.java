@@ -24,8 +24,22 @@ public class MensajesService {
         this.gm=GameManagerImpl.getInstance();
         if(gm.mensajesSize()==0){
             try{
-                Mensaje mensaje = new Mensaje("Este es un mensaje inicial");
+                Mensaje mensaje = new Mensaje("Nueva arma en la tienda");
                 this.gm.addMensaje(mensaje);
+                Mensaje mensaje2 = new Mensaje("Solución de errores 3.5");
+                this.gm.addMensaje(mensaje2);
+                Mensaje mensaje3 = new Mensaje("Nuevo evento de carnavales");
+                this.gm.addMensaje(mensaje3);
+                Mensaje mensaje4 = new Mensaje("Regalo de bienvenida");
+                this.gm.addMensaje(mensaje4);
+                Mensaje mensaje5 = new Mensaje("Nueva competición, apúntate!");
+                this.gm.addMensaje(mensaje5);
+                Mensaje mensaje6 = new Mensaje("Nuevo nivel disponible");
+                this.gm.addMensaje(mensaje6);
+                Mensaje mensaje7 = new Mensaje("Solución de errores 3.4.5");
+                this.gm.addMensaje(mensaje7);
+
+
             }catch (Throwable e){
                 throw new RuntimeException(e);
             }
